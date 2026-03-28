@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucHomeFooter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             xmlns:cust="clr-namespace:DuplicatePhotosFixer.CustomControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="53" d:DesignWidth="1000">
+    <Grid>
+        <Border Grid.Row="1" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 1 0 0">
+            <Grid Grid.Row="1" Height="51">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="btnUpgradeNow" Height="35" Width="148" Content="Upgrade Now"  Style="{DynamicResource stl_btnUpgradeNow}" Click="btnUpgradeNow_Click" 
+                        />
+
+                <Button Grid.Column="1" x:Name="btnScanForDuplicates" Height="35" Width="235" Content="Scan for Duplicates" 
+                        Style="{DynamicResource stl_btnScanForDuplicates}" 
+                    HorizontalAlignment="Center" IsEnabled="{Binding isScanEnabled}" Click="btnScanForDuplicates_Click"  />
+
+                <cust:ImageButton x:Name="btn_footer" Grid.Column="2"
+                              DockPanel.Dock="Right"                         
+                              Width="150"
+                              Height="34"
+                             Image="{DynamicResource img_play_icon}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                                FontSize="14"  Padding="5" 
+                                Content="Watch Tutorial"      
+                                    Visibility="Visible"                        
+                                            Margin="0,0,0,0"
+                                            VerticalAlignment="Center"
+                                          Foreground="White"
+                    Style="{DynamicResource stl_btnfooter}" Click="btn_footer_Click" >
+
+                </cust:ImageButton>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

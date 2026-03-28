@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+
+public static class ControlExtensions
+{
+    /// <summary>
+    /// Executes the Action asynchronously on the UI thread, does not block execution on the calling thread.
+    /// 
+    /// calling
+    /// this.UIThread(() => this.myLabel.Text = "Text Goes Here");
+    /// </summary>
+    /// <param name="control"></param>
+    /// <param name="code"></param>
+    public static void UIThread(this Control @this, Action code)
+    {
+        if (@this == null || @this.IsDisposed)
+        {
+            return;
+        }
+
+
+        if (@this.InvokeRequired)
+        {
+            @this.Invoke(code);
+        }
+        else
+        {
+            code.Invoke();
+        }
+    }
+}

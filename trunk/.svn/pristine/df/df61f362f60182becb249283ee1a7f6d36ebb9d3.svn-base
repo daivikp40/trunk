@@ -1,0 +1,392 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Views;
+
+namespace DuplicatePhotosFixer
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+
+
+            InitializeComponent();
+            App.oMainReference = this;
+
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+        }
+        public static Views.frmExitNag ofrmExitNag = null;
+        public static Views.frmSettings oSettingsfrm = null;
+        public static Views.frmSelectionAssistant selectionAssistantfrm = null;
+        public static UserControls.ucClearCache clearCachefrm = null;
+        public static Views.frmRegistrationDPF frmRegistration = null;
+        public static Views.frmAboutUs frmAboutUs = null;
+        public static UserControls.ucActionCentre ucActionCentre = null;
+        public static UserControls.ucHomeMain oSelectFolder = null;
+        public List<string> AutoMarkPreferences = null;
+
+
+
+        public List<string> ExcludedFolderList = new List<string>();
+
+        public void Home_addSelectedPath(csScanPaths PathData, bool addToXML = true)
+        {
+            oSelectFolder.addSelectedPath(PathData, addToXML);
+        }
+        public void ShowResults()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Collapsed;
+                objResult.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowHome()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Visible;
+                objResult.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowExitNag()
+        {
+            try
+            {
+               
+                if (ofrmExitNag == null)
+                {
+                    ofrmExitNag = new Views.frmExitNag();
+                }
+                Progress_Show(ofrmExitNag, this);
+                Progress_Close(ofrmExitNag, this);
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        public void ShowAssistantSelection()
+        {
+            try
+            {
+
+                if (selectionAssistantfrm == null)
+                {
+                    selectionAssistantfrm = new Views.frmSelectionAssistant();
+                }
+                Progress_Show(selectionAssistantfrm, this);
+                Progress_Close(selectionAssistantfrm, this);
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void ShowClearCaheDialog()
+        {
+            try
+            {
+                if (clearCachefrm == null)
+                {
+                    clearCachefrm = new UserControls.ucClearCache();
+                }
+                Progress_Show(clearCachefrm, this);
+                Progress_Close(clearCachefrm, this);
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        public void ShowSettings()
+        {
+            try
+            {
+                if (oSettingsfrm == null)
+                {
+                    oSettingsfrm = new Views.frmSettings();
+                }
+                Progress_Show(oSettingsfrm, this);
+                Progress_Close(oSettingsfrm, this);
+            }
+
+            catch(Exception ex)
+            {
+
+            }
+        }
+
+        public void ShowRegistration()
+        {
+            try
+            {
+                if (frmRegistration == null)
+                {
+                    frmRegistration = new Views.frmRegistrationDPF();
+                }
+                Progress_Show(frmRegistration, this);
+                Progress_Close(frmRegistration, this);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public void ShowAboutUs()
+        {
+            try
+            {
+                if (frmAboutUs == null)
+                {
+                    frmAboutUs = new Views.frmAboutUs();
+                }
+                Progress_Show(frmAboutUs, this);
+                Progress_Close(frmAboutUs, this);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public void ShowActionCenter()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Collapsed;
+                objActionCentre.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowHome2()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Visible;
+                objActionCentre.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void Progress_Show(Window oWindow, Window owner = null, bool showAsDialog = true)
+        {
+            try
+            {
+                if (oWindow == null)
+                {
+                    return;
+                }
+
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    //Window wndParent = owner;
+                    try
+                    {
+                        if (owner == null)
+                        {
+                            owner = this;
+                        }
+                        //wndParent = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+
+                        owner.Opacity = .3;
+                        owner.Effect = new System.Windows.Media.Effects.BlurEffect() { Radius = 15 };
+
+                        oWindow.ShowInTaskbar = false;
+                        oWindow.Owner = owner;
+                        oWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        //if (this.WindowState != WindowState.Maximized)
+                        {
+                            oWindow.Left = this.Left + (this.ActualWidth - oWindow.ActualWidth) / 2;
+                            oWindow.Top = this.Top + (this.ActualHeight - oWindow.ActualHeight) / 2;
+                        }
+                        if (showAsDialog)
+                            oWindow.ShowDialog();
+                        else
+                        {
+                            oWindow.Show();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Print(ex.Message);
+                        //Log.Error("MainWindow \t mnuAbout_Click \t {error}", ex);
+                    }
+                    finally
+                    {
+                        if (owner != null)
+                        {
+                            if (showAsDialog && !(owner == this && IsOtherWindowsOpen()))
+                            {
+                                owner.Opacity = 1;
+                                owner.Effect = null;
+                                owner.Activate();
+                            }
+                        }
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("Progress_Show:: ", ex);
+            }
+        }
+        public void Progress_Close(Window oWindow, Window owner = null)
+        {
+            try
+            {
+                App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                {
+                    Window wndParent = owner;
+                    try
+                    {
+                        if (wndParent == null)
+                        {
+                            wndParent = System.Windows.Application.Current.MainWindow;
+                        }
+                        if (wndParent != null)
+                        {
+                            //if (!WindowHelper.IsOtherWindowsOpen())
+                            {
+                                wndParent.Opacity = 1;
+                                wndParent.Effect = null;
+                            }
+                        }
+
+                        if (oWindow.Visibility != Visibility.Visible)
+                            return;
+
+                        if (!oWindow.IsVisible)
+                        {
+                            return;
+                        }
+
+                        //wndParent = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive); 
+                        if (oWindow == null || !oWindow.IsVisible)
+                            return;
+
+                        oWindow.Hide();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Print(ex.Message);
+                        //Log.Error("MainWindow \t mnuAbout_Click \t {error}", ex); 
+                    }
+                    finally
+                    {
+                       
+                    }
+                }));
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("Progress_Close:: ", ex);
+            }
+        }
+        public bool IsOtherWindowsOpen(Window wndToIgnore = null)
+        {
+            bool isOpen = false;
+            try
+            {
+                foreach (Window item in App.Current.Windows)
+                {
+                    if (item != this && item.Visibility == Visibility.Visible)
+                    {
+                        if (wndToIgnore != null && item == wndToIgnore)
+                        {
+                            continue;
+                        }
+
+                        return true;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|CloseIfOtherWindowsOpen()|Error:{1}", this.Name, ex.Message));
+            }
+
+            return isOpen;
+        }
+
+        public DialogResult showMessageEx(Window owner, string Caption, string Message, MessageBoxButtons msgBoxButtons = MessageBoxButtons.OK)
+        {
+            try
+            {
+                cGlobalSettings.custMsgBox = null;
+
+                cGlobalSettings.custMsgBox = new frmThemeMessageBox();
+                cGlobalSettings.custMsgBox.ShowInTaskbar = false;
+                cGlobalSettings.custMsgBox.msgBoxButtons = msgBoxButtons;
+                cGlobalSettings.custMsgBox.ShowMsg(owner, Caption, Message);
+
+                //cGlobalSettings.custMsgBox.ShowDialog(owner);
+
+                return cGlobalSettings.custMsgBox.result;
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmMian:: showMessage:", ex);
+            }
+
+            return cGlobalSettings.custMsgBox.result;
+
+        }
+
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+    }
+}

@@ -1,0 +1,443 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Engine;
+using DuplicatePhotosFixer.HelperClasses.MyLogger;
+using DuplicatePhotosFixer.Views;
+using static DuplicatePhotosFixer.Views.cNagDialogue;
+using static DuplicatePhotosFixer.Views.frmProcessing;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucHomeFooter.xaml
+    /// </summary>
+    public partial class ucHomeFooter : UserControl
+    {
+        public ucHomeFooter()
+        {
+            InitializeComponent();
+            LoadString();
+        }
+        public IgnoreRules ignoreRules = null;
+        public ScanPhotos objScanPhotos = null;
+
+        void LoadString()
+        {
+            try
+            {
+                btnUpgradeNow.Content = cResourceManager.LoadString("DPF_FOOTER_UC_BUY_NOW");
+                btnScanForDuplicates.Content = cResourceManager.LoadString("DPF_FOOTER_UC_SCAN_FOR_DUPLICATES_TEXT");
+                
+
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
+
+
+        public void Init()
+        {
+            if (ignoreRules == null)
+                ignoreRules = new IgnoreRules();
+            ignoreRules.GenerateRegEx();
+
+            if (objScanPhotos == null)
+            {
+                objScanPhotos = new ScanPhotos();
+                objScanPhotos.OnScanStart += new ScanPhotos.OnScanStartProcess(objScanPhotos_OnScanStart);
+                objScanPhotos.OnScanProgress += new ScanPhotos.OnScanProgressProcess(objScanPhotos_OnScanProgress);
+                objScanPhotos.OnScanCompleted += new ScanPhotos.OnScanCompletedProcess(objScanPhotos_OnScanCompleted);
+                objScanPhotos.onGroupCreated += new ScanPhotos.onGroupCreatedProcess(objScanPhotos_onGroupCreated);
+            }
+
+            if (cGlobalSettings.scanner != null)
+            {
+
+                cGlobalSettings.scanner.OnScanStart += new OnScanStartProcess(scanner_OnStartProgress);
+              // cGlobalSettings.scanner.OnScanProgress += new OnScanProgressProcess(scanner_OnScanProgress);
+                cGlobalSettings.scanner.OnScanCompleted += new OnScanCompletedProcess(scanner_OnScanCompleted);
+
+            }
+
+        }
+
+        void objScanPhotos_onGroupCreated(float matchingLevel)
+        {
+            try
+            {
+
+                /*Program.oMainReference.UIThread(() =>
+                {*/
+                //App.oMainReference.oResult.StartCoolDownTimer();
+                /*});*/
+                cGlobalSettings.bShowAfterScanMarkWindow = true;
+                //App.oMainReference.ucResult_showDuplicates(matchingLevel);
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("objScanPhotos_onGroupCreated:: ", ex);
+            }
+        }
+        public static ReaderWriterLockSlim ScanLock = new ReaderWriterLockSlim();
+        void objScanPhotos_OnScanStart(string startMsg)
+        {
+            //this.UIThread(() =>
+            //{
+            //    WindowsFormsSynchronizationContext.Current.Post(_ =>
+            //    {
+            //        Program.oMainReference.ShowProgress(startMsg);
+            //    }, null);
+            //});
+        }
+
+        void objScanPhotos_OnScanProgress(cClientEnum.eScanPhase scanPhaseType, string message, int percentageCompleted, string counterMsg, string subMsg, bool showScanBar = false, bool bConfirmationBox = false)
+
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                if (bConfirmationBox)
+                {
+                    App.oMainReference.LaunchAndRefresh();
+
+                    frmProcessing oProgress = null;
+                    try
+                    {
+                        cGlobal.frmNagReturnCode = FORM_RETURN_CODES.DO_NOTHING;
+                        oProgress = new frmProcessing();
+                        if (App.oMainReference.fProgress == null)
+                        {
+                            oProgress.Owner = App.oMainReference.fProgress;
+                        }
+                        else
+                        {
+                            oProgress.Owner = App.oMainReference;
+                        }
+                        oProgress.bConfirmationBox = bConfirmationBox;
+                        oProgress.ScanProgress(cClientEnum.eScanPhase.Search,message, percentageCompleted, counterMsg, subMsg, showScanBar);
+                        Thread.Sleep(0);
+                        if (bConfirmationBox)
+                        {
+                           //oProgress.LoadAsConfirmationBox();
+                            oProgress.ShowDialog();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        //if (oProgress != null)
+                        //    oProgress.Dispose();
+                        //oProgress = null;
+                    }
+                }
+                else
+                {
+                    if (App.oMainReference.fProgress == null)
+                        App.oMainReference.fProgress = new frmProcessing();
+
+                    App.oMainReference.fProgress.ScanProgress(scanPhaseType, message, percentageCompleted, counterMsg, subMsg, showScanBar);
+                }
+            });
+        }
+
+       
+        bool bNagShownAfterCmdSLNT = false;
+        void objScanPhotos_OnScanCompleted(string messageHeader, string messageDesc, bool bMoveToResultsTab, int percentageCompleted)
+        {
+
+            this.Dispatcher.Invoke(() =>
+            {
+
+#if TrayScan
+                    if (Program.oMainReference.bTrayScan && Program.bAutoscan)
+                    {
+                        // Show taskbar notification
+                        Program.oMainReference.bTrayScan = false;
+                        Program.oMainReference.ShowTaskbarNotification(1800000);
+                    }
+                    else
+#endif
+                {
+                    if (Program.bSilentScanNLaunch && !bNagShownAfterCmdSLNT)
+                    {
+                        App.oMainReference.DisplayTaskbarNotification();
+                        bNagShownAfterCmdSLNT = true;
+                    }
+                    else if (!(Program.bSilentScan))
+                    {
+                        App.oMainReference.LaunchAndRefresh();
+                    }
+
+                    cGlobalSettings.b_SCAN_STARTED = false;
+
+                    //App.oMainReference.ShowSystemTrayNagsAfterScan();
+                }
+
+
+                if (App.oMainReference.fProgress != null)
+                {
+                    App.oMainReference.Progress_Close(Program.oMainReference.fProgress);
+                }
+
+                if (!bMoveToResultsTab)
+                {
+                    App.oMainReference.footer_showScanDuplicateButton((int)enumClass.eBtnVisableStatus.Active, true, true);
+                    //Program.oMainReference.footer_showScanDuplicateButton((int)enumClass.eBtnVisableStatus.Disable, false, false);
+                }
+
+
+                Thread.Sleep(64);
+
+                if (!string.IsNullOrEmpty(messageHeader))
+                {
+                    if (!Program.bSilentScan)
+                        App.oMainReference.showMessage(messageHeader, messageDesc);
+                }
+            });
+            //Program.oMainReference.footer_showScanDuplicateButton((int)enumClass.eBtnVisableStatus.Active, true, true);
+
+
+
+            //new Thread(() =>
+            //{
+            //    Thread.Sleep(64/*1008*/);
+
+            //    this.UIThread(() =>
+            //    {
+            //        //Program.oMainReference.ucResult_showCurrentDuplicateCount(true);
+
+            //        if (Program.oMainReference.fProgress != null && !Program.oMainReference.fProgress.IsDisposed)
+            //        {
+            //            Program.oMainReference.Progress_Close(Program.oMainReference.fProgress);
+            //        }
+            //    });
+
+            //}).Start();
+
+
+#if _to_fix_
+            this.UIThread(() =>
+                {
+                    if (Program.oMainReference.fProgress != null)
+                    {
+                        Program.oMainReference.fProgress.percentage = 100;
+                        Program.oMainReference.fProgress.Close();
+
+                        Program.oMainReference.fProgress.Dispose();
+                        Program.oMainReference.fProgress = null;
+
+                        Program.oMainReference.CloseDarkBackGround();
+                        Program.oMainReference.Activate();
+                    }
+                    //Program.oMainReference.Enabled = true;
+                }); 
+#endif
+        }
+
+
+        void scanner_OnStartProgress(string message, int percentageCompleted, int counter)
+
+        {
+            //this.UIThread(() =>
+            //{
+
+            //});
+        }
+
+
+        void scanner_OnScanProgress(string startMsg, int percentageCompleted, int TotalFiles, string counterMsg, string progressInfo, bool showScanBar = false, bool bConfirmationBox = false)
+        {
+
+            this.Dispatcher.Invoke(() =>
+            {
+                if (bConfirmationBox)
+                {
+                    App.oMainReference.LaunchAndRefresh();
+
+                    frmProcessing oProgress = null;
+                    try
+                    {
+                        cGlobal.frmNagReturnCode = FORM_RETURN_CODES.DO_NOTHING;
+                        oProgress = new frmProcessing();
+                        oProgress.bConfirmationBox = true;
+                        oProgress.ScanProgress(cClientEnum.eScanPhase.Search, startMsg, percentageCompleted, counterMsg, progressInfo, showScanBar);
+                        //oProgress.LoadAsConfirmationBox();
+                        Thread.Sleep(0);
+                        oProgress.ShowDialog();
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        if (oProgress != null)
+                            //oProgress.Dispose();
+                            oProgress = null;
+                    }
+                }
+                else
+                {
+                    if (App.oMainReference.fProgress == null)
+                        App.oMainReference.fProgress = new frmProcessing();
+
+                    App.oMainReference.fProgress.ScanProgress(cClientEnum.eScanPhase.Search, startMsg, percentageCompleted, counterMsg, progressInfo, showScanBar);
+                }
+            });
+        }
+
+
+        void scanner_OnScanCompleted(string messageHeader, string messageDesc, bool bMoveToResultsTab, int percentageCompleted)
+        {
+
+            Dispatcher.Invoke(() =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    {
+                        if (Program.bSilentScanNLaunch && !bNagShownAfterCmdSLNT)
+                        {
+                            Program.oMainReference.DisplayTaskbarNotification();
+                            bNagShownAfterCmdSLNT = true;
+                        }
+                        else if (!(Program.bSilentScan))
+                        {
+                            App.oMainReference.LaunchAndRefresh();
+                        }
+
+                        cGlobalSettings.b_SCAN_STARTED = false;
+
+                       // App.oMainReference.ShowSystemTrayNagsAfterScan();
+                    }
+
+
+
+                    if (App.oMainReference.fProgress != null )
+                    {
+                        App.oMainReference.Progress_Close(Program.oMainReference.fProgress);
+                    }
+
+                    if (!bMoveToResultsTab)
+                    {
+                        App.oMainReference.footer_showScanDuplicateButton((int)enumClass.eBtnVisableStatus.Active, true, true);
+                        //Program.oMainReference.footer_showScanDuplicateButton((int)enumClass.eBtnVisableStatus.Disable, false, false);
+                    }
+
+
+                    Thread.Sleep(64);
+
+                    if (!string.IsNullOrEmpty(messageHeader))
+                    {
+                        if (!Program.bSilentScan)
+                            Program.oMainReference.showMessage(messageHeader, messageDesc);
+                    }
+                });
+
+            });
+
+        }
+
+     
+        public void startCompare()
+        {
+            try
+            {
+                if (!ScanLock.TryEnterWriteLock(0))
+                {
+                    return;
+                }
+
+
+                try
+                {
+                    Init();
+
+                    //if (Environment.OSVersion.Version.Major >= 6)
+                    //    Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance.SetProgressState((Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal));
+
+                    App.oMainReference.fProgress.progressType = ProgressType.Scan;
+                    App.oMainReference.fProgress.LoadStringsForScan();
+
+#if TrayScan
+                    if (Program.oMainReference.bTrayScan && Program.bAutoscan)
+                    {
+                        Program.oMainReference.fProgress.Opacity = 0;
+                    }
+                    else
+                    {
+                        Program.oMainReference.fProgress.Opacity = 100;
+                    }
+#endif
+
+                    App.oMainReference.Progress_Show(App.oMainReference.fProgress,null, true);
+                    if (Program.bIsFirstInstall)
+                    {
+                        switch (cGlobal.setupType)
+                        {
+                            case eSetupType.SCAN_DEFAULT:
+                            case eSetupType.SCAN_ALL:
+                                //case eSetupType.ADD_All:
+                                //App.oMainReference.MinimizeAppToTray(false);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                finally
+                {
+                    ScanLock.SafeExitWriteLock();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("SearchDuplicates", ex);
+            }
+        }
+
+        private void btnScanForDuplicates_Click(object sender, RoutedEventArgs e)
+        {
+           //App.oMainReference.Home_startCompare();
+           App.oMainReference.ShowResults();
+
+
+            //try
+            //{
+
+            //    //foreach (var item in selectedFiles)
+            //    //{
+            //    //    if (Directory.Exists(item.filePath))
+            //    //    {
+            //    //        //string[] files = 
+            //    //    }
+            //    //}
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+
+        }
+    }
+}

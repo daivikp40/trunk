@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucMainBoder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+               xmlns:cust ="clr-namespace:DuplicatePhotosFixer.CustomControl"
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="235" d:DesignWidth="725" Background="Black">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#3E3E3E" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+
+            </Grid.ColumnDefinitions>
+            <Label Content="Duplicate Photos Fixer Pro" Foreground="{DynamicResource bgrclr_grayish}"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   FontSize="12"/>
+            <Grid Grid.Column="1">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <DockPanel>
+                        <cust:ImageButton x:Name="lnkLblLang"                                                              
+                                  Image="{DynamicResource img_flags}"
+                                   Style="{DynamicResource stl_btnLanguage}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_cart}">
+                        </cust:ImageButton>
+                        <cust:ImageButton x:Name="lnkLblLangArrow"                                                              
+                                  Image="{DynamicResource img_dropdownarrow}"
+                                   Style="{DynamicResource stl_btnLanguageArrow}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_cart}">
+                    </cust:ImageButton>
+                    </DockPanel>
+                    <!--<cust:ImageButton x:Name="btnCart"                                                              
+                                  Image="{DynamicResource img_cart}"
+                                   Style="{DynamicResource stl_btnCart}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_cart}">
+                    </cust:ImageButton>-->
+                    <cust:ImageButton x:Name="btnActionCenter"                                                              
+                                  Image="{DynamicResource img_actioncenter}"
+                                   Style="{DynamicResource stl_btnAction}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_close_clicked}">
+                    </cust:ImageButton>
+                    <Image Source="{DynamicResource img_footer}" x:Name="linkDivider" Width="21" Height="17" VerticalAlignment="Top" Margin="0,5,0,0" />
+                    <cust:ImageButton x:Name="linklblSettings"
+                              DockPanel.Dock="Right"
+                              Margin="0,1,5,0"                                   
+                             Image="{DynamicResource img_settings_sm}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                    FontSize="14" VerticalAlignment="Top" Padding="5 0" 
+                              Content="Settings" 
+                                      
+                              Visibility="Visible"
+                    
+                    Style="{DynamicResource stl_btnSettings}">
+
+                    </cust:ImageButton>
+
+                    <cust:ImageButton x:Name="lnkLblHelp"
+                              DockPanel.Dock="Right"
+                              Margin="0,1,10,0"                                   
+                             Image="{DynamicResource img_dropdownarrow}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                    FontSize="14" VerticalAlignment="Top" Padding="5 0" 
+                              Content="Help" 
+                                      
+                              Visibility="Visible"
+                    
+                    Style="{DynamicResource StyleMainBorderHelpButton}">
+                       
+                    </cust:ImageButton>
+
+                    <DockPanel HorizontalAlignment="Right">
+                        <cust:ImageButton x:Name="btn_close"  DockPanel.Dock="Right"                              
+                                  Margin="0,0,5,0"
+                                  Image="{DynamicResource img_close_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_close_hover}"
+                                  SelectedImage="{DynamicResource  img_close_clicked}">
+                        </cust:ImageButton>
+                     
+                        <cust:ImageButton x:Name="btnMaximize"     DockPanel.Dock="Right"                         
+                                 
+                                  Image="{DynamicResource img_max_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_max_hover}"
+                                  SelectedImage="{DynamicResource  img_max_clicked}">
+                        </cust:ImageButton>
+                        <cust:ImageButton x:Name="btnMinimize"   DockPanel.Dock="Right"                                                         
+                                  Image="{DynamicResource img_min_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_min_hover}"
+                                  SelectedImage="{DynamicResource  img_min_clicked}">
+                        </cust:ImageButton>
+
+                    </DockPanel>
+
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+
+    </Grid>
+</UserControl>

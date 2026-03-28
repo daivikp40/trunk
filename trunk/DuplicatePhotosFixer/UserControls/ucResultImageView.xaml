@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucResultImageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <ListView ItemsSource="{Binding Items}"
+                      x:Name="ItemControlImageView"
+                  SelectionChanged="ItemControlImageView_SelectionChanged"
+                      ScrollViewer.CanContentScroll="False"                      
+                      PreviewMouseWheel="ItemsControl_PreviewMouseWheel"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.Template>
+                    <ControlTemplate>
+                        <ScrollViewer KeyboardNavigation.IsTabStop="True" x:Name="ItemControlScrollViewer"
+                        CanContentScroll="True">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ListView.Template>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!--<dc:SmoothPanel>
+                            <dc:SmoothPanel.Templates>
+                                --><!--<dc:SmoothPanelTemplate ViewModel="{x:Type sample:FooItem}"
+                                      View="{x:Type sample:FooControl}" />--><!--
+                                <dc:SmoothPanelTemplate ViewModel="{x:Type main:GroupItems}"
+                                      View="{x:Type local:ucGroupControl}" />
+                                <dc:SmoothPanelTemplate ViewModel="{x:Type main:BarItem}"
+                                      View="{x:Type local:ucBarControl}" />
+                            </dc:SmoothPanel.Templates>
+                        </dc:SmoothPanel>-->
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</UserControl>

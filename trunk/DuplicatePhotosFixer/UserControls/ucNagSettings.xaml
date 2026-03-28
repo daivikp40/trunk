@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucNagSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls" 
+             mc:Ignorable="d" 
+             x:Name="ucNagTheme"
+             d:DesignHeight="441" d:DesignWidth="482" Background="{DynamicResource cl_bg_settingsNag}" >
+    <UserControl.Resources>
+        <Style x:Key="styl_radiobtn_content" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource cl_fg_setCont}"></Setter>
+            <Setter Property="Padding" Value="3 0 0 0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="70" />
+            <RowDefinition Height="*"/>
+           
+            <RowDefinition Height="57"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="12 10 10 0">
+            <TextBlock x:Name="move_heading" Foreground="{DynamicResource cl_fg_setHeading}"
+                       FontSize="22" >
+                Nag Theme
+            </TextBlock>
+            <TextBlock x:Name="heading_info"
+                       Foreground="{DynamicResource cl_fg_setCont}" FontSize="14" TextWrapping="Wrap" FontWeight="Regular">
+                       
+                Select notification nag Theme Mode
+            </TextBlock>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="5 10 10 0">
+            <StackPanel Grid.Row="1"  >
+                <RadioButton  x:Name="rb_darkTheme" Margin="5 2 0 5" 
+                              IsChecked="{Binding DarkTheme}" 
+                              Style="{StaticResource styl_radiobtn_content}" Content="Dark" Checked="rb_darkTheme_Checked" />
+                <RadioButton x:Name="rb_lightTheme" 
+                             Style="{StaticResource styl_radiobtn_content}"
+                              Margin="5 2 0 5"   
+                             Content="Light" 
+                             
+                             IsChecked="{Binding LightTheme}" 
+                             Checked="rb_lightTheme_Checked"  />
+                
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="footer_grid" Grid.Row="3" Background="{DynamicResource cl_bg_TabControl}" >
+            <!--<Label x:Name="lbl_settingsApplied" Content="Settings Applied" 
+                   Foreground="{DynamicResource cl_fg_primary}"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Visibility="Collapsed"/>-->
+        </Grid>
+
+
+
+
+        <!--<TextBlock Grid.Row="3"  Background="#D5D5D5" VerticalAlignment="Bottom"/>-->
+    </Grid>
+</UserControl>

@@ -1,0 +1,394 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+using Image = System.Drawing.Image;
+using Rectangle = System.Drawing.Rectangle;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucMainBoder.xaml
+    /// </summary>
+    public partial class ucMainBoder : UserControl
+    {
+      
+        public ucMainBoder()
+        {
+            InitializeComponent();
+            //LoadLanguageDetails();
+            LoadStrings();
+            SetLangImage();
+        }
+        private void LoadStrings()
+        {
+            //lblAppTitle.Content = cGlobalSettings.GetProductName();
+            linklblSettings.Content = "    " + cResourceManager.LoadString("DPF_MAINBORDER_UC_SETTINGS_TEXT");
+
+            mnuEnglish.Header = "English";
+            mnuJapanese.Header = "日本語 (Japanese)";
+            mnuGerman.Header = "Deutsch (German)";
+            mnuSpanish.Header = "Español (Spanish)";
+            mnuSwedish.Header = "Svenska (Swedish)";
+            //mnuDanish.Header = "Danske (Danish)";
+            mnuItalian.Header = "Italiano (Italian)";
+            mnuNorwegian.Header = "Norsk (Norwegian)";
+            mnuFrench.Header = "Français (French)";
+            mnuFinnish.Header = "Suomi (Finnish)";
+            mnuPortugal.Header = "Português Brasileiro (Portuguese)";
+            mnuDutch.Header = "Nederlands (Dutch)";
+            mnuRussian.Header = "Русский (Russian)";
+            mnuDanish.Header = "Danske (Danish)";
+
+            //lnkLblHelp.Content = "   " + cResourceManager.LoadString("IDS_HELP");
+            //btnHelp.Content = cResourceManager.LoadString("IDS_HELP");
+            //btnContactus.Content = cResourceManager.LoadString("IDS_CONTACT_US");
+            //btnClearCache.Content = cResourceManager.LoadString("IDS_CLEAR_CACHE");
+            //btnRegistration.Content = cResourceManager.LoadString("IDS_ENTER_REGISTRATIONKEY");
+            //btnupdates.Content  = cResourceManager.LoadString("IDS_CHECK_FOR_UPDATE");
+            ////btnfeedback.Content = cResourceManager.LoadString("IDS_HELP");
+            //btnVideo.Content = cResourceManager.LoadString("IDS_GO_TO_CHANNEL");
+            //btnAboutus.Content = cResourceManager.LoadString("IDS_ABOUT");
+
+            //toolStripMenuHelp.Text = cResourceManager.LoadString("IDS_HELP");
+        }
+        public class LanguageItem
+        {
+            public string LanguageName { get; set; }
+            public string FlagImagePath { get; set; }
+        }
+
+
+
+        //private void PopulateComboBox()
+        //{
+        //    List<LanguageItem> languages = new List<LanguageItem>
+        //    {
+        //       new LanguageItem { LanguageName = "English", FlagImagePath = "/Resources/en.png" },
+        //       new LanguageItem { LanguageName = "Danske (Danish)", FlagImagePath = "/Resources/da.png" },
+        //       new LanguageItem { LanguageName = "Nederlands (Dutch) ", FlagImagePath = "/Resources/du.png" },
+        //       new LanguageItem { LanguageName = "Franḉais(French)", FlagImagePath = "/Resources/fr.png" },
+        //       new LanguageItem { LanguageName = "Deutsch (German)", FlagImagePath = "/Resources/de.png" },
+        //       new LanguageItem { LanguageName = "Italiano (Italian) ", FlagImagePath = "/Resources/it.png" },
+        //       new LanguageItem { LanguageName = " (Japenese)", FlagImagePath = "/Resources/ja.png" },
+        //       new LanguageItem { LanguageName = "Norsk (Nowrwegian)", FlagImagePath = "/Resources/no.png" },
+        //       new LanguageItem { LanguageName = "Portuguễs Brasilerio (Portuguese)", FlagImagePath = "/Resources/pt-br.png" },
+        //       new LanguageItem { LanguageName = "Español (Spanish)", FlagImagePath = "/Resources/es.png" },
+        //       new LanguageItem { LanguageName = "Svenska (Swedish)", FlagImagePath = "/Resources/sv.png" },
+        //       new LanguageItem { LanguageName = "Suomi (Finnish)", FlagImagePath = "/Resources/en.png" },
+        //       new LanguageItem { LanguageName = "Pyccknn (Russian)", FlagImagePath = "/Resources/en.png" },
+        //       new LanguageItem { LanguageName = "(Chinese Specified)", FlagImagePath = "/Resources/en.png" },
+        //        // Add more language-flag mappings as needed
+        //    };
+
+        //    languageComboBox.ItemsSource = languages;
+        //    languageComboBox1.ItemsSource = languages;
+        //}
+
+
+            public static Image cropImage(Image img, Rectangle cropArea)
+        {
+            Bitmap bmpImage = new Bitmap(img);
+            Bitmap bmpCrop = bmpImage.Clone(cropArea,
+            bmpImage.PixelFormat);
+            return (Image)(bmpCrop);
+        }
+
+
+        //private void lnkLblLang_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //PopulateComboBox();
+        //    languageComboBox.IsDropDownOpen = true;
+        //    //PopulateComboBox();
+
+        //}
+
+        //private void lnkLblLangArrow_Click(object sender, RoutedEventArgs e)
+        //{
+        //    languageComboBox1.IsDropDownOpen = true;
+           
+        //}
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            var winState = Application.Current.MainWindow.WindowState;
+            if (winState == WindowState.Normal)
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Minimized;
+            }
+            else
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            var winState = Application.Current.MainWindow.WindowState;
+            if (winState == WindowState.Normal)
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
+            }
+            else
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+        }
+
+        private void btn_close_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowExitNag();
+            App.oMainReference = (MainWindow)Window.GetWindow(this);
+            App.oMainReference.Close();
+        }
+
+        private void stkLang_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {                
+                mnuLang.Placement = PlacementMode.Bottom;
+                mnuLang.PlacementTarget = stkLang;
+                mnuLang.IsOpen = true;
+            }
+        }
+
+        private void mnulangItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedTag = (e.Source as MenuItem).Tag;
+
+                if (selectedTag != null)
+                {
+                    string selectNameAbbv = selectedTag.ToString();
+                    if (string.Compare(cGlobalSettings.oScanSettings.LanguageCode, selectNameAbbv, true) == 0)
+                        return;
+
+                    //MessageBoxResult odlgRes = MessageBoxWithCheckBox.SimpleMsgBox(App.oMainFormReference, cResourceManager.LoadString("IDS_RESTART_CONFIRM_MSG"), cGlobalSettings.GetProductName() + " ", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    string strMsg = cResourceManager.LoadString("IDS_RESTART_CONFIRM_MSG");
+                    //MessageBoxResult odlgRes = MessageBoxWithCheckBox.show(strMsg, "", cGlobalSettings.GetProductName(), cResourceManager.LoadString("IDS_YES"), cResourceManager.LoadString("IDS_NO"), 0, MessageBoxImage.Question, 0, 0);
+
+                    //Program.mainWindow.oAlertBox = new frmAlertBox(strMsg, MessageBoxButton.YesNo);
+                    //App.mainWindow.Progress_Show(App.mainWindow.oAlertBox, App.mainWindow);
+
+                    //if (App.mainWindow.CurrentAlertBoxStatus == (int)cClientEnum.enAlertStatus.Yes)
+                    //{
+                    //    cGlobalSettings.oScanSettings.LanguageCode = selectNameAbbv;
+
+                    //    cGlobalSettings.oScanSettings.SetLanguageInRegistry();
+                    //    App.mainWindow.RestartApp(System.Diagnostics.Process.GetCurrentProcess().Id);
+                    //    return;
+                    //}
+                    //else if (App.mainWindow.CurrentAlertBoxStatus == (int)cClientEnum.enAlertStatus.Yes)
+                    //{
+
+                    //}
+                    //if (odlgRes == MessageBoxResult.Yes)
+                    //{
+                    //    cGlobalSettings.oScanSettings.LanguageCode = selectNameAbbv;
+
+                    //    cGlobalSettings.oScanSettings.SetLanguageInRegistry();
+
+                    //    RestartApp(System.Diagnostics.Process.GetCurrentProcess().Id);
+                    //}
+                }
+            }
+            catch (Exception oEx)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("ucMainBorder|mnulangItem_Click", oEx.Message));
+            }
+        }
+
+        void SetLangImage()
+        {
+            BitmapImage bmpImg;
+            switch (cGlobalSettings.oScanSettings.LanguageCode)
+            {
+
+                case "en":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/English.png", UriKind.Relative));
+                        break;
+                    }
+                case "de":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Deutsch.png", UriKind.Relative));
+                        break;
+                    }
+                case "ja":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Japanese.png", UriKind.Relative));
+                        break;
+                    }
+                case "es":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Spanish.png", UriKind.Relative));
+                        break;
+                    }
+                case "sv":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Swedish.png", UriKind.Relative));
+                        break;
+                    }
+
+                case "it":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Italiano.png", UriKind.Relative));
+                        break;
+                    }
+
+                case "no":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Norsk.png", UriKind.Relative));
+                        break;
+                    }
+                case "fr":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Francais.png", UriKind.Relative));
+                        break;
+                    }
+                case "fi":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Finnish.png", UriKind.Relative));
+                        break;
+                    }
+                case "ptbr":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Portugues.png", UriKind.Relative));
+                        break;
+                    }
+                case "nl":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Nederlands.png", UriKind.Relative));
+                        break;
+                    }
+                case "ru":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Russian.png", UriKind.Relative));
+                        break;
+                    }
+                case "da":
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/Danske.png", UriKind.Relative));
+                        break;
+                    }
+                default:
+                    {
+                        imgLang.Source = new BitmapImage(new Uri(@"/Resources/Flags/English.png", UriKind.Relative));
+                        break;
+                    }
+
+            }
+
+
+        }
+
+
+        //private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    var selectedItem = (LanguageItem)languageComboBox.SelectedItem;
+
+        //    if (selectedItem != null)
+        //    {
+
+        //        lnkLblLang.Image = new BitmapImage(new Uri(selectedItem.FlagImagePath, UriKind.Relative));
+
+        //        //flag_img.Source = new BitmapImage(new Uri(selectedItem.FlagImagePath, UriKind.Relative));
+        //    }
+        //}
+
+        private void linklblSettings_Click(object sender, RoutedEventArgs e)
+        {
+            
+            App.oMainReference.ShowSettings();
+           
+        }
+
+        private void lnkLblHelp_Click(object sender, RoutedEventArgs e)
+        {
+           // help_menu.IsOpen = true;
+           settingspopup.IsOpen = true;
+        }
+
+        private void btnActionCenter_Click(object sender, RoutedEventArgs e)
+        {
+            
+            btnActionCenter.Image = new BitmapImage(new Uri(@"/Resources/action_center.png", UriKind.Relative));
+            App.oMainReference.ShowActionCenter();
+       
+        }
+
+        private void btnClearCache_Click(object sender, RoutedEventArgs e)
+        {
+           App.oMainReference.ShowClearCaheDialog();
+        }
+
+        private void btnRegistration_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowRegistration();
+           
+        }
+
+        private void btnAboutus_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowAboutUs();
+        }
+
+        private void btnFeedBack_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowFeedBack();
+        }
+
+        private void btnhelp_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(cGlobalSettings.DPFWebURL);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucMainBorder :: btnhelp_Click :", ex);
+            }
+        }
+
+        private void btnUserGuide_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(AppConstants.UserGuideURL);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucMainBorder :: btnUserGuide_Click :", ex);
+            }
+        }
+
+        private void btnContactUs_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(AppConstants.ContactUsURL);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucMainBorder :: btnContactUs_Click :", ex);
+            }
+        }
+    }
+}
+
+

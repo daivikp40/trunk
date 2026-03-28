@@ -1,0 +1,184 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using DuplicatePhotoFixer;
+using DuplicatePhotosFixer.Models;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucGeneral.xaml
+    /// </summary>
+    public partial class ucGeneral : UserControl
+    {
+        
+        public ucGeneral()
+        {
+            InitializeComponent();
+            PreInit();
+            Init();          
+
+        }
+
+        void PreInit()
+        {
+            try
+            {
+                if (App.oMainReference.objGeneral == null)
+                    App.oMainReference.objGeneral = new vmGeneralSettings();
+                this.DataContext = App.oMainReference.objGeneral;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsGeneral:: PreInit: ", ex);
+            }
+        }
+
+        void Init()
+        {
+            try
+            {
+                LoadStrings();
+                UpdateUIData();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsGeneral:: Init: ", ex);
+            }
+        }
+
+        void LoadStrings()
+        {
+            alert_settings_lbl.Text = cResourceManager.LoadString("DPF_PREFERENCES_ALERT_SETTINGS");
+            lbl_info.Text = cResourceManager.LoadString("DPF_PREFERENCES_SETTINGS_INFO");
+            chk_OpenAssistant.Content = cResourceManager.LoadString("DPF_PREFERENCES_GENERAL_DONT_SHOW_DIALOG_ON_AUTOMARK");
+            chk_Backbtn.Content = cResourceManager.LoadString("DPF_PREFERENCES_GENERAL_DONT_SHOW_DIALOG_ON_MOVING_BACK");
+            //chk_confirmationWindow.Content = cResourceManager.LoadString("DPF_PREFERENCES_GENERAL_DONT_SHOW_DIALOG_ON_MOVING_BACK");
+           // btncancel.Content = cResourceManager.LoadString("167");
+            //btndone.Content = cResourceManager.LoadString("");
+
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //UpdateUIData();
+        }
+
+        public void UpdateUIData()
+        {
+            try
+            {
+                App.oMainReference.objGeneral.SetUIPropertiesValue();
+                return;
+
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsGeneral:: UpdateUIData: ", ex);
+            }
+        }
+
+        private void chk_OpenAssistant_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a DoubleAnimation to fade out the label
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+
+        }
+
+        private void chk_Backbtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a DoubleAnimation to fade out the label
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+
+        }
+
+        private void chk_launchSystm_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a DoubleAnimation to fade out the label
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void chk_productMessage_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a DoubleAnimation to fade out the label
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void chk_otherProduct_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a DoubleAnimation to fade out the label
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void FadeOutAnimation_Completed(object sender, EventArgs e)
+        {
+            // Reset the label's opacity once the fade out animation is complete
+            lbl_settingsApplied.Opacity = 1.0;
+            lbl_settingsApplied.Visibility = Visibility.Hidden;
+        }
+    }
+}

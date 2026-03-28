@@ -1,0 +1,1962 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:cust ="clr-namespace:DuplicatePhotosFixer.CustomControl">
+
+
+<!--region mainHeader -->   
+<!--===========================================-->
+    <!-- Help Menu -->
+    <!--- ForeGround Colors -->
+    <SolidColorBrush x:Key="cl_fg_helpmenuItem" Color="#9e9e9e"/>
+    <!-- Background Colors -->
+    <SolidColorBrush x:Key="cl_bg_dropdown" Color="#232323"/>
+    <!-- Border -->
+    <SolidColorBrush x:Key="cl_br_dropdown" Color="#292929"/>
+ <!--============================================-->
+
+    <!--endregion-->
+    
+<!--#region ucClearCache-->
+  <!-- ForeGround Colors-->
+    <SolidColorBrush x:Key="cl_fg_heading" Color="#cecece"/>
+    <!--- Border Colors-->
+    <SolidColorBrush x:Key="cl_br_afterHeading" Color="#4A4A4A"/>
+
+    <!--#endregion-->
+    
+<!--#region AboutUs-->
+    <!-- Foreground Colors-->
+    <SolidColorBrush x:Key="cl_fg_subHeading" Color="#919191"/>
+    <SolidColorBrush x:Key="cl_fg_Heading" Color="#f9f9f9"/>
+    <SolidColorBrush x:Key="cl_fg_abthighlight" Color="#364CB4"/>
+    <SolidColorBrush x:Key="cl_fg_abtContent" Color="#d4d4d4"/>
+    <SolidColorBrush x:Key="cl_fg_Divider" Color="#787878"/>
+
+    <!--#endregion-->
+    
+<!-- #region Registartion-->
+    <!--- Foreground Colors-->
+    <SolidColorBrush x:Key="cl_fg_RegContent" Color="#424242"/>
+    <SolidColorBrush x:Key="cl_fg_info" Color="#3e3e3e"/>
+    <SolidColorBrush x:Key="cl_fg_hyperLinkText" Color="#0095fe"/>
+    <SolidColorBrush x:Key="cl_fg_footertext1" Color="#D6d6d6"/>
+    <SolidColorBrush x:Key="cl_fg_footertext2" Color="#979797"/>
+    <SolidColorBrush x:Key="cl_fg_WaterMark" Color="#717171"/>
+  
+
+    <!--- Background Color buttons -->
+    <SolidColorBrush x:Key="cl_bgBtn" Color="#5D5D5D"/>
+    <SolidColorBrush x:Key="cl_bgText-Border" Color="#cecece"/>
+    <SolidColorBrush x:Key="cl_bgWaterMarkText" Color="#E2E2E2"/>
+    
+    <!-- Border Color-->
+    <SolidColorBrush x:Key="cl_br_WaterMark" Color="#cecece"/>
+
+    <!--#endregion-->
+    
+<!--#region Settings-->
+    <!--Foreground Colors-->
+    <SolidColorBrush x:Key="cl_fg_tabItem" Color="#9c9c9c"/>
+    <SolidColorBrush x:Key="cl_fg_tabhover" Color="#fff"/>
+    <SolidColorBrush x:Key="cl_fg_setCont" Color="#AEAEAE"/>
+
+    <SolidColorBrush x:Key="cl_fg_setHeading" Color="#f9f9f9"/>
+
+
+    <!--  Background color  -->
+    <SolidColorBrush x:Key="cl_bgSettingsHeading" Color="#373737"/>
+    <SolidColorBrush x:Key="cl_bg_settingsNag" Color="#393939"/>
+    <SolidColorBrush x:Key="cl_bg_SettingsTabItem" Color="#303030"/>
+    <SolidColorBrush x:Key="cl_bg_settingsTabItemHover" Color="#393939"/>
+    <SolidColorBrush x:Key="cl_bg_TabControl" Color="#232323"/>
+
+    <!--=========================================-->
+    
+<!-- Border Color-->
+    
+
+    <SolidColorBrush x:Key="cl_br_setting" Color="#2F2F2F"/>
+  
+
+    <!--#endregion-->
+    
+   
+    
+
+    <!-- Foreground colors  -->
+    <SolidColorBrush x:Key="cl_fg_primary" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="cl_fg_primary2" Color="#000"/>
+
+    <SolidColorBrush x:Key="cl_fg_gray" Color="#707070"/>
+    <SolidColorBrush x:Key="frgclr_solidgray" Color="#4E4E4E"/>
+    <SolidColorBrush x:Key="frgclr_whitish" Color="#D2D2D2"/>
+    <SolidColorBrush x:Key="frg_clr_dragdropbox" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="frg_clr_blue" Color="#0E5AF4"/>
+    <SolidColorBrush x:Key="frg_clr_red" Color="#E00000"/>
+
+    <!-- Background colors  -->
+    <SolidColorBrush x:Key="bgclr_dark" Color="#2F2F2F"/>
+    <SolidColorBrush x:Key="bgclr_lightdark" Color="#343434"/>
+    <SolidColorBrush x:Key="bgclr_soliddark" Color="#232323"/>
+    <SolidColorBrush x:Key="bgclr_meddark" Color="#3E3E3E"/>
+
+    <SolidColorBrush x:Key="bgrclr_gray" Color="#545454"/>
+    <SolidColorBrush x:Key="bgrclr_lightgray" Color="#5E5D5F"/>
+    <SolidColorBrush x:Key="cl_bg_theme" Color="#242424"/>
+    <SolidColorBrush x:Key="bgrclr_ucHomeDragDrop" Color="#3D3D3D"/>
+    <SolidColorBrush x:Key="bgrclr_menuitemstackpanel" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="bgrclr_grayish" Color="#D5D5D5"/>
+    <SolidColorBrush x:Key="bgrclr_white" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="bgrclr_whitish" Color="#F0F1F4"/>
+    
+
+    <!--  Border color  -->
+    
+    <SolidColorBrush x:Key="clr_darkborder" Color="#000000"/>
+    <SolidColorBrush x:Key="clr_grayborder" Color="#545454"/>
+
+    <!--   Image Resources -->
+  
+    <BitmapImage x:Key="img_applicationIcon" UriSource="/Resources/Application.ico"/>
+    <BitmapImage x:Key="img_top_left_logo" UriSource="/Resources/top_left_logo.png"/>
+    <BitmapImage x:Key="img_compare1" UriSource="/Resources/campare1.png"/>
+    <BitmapImage x:Key="img_compare2" UriSource="/Resources/campare2.png"/>
+    <BitmapImage x:Key="img_about_icon" UriSource="/Resources/menu_about.png"/>
+    <BitmapImage x:Key="img_ucHomedragdrop" UriSource="/Resources/photos.png"/>
+    <BitmapImage x:Key="img_btnpic" UriSource="/Resources/btn_pic.png"/>
+    <BitmapImage x:Key="img_btnfolder" UriSource="/Resources/btn_folder.png"/>
+    <BitmapImage x:Key="img_pc" UriSource="/Resources/pc.png"/>
+    <BitmapImage x:Key="img_drive" UriSource="/Resources/drive.png"/>
+    <BitmapImage x:Key="img_close_normal" UriSource="/Resources/close_btn_normal.png"/>
+    <BitmapImage x:Key="img_close_hover" UriSource="/Resources/close_btn_hover.png"/>
+    <BitmapImage x:Key="img_close_clicked" UriSource="/Resources/close_btn_clicked.png"/>
+    <BitmapImage x:Key="img_max_normal" UriSource="/Resources/max_btn_normal.png"/>
+    <BitmapImage x:Key="img_max_hover" UriSource="/Resources/max_btn_hover.png"/>
+    <BitmapImage x:Key="img_max_clicked" UriSource="/Resources/max_btn_clicked.png"/>
+    <BitmapImage x:Key="img_min_normal" UriSource="/Resources/mini_btn_normal.png"/>
+    <BitmapImage x:Key="img_min_hover" UriSource="/Resources/mini_btn_hover.png"/>
+    <BitmapImage x:Key="img_min_clicked" UriSource="/Resources/mini_btn_clicked.png"/>
+    <BitmapImage x:Key="img_restore" UriSource="/Resources/Restore_btn.png"/>
+    <BitmapImage x:Key="img_cache" UriSource="/Resources/menu_clear_cache.png"/>
+    <BitmapImage x:Key="img_contactus" UriSource="/Resources/menu_contact.png"/>
+    <BitmapImage x:Key="img_feedback" UriSource="/Resources/menu_feedabck.png"/>
+    <BitmapImage x:Key="img_helpicon" UriSource="/Resources/menu_help.png"/>
+    <BitmapImage x:Key="img_infoicon" UriSource="/Resources/info_icon.png"/>
+    <BitmapImage x:Key="img_registration" UriSource="/Resources/menu_register_key.png"/>
+    <BitmapImage x:Key="img_updates" UriSource="/Resources/menu_check_updates.png"/>
+    <BitmapImage x:Key="img_settings" UriSource="/Resources/menu_setting_ico.png"/>
+    <BitmapImage x:Key="img_actioncenter" UriSource="/Resources/action-center-icon.png"/>
+    <BitmapImage x:Key="img_video" UriSource="/Resources/menu_video.png"/>
+    <BitmapImage x:Key="img_menuseperator" UriSource="/Resources/menu_separator.png"/>
+    <BitmapImage x:Key="img_dropdownarrow" UriSource="/Resources/dropdown_arrow.png"/>
+    <BitmapImage x:Key="img_help" UriSource="/Resources/help.png"/>
+    <BitmapImage x:Key="img_deleteselectedfilefolder" UriSource="/Resources/delete_normal.png"/>
+    <BitmapImage x:Key="img_automark" UriSource="/Resources/auto_mark.png"/>
+    <BitmapImage x:Key="img_automark_over" UriSource="/Resources/auto_mark_over.png"/>
+    <BitmapImage x:Key="img_mark" UriSource="/Resources/mark.png"/>
+    <BitmapImage x:Key="img_mark_over" UriSource="/Resources/mark_over.png"/>
+    <BitmapImage x:Key="img_imageViewIcon" UriSource="/Resources/image_view_ico.png"/>
+    <BitmapImage x:Key="img_imageView" UriSource="/Resources/image_view.png"/>
+    <BitmapImage x:Key="img_imageView_hover" UriSource="/Resources/image_view_hover.png"/>
+    <BitmapImage x:Key="img_selection_assistant_A_icon" UriSource="/Resources/selection_assistant_A_icon.png"/>
+    <BitmapImage x:Key="img_selection_assistant_A_icon_hover" UriSource="/Resources/selection_assistant_A_icon_hover.png"/>
+    <BitmapImage x:Key="img_selection_assistant_B_icon" UriSource="/Resources/selection_assistant_B_icon.png"/>
+    <BitmapImage x:Key="img_selection_assistant_B_icon_hover" UriSource="/Resources/selection_assistant_B_icon_hover.png"/>
+    <BitmapImage x:Key="img_alert_icon_trans" UriSource="/Resources/alert_icon_trans.png"/>
+    <BitmapImage x:Key="img_pipe_devider" UriSource="/Resources/pipe-devider.png"/>
+    <BitmapImage x:Key="img_seprator" UriSource="/Resources/seprator.png"/>
+    <BitmapImage x:Key="img_detailed_view_icon" UriSource="/Resources/detailed_view_ico.png"/>
+    <BitmapImage x:Key="img_detailedView" UriSource="/Resources/detailed_view.png"/>
+    <BitmapImage x:Key="img_detailedView_hover" UriSource="/Resources/detailed_view_hover.png"/>
+    <BitmapImage x:Key="img_btnback" UriSource="/Resources/back_btn.png"/>
+    <BitmapImage x:Key="img_btnback_hover" UriSource="/Resources/back_h.png"/>
+    <BitmapImage x:Key="img_db" UriSource="/Resources/dropbox_img.png"/>
+    <BitmapImage x:Key="img_picasa" UriSource="/Resources/picasa15x15.png"/>
+    <BitmapImage x:Key="img_lr" UriSource="/Resources/Lightroom_15x15.png"/>
+    <BitmapImage x:Key="img_photo" UriSource="/Resources/po_logo_small.png"/>
+    <BitmapImage x:Key="img_close" UriSource="/Resources/close.png"/>
+    <BitmapImage x:Key="img_nag" UriSource="/Resources/nag_icon.png"/>
+    <BitmapImage x:Key="img_settings_sm" UriSource="/Resources/setting_icon_sm.png"/>
+    <BitmapImage x:Key="img_footer" UriSource="/Resources/menu_separator.png"/>
+    <BitmapImage x:Key="img_cart" UriSource="/Resources/cart.png"/>
+    <BitmapImage x:Key="img_flags" UriSource="/Resources/flags_strip.jpg"/>
+    <BitmapImage x:Key="img_bg" UriSource="/Resources/bg.png" />
+    <BitmapImage x:Key="img_play_icon" UriSource="/Resources/play_icon.png"/>
+    <BitmapImage x:Key="img_Alert" UriSource="/Resources/alert.png"/>
+    <BitmapImage x:Key="img_close_flat" UriSource="/Resources/close_btn_flat.jpg"/>
+    <BitmapImage x:Key="img_ms_logo" UriSource="/Resources/mscp_logo_new.png"/>
+    <BitmapImage x:Key="img_device" UriSource="/Resources/device_list.jpg"/>
+    <BitmapImage x:Key="scan_progress" UriSource="/Resources/scanBar.gif"/>
+    <BitmapImage x:Key="nag_dpf_logo" UriSource="/Resources/dpf_update_logo.png"/>
+    <BitmapImage x:Key="img_ms_logo_small" UriSource="/Resources/mscp_logo_small.png"/>
+    <BitmapImage x:Key="img_corner_50" UriSource="/Resources/corner_50.png"/>
+    <BitmapImage x:Key="img_dff_logo" UriSource="/Resources/dff-logo.png"/>
+    <BitmapImage x:Key="img_alert_yellow" UriSource="/Resources/alert_icon.png"/>
+    <BitmapImage x:Key="img_logo_dpf" UriSource="/Resources/popup_photo.png"/>
+    <BitmapImage x:Key="img_bg_gradient" UriSource="/Resources/yellow_gradient_middle.png"/>
+    <BitmapImage x:Key="img_green_tick" UriSource="/Resources/tick.png"/>
+    <BitmapImage x:Key="img_vista_gradient" UriSource="/Resources/vista_gradient.png"/>
+    <BitmapImage x:Key="vista_app_icon" UriSource="/Resources/app_icon_vista.png"/>
+    <BitmapImage x:Key="img_close_black" UriSource="/Resources/close_black.png"/>
+    <BitmapImage x:Key="img_limited_offer" UriSource="/Resources/limited_time_offer.png"/>
+    <BitmapImage x:Key="blue_tick" UriSource="/Resources/blue_right_mark.png"/>
+    <BitmapImage x:Key="img_dpf_updatelogo" UriSource="/Resources/dpf_updateofr_icon.png"/>
+    <BitmapImage x:Key="img_vpn_graphics" UriSource="/Resources/vpn_graphics.png"/>
+    <BitmapImage x:Key="img_limited_offer_clock" UriSource="/Resources/limited-time-offer-clock.png"/>
+    <BitmapImage x:Key="img_install_btn_red" UriSource="/Resources/install-now-button.png"/>
+    <BitmapImage x:Key="img_plus_btn" UriSource="/Resources/plus.png"/>
+    <BitmapImage x:Key="img_nag_bg" UriSource="/Resources/nag_bg.png"/>
+    <BitmapImage x:Key="img_new" UriSource="/Resources/new.png"/>
+    <BitmapImage x:Key="img_tsr_logo" UriSource="/Resources/tsr-logo.png"/>
+    <BitmapImage x:Key="img_arrow" UriSource="/Resources/arrowvpn-button.png"/>
+    <BitmapImage x:Key="img_btn_orange" UriSource="/Resources/button-orange.png"/>
+    <BitmapImage x:Key="img_apm_bg" UriSource="/Resources/apm_bg.png"/>
+    <BitmapImage x:Key="img_apm_ss" UriSource="/Resources/apm_ss.png"/>
+    <BitmapImage x:Key="img_en_flag" UriSource="/Resources/en.png"/>
+    <BitmapImage x:Key="img_systweak_logo" UriSource="/Resources/about_systweak_logo_sm.png"/>
+    <BitmapImage x:Key="img_top_header" UriSource="/Resources/Top-sub-header.jpg"/>
+    <BitmapImage x:Key="img_top_header_vertical" UriSource="/Resources/Top-sub-header-vertical.jpg"/>
+    <BitmapImage x:Key="img_apm_logo" UriSource="/Resources/apm_logo.png"/>
+    <BitmapImage x:Key="img_bottom_mid.png" UriSource="/Resources/bottom_mid.png"/>
+    <BitmapImage x:Key="img_up_maxsize" UriSource="/Resources/up_maxSize.png"/>
+    <BitmapImage x:Key="img_down_minSize" UriSource="/Resources/down_minsize.png"/>
+    <BitmapImage x:Key="img_arrow_up" UriSource="/Resources/arrowUp.png"/>
+    <BitmapImage x:Key="img_arrow_down" UriSource="/Resources/arrowDown.png"/>
+    <BitmapImage x:Key="img_about_systweak_logo" UriSource="/Resources/systweak_logo_about.png"/>
+    <BitmapImage x:Key="img_close_plain" UriSource="/Resources/closevpn.png"/>
+    <BitmapImage x:Key="img_duplicate_number_bg_orange" UriSource="/Resources/duplicate_number_bg_orange.png"/>
+    <BitmapImage x:Key="img_photo_scan_icon" UriSource="/Resources/photo-scan-complete-icon.png"/>
+    <BitmapImage x:Key="img_reset_icon" UriSource="/Resources/reset_icon.png"/>
+    <BitmapImage x:Key="img_mb" UriSource="/Resources/money-back.png"/>
+    <BitmapImage x:Key="img_checkmark" UriSource="/Resources/checkmark.png"/>
+    <BitmapImage x:Key="img_orange_arrow" UriSource="/Resources/orange-arrow.png"/>
+    <BitmapImage x:Key="img_adu_logo" UriSource="/Resources/adu-logo.png"/>
+    <BitmapImage x:Key="img_green_bullet" UriSource="/Resources/greenbullet.png"/>
+    <BitmapImage x:Key="img_lock__exit" UriSource="/Resources/lock_exit.png"/>
+    <BitmapImage x:Key="img_auto_mark" UriSource="/Resources/feature_auto_mark.png"/>
+    <BitmapImage x:Key="img_clean_duplicate" UriSource="/Resources/feature_clean_duplicate.png"/>
+    <BitmapImage x:Key="img_one_click" UriSource="/resources/feature_one_click_scan.png"/>
+    <BitmapImage x:Key="img_recover" UriSource="/resources/feature_recover_storage_space.png"/>
+    <BitmapImage x:Key="img_adu-image" UriSource="/Resources/adu-image.png"/>
+    <BitmapImage x:Key="img_divider-line" UriSource="/Resources/divider-line.png"/>
+    <BitmapImage x:Key="img_circle" UriSource="/Resources/circle.png"/>
+    <BitmapImage x:Key="img_disk_space" UriSource="/Resources/disk_space.png"/>
+    <BitmapImage x:Key="img_remaining_photos" UriSource="/Resources/remaining_photos.png"/>
+    <BitmapImage x:Key="img_right" UriSource="/Resources/right.png"/>
+    <BitmapImage x:Key="img_cross" UriSource="/Resources/cross_lt.png"/>
+    <BitmapImage x:Key="img_green_btn_arrow" UriSource="/Resources/bullet_1.png"/>
+    <BitmapImage x:Key="img_green_btn" UriSource="/Resources/green_btn.png"/>
+    <BitmapImage x:Key="img_green_btn_n" UriSource="/Resources/green_btn.png"/>
+    <BitmapImage x:Key="img_green_btn_h" UriSource="/Resources/green_btn_h.png"/>
+    <BitmapImage x:Key="img_green_btn_d" UriSource="/Resources/green_btn_d.png"/>
+    <BitmapImage x:Key="img_green_btn_hover" UriSource="/Resources/green_btn_hover.png"/>
+    <BitmapImage x:Key="img_green_btn_down" UriSource="/Resources/green_btn_down.png"/>
+    <BitmapImage x:Key="img_download" UriSource="/Resources/download.png"/>
+    <BitmapImage x:Key="img_right-backup" UriSource="/Resources/right-backup-logo.png"/>
+    <BitmapImage x:Key="img_minsize" UriSource="/Resources/down_minsize.png"/>
+    <BitmapImage x:Key="img_maxsize" UriSource="/Resources/backup_log_arrow_right.png"/>
+    <BitmapImage x:Key="img_english" UriSource="/Resources/Flags/English.png"/>
+    <BitmapImage x:Key="img_danish" UriSource="/Resources/Flags/Danske.png"/>
+    <BitmapImage x:Key="img_german" UriSource="/Resources/Flags/Deutsch.png"/>
+    <BitmapImage x:Key="img_french" UriSource="/Resources/Flags/Francais.png"/>
+    <BitmapImage x:Key="img_dutch" UriSource="/Resources/Flags/Nederlands.png"/>
+    <BitmapImage x:Key="img_italian" UriSource="/Resources/Flags/Italiano.png"/>
+    <BitmapImage x:Key="img_japnese" UriSource="/Resources/Flags/Japanese.png"/>
+    <BitmapImage x:Key="img_norwegian" UriSource="/Resources/Flags/Norsk.png"/>
+    <BitmapImage x:Key="img_portuguese" UriSource="/Resources/Flags/Portugues.png"/>
+    <BitmapImage x:Key="img_spanish" UriSource="/Resources/Flags/Spanish.png"/>
+    <BitmapImage x:Key="img_sweddish" UriSource="/Resources/Flags/Swedish.png"/>
+    <BitmapImage x:Key="img_finnish" UriSource="/Resources/Flags/Finnish.png"/>
+    <BitmapImage x:Key="img_russian" UriSource="/Resources/Flags/Russian.png"/>
+    <BitmapImage x:Key="img_arrowUp" UriSource="/Resources/arrowUp1.png"/>
+    <BitmapImage x:Key="img_arrowDown" UriSource="/Resources/arrowDown1.png"/>
+
+
+
+<!--region Images-->
+
+    <DrawingImage x:Key="img_uncheckDrawingImage">
+        
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V16.6 H16.6 V0 H0 Z">
+                <GeometryDrawing Brush="#FF686868" Geometry="F1 M16.6,16.6z M0,0z M16.6,16.6L0,16.6 0,0 16.6,0 16.6,16.6z M1,15.6L15.6,15.6 15.6,1 1,1 1,15.6z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="img_checkDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V16.6 H16.6 V0 H0 Z" >
+                <GeometryDrawing  Brush="#FF686868"  Geometry="F1 M16.6,16.6z M0,0z M16.6,16.6L0,16.6 0,0 16.6,0 16.6,16.6z M1,15.6L15.6,15.6 15.6,1 1,1 1,15.6z M12.6,6.7L11.2,5.3 7.5,8.9 5.6,6.8 4.1,8.2 7.4,11.8 12.6,6.7z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!--endregion-->
+
+    <!--  Styles  -->
+
+    <ControlTemplate x:Key="ComboBoxToggleButton"
+                     TargetType="ToggleButton">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="20"
+                                  MaxWidth="40" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border"
+                    Grid.ColumnSpan="2"
+                    CornerRadius="3"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="{TemplateBinding BorderThickness}" />
+            <Border Grid.Column="0"
+                    CornerRadius="0"
+                    Margin="1"
+                    Background="Transparent"
+                    BorderThickness="0,0,0,0" />
+            <Border Grid.Column="1" Background="#003E3E3E" Width="10" Height="20" CornerRadius="2" HorizontalAlignment="Center" Margin="0 0 0 0 " BorderBrush="#BCBCBC" BorderThickness="1 0 0 0">
+                <Image Width="auto"
+                       Height="auto"
+                       Stretch="None"
+                       Source="/Resources/dropdown_arrow.png"
+                       Margin="1 0 0 0"                   
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center" />
+            </Border>
+        </Grid>
+    </ControlTemplate>
+
+
+    <ControlTemplate x:Key="ComboBoxTextBox"
+                     TargetType="TextBox">
+        <Border x:Name="PART_ContentHost"
+                Focusable="False"
+                Background="{TemplateBinding Background}" />
+    </ControlTemplate>
+
+
+    <Style x:Key="DataGridContextMenuStyle" TargetType="{x:Type ContextMenu}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            SnapsToDevicePixels="True">
+                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="stl_btnUpgradeNow" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="0.8"/>
+
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <!--<Setter Property="HorizontalContentAlignment" Value=""/>-->
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="15 0"/>
+
+        <Setter Property="Background">
+            <Setter.Value>
+                <!--EndPoint="0.5,1" StartPoint="0.5,0"-->
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5, 1">
+                    <GradientStop Color="#FFA341" Offset="0"/>
+                    <GradientStop Color="#FF7602" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"
+                            >
+                        <ContentControl Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="{TemplateBinding FontWeight}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFD580" Offset="0"/>
+                            <GradientStop Color="#FF7602" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="stl_btnScanForDuplicates" TargetType="Button">
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="0.8"/>
+        <Setter Property="Background" Value="#317AE6"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0 0"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                        <ContentControl Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="{TemplateBinding FontWeight}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource frgclr_gray}"/>
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#87CEFA" Offset="0"/>
+                            <GradientStop Color="#317AE6" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                      
+
+            </Trigger>
+
+            
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="styl_reset_btn" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="#989898"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background" Value="#E3D8D8">
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+    <Style x:Key="TextImagebtn" TargetType="cust:ImageButton">
+        <Setter Property="Background"
+                    Value="Transparent" />
+        <Setter Property="Cursor"
+                    Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch">
+                                <TextBlock  Padding="3,0,3,0"
+                                            Margin="0,0,0,0"
+                                            x:Name="lnkLblInstall"
+                                           FontSize="13"                                       
+                                          Foreground="#fff"
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow"/>
+                                <Image  
+                                            Margin="0,2,4,0"
+                                           Stretch="None"
+                                           x:Name="lnkImageSettings"
+                                           SnapsToDevicePixels="False"
+                                           Source="{TemplateBinding Image}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="styl_add_excludebtn" TargetType="Button">
+        <Setter Property="Background" Value="#1CA2E5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background" Value="#E3D8D8">
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+
+
+    </Style>
+
+
+    <Style x:Key="stl_ImgTextButton" TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Cursor"
+                    Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                            Padding="5 0"
+                            MinWidth="{TemplateBinding MinWidth}"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center">
+                                <Image  
+                                     Stretch="None"
+                                           x:Name="lnkImagereset"
+                                           Source="{TemplateBinding Image}"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center" />
+                                <TextBlock  Padding="{TemplateBinding Padding}"
+                                            x:Name="lnkLblHelp"
+                                           FontSize="{TemplateBinding FontSize}"
+                                          Foreground="{TemplateBinding Foreground }"
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow"/>
+
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <Style x:Key="stl_btnClose" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+
+        <Setter Property="Height" Value="19"/>
+        <Setter Property="Width" Value="28"/>
+
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="{DynamicResource img_close_normal}"/>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Background="{TemplateBinding Background}">
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource img_close_hover}"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+    <!--<Style x:Key="stl_btnreset" TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background"
+                    Value="Transparent" />
+        <Setter Property="Cursor"
+                    Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#989898"
+                                
+                                BorderThickness="1">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Top">
+                                <Image  
+                                    Margin="0,0,0,0"
+                                     Stretch="None"
+                                           x:Name="lnkImagereset"
+                                           SnapsToDevicePixels="False"
+                                           Source="{TemplateBinding Image}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                <TextBlock  Padding="3,0,3,0"
+                                            Margin="0,0,0,0"
+                                            x:Name="lnkLblHelp"
+                                           FontSize="13"
+                                            
+                                          Foreground="#A8A8A8"
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow"/>
+
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+    <Style x:Key="stl_btnfooter" TargetType="{x:Type cust:ImageButton}">
+
+        <Setter Property="Background"
+                    Value="Transparent" />
+        <Setter Property="Cursor"
+                    Value="Hand" />
+        <Setter Property="BorderBrush"
+                Value="#646464"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Center"
+                               Padding="3 0 0 0"
+                                Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                            VerticalAlignment="Center"
+                                BorderThickness="0.8">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Top">
+                                <Image  
+                                    Margin="0,5,0,0"
+                                      Width="25"
+                                    Height="25"
+                                           x:Name="img_playbtn"
+                                           SnapsToDevicePixels="False"
+                                           Source="{TemplateBinding Image}"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                <TextBlock  Padding="5,0,3,0"
+                                            Margin="0,5,0,0"
+                                            x:Name="lnkwatchtutorial"
+                                           FontSize="14"
+                                            VerticalAlignment="Center"
+                                          Foreground="White"
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow"/>
+
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_imgbtn" TargetType="{x:Type cust:ImageButton}">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Image x:Name="btnActionCenter"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                          Margin="{TemplateBinding Margin}"
+                          Source="{TemplateBinding Image}"
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"  
+                           Stretch="Uniform"
+                              />
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+   
+   
+
+
+    <!--<Style x:Key="stl_btnLanguage" TargetType="{x:Type cust:ImageButton}">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                  
+                        <Image x:Name="btnLanguage"
+                                Width="15"
+                                Height="15"
+                          Margin="0,0,5,10"
+                          Source="{TemplateBinding Image}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"  
+                           Stretch="Uniform"
+                              />
+                        
+                        
+                   
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+   
+
+       
+
+    <!--<Style x:Key="StyleComboboxTextButton"
+        TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background"
+                    Value="White" />
+        
+        <Setter Property="Foreground" Value="{DynamicResource clr_darkborder}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                                Width="200"
+                                Height="28"
+                          
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch">
+                                <Image 
+                                       Width="15"
+                                       Height="15"
+                                        Margin="10,0,0,0"
+                                           x:Name="imgOption"
+                                           SnapsToDevicePixels="False"
+                                           Source="{TemplateBinding Image}"
+                                           Stretch="Uniform"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                <TextBlock  Padding="5,0,0,0"
+                                            x:Name="txtName"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                           
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                 
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+
+    <Style x:Key="styl_trans_btn" TargetType="{x:Type Button}">
+       
+           
+                <Setter Property="Background" Value="White" />
+                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bdr_main"  BorderThickness="1" BorderBrush="#4E4E4E" Background="Transparent">
+                                <ContentPresenter x:Name="cpName" HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"
+                                                              TextElement.Foreground="White">
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" TargetName="bdr_main" Value="#494949"></Setter>
+                                    <Setter Property="TextElement.Foreground" TargetName="cpName" Value="#FFFFFF"></Setter>
+                                    <Setter Property="Background" TargetName="bdr_main" Value="#494949"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                    <Setter Property="TextElement.Foreground" TargetName="cpName" Value="#FFFFFF"></Setter>
+                                    <Setter Property="Background" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="cpName" Property="TextElement.Foreground" Value="#747373" />
+                                    <Setter TargetName="bdr_main" Property="Background" Value="#b0b0b0" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            
+      
+    </Style>
+    
+
+    <Style x:Key="stl_MoveSettingsRadiobtn" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="#565656"/>
+        
+        <!--<Setter Property="Width" Value="244"/>
+        <Setter Property="Height" Value="27"/>-->
+        <Setter Property="IsChecked" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <RadioButton Foreground="{TemplateBinding Foreground}"
+                                
+                                 Padding="{TemplateBinding Padding}"
+                                 IsChecked="{TemplateBinding IsChecked}">
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </RadioButton>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_btndeleteCurrentRow" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                            Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                        <ContentControl Content="{TemplateBinding Content}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers >
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource img_deleteselectedfilefolder}" AlignmentX="Center"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="stl_btnEmptySelectedFileList" TargetType="Button">
+
+        <Setter Property="Background" Value="{DynamicResource bgclr_soliddark}"/>
+
+        <Setter Property="Height" Value="15"/>
+        <Setter Property="Width" Value="15"/>
+        <Setter Property="Padding" Value="0 0"/>
+        <Setter Property="Margin" Value="0 0"/>
+        <!--<Setter Property="BorderThickness" Value="0"/>-->
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+                            Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                        <ContentControl Content="{TemplateBinding Content}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers >
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource bgclr_soliddark}">
+                                
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style x:Key="stl_btnRefresh" TargetType="cust:ImageButton">
+        <Setter Property="Background" Value="#888888"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="125"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                                Width="125"
+                                Height="32"
+                              HorizontalAlignment="Left"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1">
+                        <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch">
+                                <Image 
+                                       Width="15"
+                                       Height="15"
+                                        Margin="10,0,0,0"
+                                           x:Name="imgOption"
+                                           SnapsToDevicePixels="False"
+                                           Source="{TemplateBinding Image}"
+                                           Stretch="Uniform"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                <TextBlock  Padding="5,0,0,0"
+                                            x:Name="txtName"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                           
+                                            Text="{TemplateBinding Content}"
+                                            TextWrapping="WrapWithOverflow" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                            
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+
+    <Style x:Key="stl_btnScanDeleteMarked" TargetType="Button">
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="#317AE6"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0 0"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                        <ContentControl Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="{TemplateBinding FontWeight}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource frgclr_gray}"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#87CEFA" Offset="0"/>
+                            <GradientStop Color="#317AE6" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="false"/>
+        <Setter Property="Height" Value="18"/>
+        <Setter Property="Width" Value="18"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Ellipse  Stroke="Black"
+                          StrokeThickness="1"
+                          Name="Ellipse" 
+                          Fill="OrangeRed" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Ellipse" Property="Fill" Value="Orange"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Ellipse" Property="Fill" Value="Gray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="stylGreenBtn" TargetType="Button">
+        <Setter Property="Background" Value="#14A402"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                        <ContentControl Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#14A402"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+                
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+    <Style x:Key="stl_btnBack" TargetType="Button">
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource bgclr_lightdark}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="13"/>
+        <!--<Setter Property="FontWeight" Value="Medium"/>-->
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0 0"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                        <ContentControl Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="{TemplateBinding FontWeight}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource frgclr_gray}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#89898A" Offset="0"/>
+                            <GradientStop Color="#E8F0F0" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+
+
+            </Trigger>
+
+
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="stl_ViewType_cmbBox" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="#343434" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}"
+                                                                 Value="True">
+                <Setter Property="Background" Value="#4D4D4D" />
+            </DataTrigger>
+             <!--<Trigger Property="IsPressed" Value="True">
+             <Setter Property="Background" Value="#4D4D4D"/>
+                                        </Trigger>--> 
+        </Style.Triggers>
+    </Style>
+
+    <ControlTemplate x:Key="ComboBoxToggleButton_ViewType" 
+                      TargetType="{x:Type ToggleButton}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="20" 
+                                   MaxWidth="40" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border" 
+                     Grid.ColumnSpan="2" 
+                     CornerRadius="3" 
+                     Background="#272727" 
+                     BorderBrush="#272727" 
+                     BorderThickness="0" />
+            <Border Grid.Column="0" 
+                     CornerRadius="3" 
+                     Margin="1" 
+                     Background="#272727" 
+                     BorderThickness="0,0,0,0" />
+            <Border Grid.Column="1" CornerRadius="2" HorizontalAlignment="Right" Margin="0 0 12 15 ">
+                <Image Width="auto" 
+                        Height="auto" 
+                        Stretch="None" 
+                         
+                        Margin="1 0 0 0"                    
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"/>
+            </Border>
+        </Grid>
+    </ControlTemplate>
+
+    <DataTemplate x:Key="cmbTemplateViewsType">
+        <StackPanel VerticalAlignment="Center" Margin="0 0 0 0" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Image Stretch="None" 
+                        Width="16" 
+                        HorizontalAlignment="Center" 
+                        Source="{Binding ViewImage}" />
+            <TextBlock Text="{Binding ViewName}" 
+                            ToolTip="{Binding ViewName}" 
+                            Margin="5 5 0 5" 
+                            TextAlignment="Center" 
+                            TextWrapping="Wrap" 
+                            TextTrimming="WordEllipsis" 
+                        VerticalAlignment="Bottom"
+                       
+                        FontSize="{Binding cboFontSize}" 
+                        Foreground="#FFFFFF" />
+            <!-- <Image Width="auto" 
+                        Height="auto" 
+                        Stretch="None" 
+                        x:Name="imgTick" 
+                        Source="/Resources/tick.png" 
+                        Margin="3 0 0 0" 
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Center" /> -->
+        </StackPanel>
+        
+        <!-- <DataTemplate.Triggers> 
+                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ComboBoxItem}},Path=IsSelected}" Value="True"> 
+                     <Setter TargetName="imgTick" Property="Visibility" Value="Visible"/> 
+                 </DataTrigger> 
+                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ComboBoxItem}},Path=IsSelected}" Value="False"> 
+                     <Setter TargetName="imgTick" Property="Visibility" Value="Collapsed"/> 
+                 </DataTrigger> 
+             </DataTemplate.Triggers> -->
+    </DataTemplate>
+    
+    <Style x:Key="CustomComboViewsType"
+           TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels"
+                Value="true" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+                Value="true" />
+        <Setter Property="MinWidth"
+                Value="20" />
+        <Setter Property="MinHeight"
+                Value="20" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton Name="ToggleButton"
+                                      Template="{StaticResource ComboBoxToggleButton_ViewType}"
+                                      Grid.Column="2"
+                                      Focusable="false"
+                                      IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press" />
+
+                        <ContentPresenter Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Margin="3,3,3,3"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left" />
+
+                        <TextBox x:Name="PART_EditableTextBox"
+                                 Style="{x:Null}"
+                                
+                                 HorizontalAlignment="Left"
+                                 BorderBrush="{TemplateBinding BorderBrush}"
+                                 VerticalAlignment="Center"
+                                 Focusable="True"
+                                 Background="#272727"
+                                 Foreground="Green"
+                                 Visibility="Hidden"
+                                 IsReadOnly="{TemplateBinding IsReadOnly}" />
+
+                        <Popup Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Grid Name="DropDown"
+                                  SnapsToDevicePixels="True"
+                                  MinWidth="{TemplateBinding ActualWidth}"
+                                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+
+                                <Border x:Name="DropDownBorder"
+                                        Background="#2C2C2C"
+                                        BorderThickness="1"
+                                        BorderBrush="#4C4C4C" />
+
+                                <ScrollViewer Margin="4,6,4,6"
+                                              SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True"
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems"
+                                 Value="false">
+                            <Setter TargetName="DropDownBorder"
+                                    Property="Height"
+                                    Value="40" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Foreground"
+                                    Value="#888888" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping"
+                                 Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll"
+                                    Value="false" />
+                        </Trigger>
+                        <Trigger SourceName="Popup"
+                                 Property="Popup.AllowsTransparency"
+                                 Value="true">
+                            <Setter TargetName="DropDownBorder"
+                                    Property="CornerRadius"
+                                    Value="0" />
+                            <Setter TargetName="DropDownBorder"
+                                    Property="Margin"
+                                    Value="0,2,0,0" />
+
+                        </Trigger>
+                        <Trigger Property="IsEditable"
+                                 Value="true">
+                            <Setter Property="IsTabStop"
+                                    Value="false" />
+                            <Setter TargetName="PART_EditableTextBox"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                            <Setter TargetName="ContentSite"
+                                    Property="Visibility"
+                                    Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+        </Style.Triggers>
+    </Style>
+
+    
+
+    <Style x:Key="CustomComboScanMode"
+           TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels"
+                Value="true" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+                Value="true" />
+        <Setter Property="MinWidth"
+                Value="20" />
+        <Setter Property="MinHeight"
+                Value="20" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <ToggleButton Name="ToggleButton"
+                                      Template="{StaticResource ComboBoxToggleButton}"
+                                      Grid.Column="2"
+                                      Focusable="false"
+                                      IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press" />
+
+                        <ContentPresenter Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Margin="3,3,23,3"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left" />
+
+                        <TextBox x:Name="PART_EditableTextBox"
+                                 Style="{x:Null}"
+                                 Template="{StaticResource ComboBoxTextBox}"
+                                 HorizontalAlignment="Left"
+                                 BorderBrush="{TemplateBinding BorderBrush}"
+                                 VerticalAlignment="Center"
+                                 Focusable="True"
+                                 Background="#272727"
+                                 Foreground="Green"
+                                 Visibility="Hidden"
+                                 IsReadOnly="{TemplateBinding IsReadOnly}" />
+
+                        <Popup Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Grid Name="DropDown"
+                                  SnapsToDevicePixels="True"
+                                  MinWidth="{TemplateBinding ActualWidth}"
+                                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+
+                                <Border x:Name="DropDownBorder"
+                                        Background="#fff"
+                                        BorderThickness="1"
+                                        BorderBrush="Transparent" />
+
+                                <ScrollViewer Margin="0"
+                                              SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True"
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems"
+                                 Value="false">
+                            <Setter TargetName="DropDownBorder"
+                                    Property="Height"
+                                    Value="40" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Foreground"
+                                    Value="#888888" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping"
+                                 Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll"
+                                    Value="false" />
+                        </Trigger>
+                        <Trigger SourceName="Popup"
+                                 Property="Popup.AllowsTransparency"
+                                 Value="true">
+                            <Setter TargetName="DropDownBorder"
+                                    Property="CornerRadius"
+                                    Value="0" />
+                            <Setter TargetName="DropDownBorder"
+                                    Property="Margin"
+                                    Value="0,2,0,0" />
+
+                        </Trigger>
+                        <Trigger Property="IsEditable"
+                                 Value="true">
+                            <Setter Property="IsTabStop"
+                                    Value="false" />
+                            <Setter TargetName="PART_EditableTextBox"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                            <Setter TargetName="ContentSite"
+                                    Property="Visibility"
+                                    Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="imgNumericButton" 
+                TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background" 
+                     Value="Transparent" />
+        <Setter Property="Cursor" 
+                     Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border" 
+                                 Width="{TemplateBinding Width}" 
+                                 Height="{TemplateBinding Height}" 
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Stretch" 
+                               
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                 BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid HorizontalAlignment="Stretch" 
+                                   VerticalAlignment="Stretch">
+                            
+                                <Image x:Name="imgOption" 
+                                        SnapsToDevicePixels="False" 
+                                        Source="{TemplateBinding Image}" 
+                                        Stretch="Uniform" 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        RenderOptions.BitmapScalingMode="HighQuality" />
+                          
+                        </Grid>
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                                <GradientStop Color="#ECEBEC" Offset="0" />
+                                <GradientStop Color="#E1E1E1" Offset="0.567" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="imageButton" 
+                TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background" 
+                     Value="Transparent" />
+        <Setter Property="Cursor" 
+                     Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border" 
+                                 Width="{TemplateBinding Width}" 
+                                 Height="{TemplateBinding Height}" 
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Stretch" 
+                                 Background="{TemplateBinding Background}" 
+                                 BorderBrush="{TemplateBinding BorderBrush}" 
+                                 BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid HorizontalAlignment="Stretch" 
+                                   VerticalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" 
+                                             HorizontalAlignment="Stretch" 
+                                             VerticalAlignment="Stretch">
+                                <Image x:Name="imgOption" 
+                                        SnapsToDevicePixels="False" 
+                                        Source="{TemplateBinding Image}" 
+                                        Stretch="Uniform" 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" 
+                                      Value="true">
+                            <Setter TargetName="Border" 
+                                         Property="BorderThickness" 
+                                         Value="0,0,0,0" />
+                            <Setter TargetName="Border" 
+                                         Property="BorderBrush" 
+                                         Value="{DynamicResource ucPdfViewerOptionsHoverForeColor}" />
+                            <Setter TargetName="imgOption" 
+                                         Property="Image.Source" 
+                                         Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HoverImage}" />
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" 
+                                      Value="true">
+                            <Setter TargetName="Border" 
+                                         Property="BorderThickness" 
+                                         Value="0,0,0,0" />
+                            <Setter TargetName="Border" 
+                                         Property="BorderBrush" 
+                                         Value="{DynamicResource ucPdfViewerOptionsHoverForeColor}" />
+                            <Setter TargetName="imgOption" 
+                                         Property="Image.Source" 
+                                         Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HoverImage}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" 
+                                      Value="true">
+                            <Setter TargetName="Border" 
+                                         Property="BorderThickness" 
+                                         Value="0,0,0,0" />
+                            <Setter TargetName="Border" 
+                                         Property="BorderBrush" 
+                                         Value="{DynamicResource ucPdfViewerOptionsHoverForeColor}" />
+                            <Setter TargetName="imgOption" 
+                                         Property="Image.Source" 
+                                         Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedImage}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="nodefaultHoverbtn" TargetType="Button">
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <!--<Setter Property="Background" Value="{DynamicResource bgclr_lightdark}"/>-->
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 0"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentControl Content="{TemplateBinding Content}" VerticalContentAlignment="Bottom" HorizontalAlignment="Center" FontWeight="{TemplateBinding FontWeight}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource frgclr_gray}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#89898A" Offset="0"/>
+                            <GradientStop Color="#E8F0F0" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+
+
+            </Trigger>
+
+
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="imgBtn_TopImageText" TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background"
+                    Value="Transparent" />
+        <Setter Property="Cursor"
+                    Value="Arrow" />
+        <Setter Property="BorderBrush" Value="{DynamicResource clr_darkborder}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border x:Name="Border"
+                            Height="{TemplateBinding Height}"
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Vertical" >
+                          
+                            <Image  x:Name="lnkAutoMark"
+                                    Source="{TemplateBinding Image}" 
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Stretch="None"/>
+                            <!--<TextBlock FontWeight="SemiBold" FontSize="12" 
+                                       x:Name="lnkLblAutoMark"                                                                                   
+                                       Foreground="#fff"
+                                       Text="{TemplateBinding Content}"
+                                       TextWrapping="WrapWithOverflow"/>-->
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                     Value="true">
+                            <Setter TargetName="Border"
+                                        Property="BorderThickness"
+                                        Value="0,0,0,0" />
+                            <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="{DynamicResource ucPdfViewerOptionsHoverForeColor}" />
+                           
+                            <!--<Setter TargetName="imgOption"
+                                        Property="Image.Source"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HoverImage}" />-->
+
+                        </Trigger>
+                        </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="styleResultHeaderButtons"
+               TargetType="{x:Type cust:ImageButton}">
+        <Setter Property="Background"
+                    Value="{DynamicResource clr_bgr}" />
+        <Setter Property="Cursor"
+                    Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type cust:ImageButton}">
+                    <Border CornerRadius="0"
+                                x:Name="Border"
+                                Background="{DynamicResource clr_border}">
+                        <StackPanel HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center">
+
+                            <Image x:Name="imgMenu"
+                                       SnapsToDevicePixels="False"
+                                       Source="{TemplateBinding Image}"
+                                       Stretch="None"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock x:Name="txtName"
+                                           Grid.Row="1"
+                                           FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Top"
+                                           Foreground="{DynamicResource clr_txt}"
+                                       FontWeight="SemiBold"
+                                           Text="{TemplateBinding Content}"
+                                           TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                     Value="true">
+                            <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource clr_bgr_mediumLight}" />
+                            <Setter TargetName="txtName"
+                                        Property="Foreground"
+                                        Value="{DynamicResource cl_txt_high}" />
+
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                     Value="true">
+                            <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#33343B" />
+                            <Setter TargetName="txtName"
+                                        Property="Foreground"
+                                        Value="{DynamicResource cl_txt_high}" />
+                            <!-- <Setter TargetName="imgMenu"
+                                        Property="Image.Source"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HoverImage}" /> -->
+                        </Trigger>
+                        <Trigger Property="IsFocused"
+                                     Value="true">
+                            <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#33343B" />
+                            <Setter TargetName="txtName"
+                                        Property="Foreground"
+                                        Value="{DynamicResource cl_txt_high}" />
+                            <!-- <Setter TargetName="imgMenu"
+                                        Property="Image.Source"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedImage}" /> -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+  
+    <!--<Style x:Key="CustComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Focusable="False"
+                                              ClickMode="Press"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              BorderThickness="0"/>
+                            <ContentPresenter x:Name="ContentPresenter"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  Margin="3,0,0,0"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  SnapsToDevicePixels="True"/>
+                            <Popup x:Name="Popup"
+                                       AllowsTransparency="True"
+                                       IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Bottom"
+                                       Focusable="False"
+                                       PopupAnimation="Slide">
+                                <Grid x:Name="DropDown"
+                                          SnapsToDevicePixels="True"
+                                          MinWidth="{TemplateBinding ActualWidth}"
+                                          MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                          Background="{TemplateBinding Background}"
+                                          >
+                                    <ScrollViewer x:Name="DropDownScrollViewer"
+                                                      Background="{TemplateBinding Background}"
+                                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                                      BorderThickness="{TemplateBinding BorderThickness}">
+                                        <StackPanel IsItemsHost="True"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="True">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="Popup.HasDropShadow" Value="True">
+                            <Setter TargetName="DropDown" Property="Margin" Value="0,0,0,10"/>
+                            <Setter TargetName="DropDown" Property="SnapsToDevicePixels" Value="True"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter Property="Height" TargetName="DropDown" Value="95"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsGrouping" Value="True"/>
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEditable" Value="True">
+                            <Setter Property="IsTabStop" Value="False"/>
+                            <Setter TargetName="ContentPresenter" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+    <!--<Style TargetType="{x:Type Button}"
+           x:Key="styl_changeSettings">
+        
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property=" VerticalAlignment" Value="Top"/>
+        <Setter Property="Margin" Value="0 3 0 0"/>
+        <Setter Property=" Foreground" Value="White"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    --><!--<ControlTemplate TargetType="Button">
+                    <Button
+                        Background="{TemplateBinding Background}"
+                        Width="{TemplateBinding Width}"
+                        Height="{TemplateBinding Height}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Margin="{TemplateBinding Margin}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Cursor="{TemplateBinding Cursor}">
+                        --><!--BorderBrush="{TemplateBinding BorderBrush}"--><!--
+                        
+                    </Button>--><!--
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="White">
+                                </Setter>
+                            </Trigger>
+                       
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>-->
+
+    
+        <Style x:Key="link_btn" TargetType="Button">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bdr_main" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                            <ContentPresenter x:Name="cpName" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontSize="{TemplateBinding FontSize}"
+                                              
+                                                              
+                                              >
+                            </ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+
+                                <Setter Property="Background" TargetName="bdr_main" Value="Transparent"></Setter>
+                            </Trigger>
+                            <!--<Trigger Property="IsPressed" Value="true">
+                                                                <Setter Property="BorderBrush" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                                                <Setter Property="TextElement.Foreground" TargetName="cpName" Value="#FFFFFF"></Setter>
+                                                                <Setter Property="Background" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter TargetName="cpName" Property="TextElement.Foreground" Value="#747373" />
+                                                                <Setter TargetName="bdr_main" Property="Background" Value="#b0b0b0" />
+                                                            </Trigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+   
+
+ 
+   
+
+    <!--<Window x:Class="CustomComboBoxExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Custom ComboBox Example" Height="450" Width="400">
+        <Window.Resources>
+           
+        </Window.Resources>
+        <Grid>
+            <ComboBox x:Name="customComboBox" Width="200" Height="30" SelectedIndex="0" IsEditable="True">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding}" Margin="5"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.Items>
+                    <TextBlock Text="Item 1" Margin="5"/>
+                    <TextBlock Text="Item 2" Margin="5"/>
+                    <TextBlock Text="Item 3" Margin="5"/>
+                </ComboBox.Items>
+            </ComboBox>
+        </Grid>-->
+  
+
+
+
+    <Style TargetType="{x:Type CheckBox}"
+           x:Key="SettingsCheckBoxStyle">
+        <Setter Property="Width"
+                Value="16" />
+        <Setter Property="Height"
+                Value="16" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Image x:Name="checkBoxImage"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="Unspecified"
+                           Source="{DynamicResource img_uncheckDrawingImage}"></Image>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Setter TargetName="checkBoxImage"
+                                    Property="Source"
+                                    Value="{DynamicResource img_checkDrawingImage}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="False">
+                            <Setter TargetName="checkBoxImage"
+                                    Property="Source"
+                                    Value="{DynamicResource img_uncheckDrawingImage}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

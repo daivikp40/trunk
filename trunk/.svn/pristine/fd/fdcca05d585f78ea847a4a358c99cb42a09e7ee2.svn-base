@@ -1,0 +1,232 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+
+namespace DuplicatePhotosFixer.Views
+{
+    /// <summary>
+    /// Interaction logic for frmThemeMessageBox.xaml
+    /// </summary>
+    public partial class frmThemeMessageBox : Window
+    {
+      
+        public bool bConfirmationBox { get; set; }
+        public MessageBoxButtons msgBoxButtons { get; set; }
+
+        public DialogResult result { get; set; }
+
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams cp = base.CreateParams;
+
+        //        //remove flickering
+        //        cp.ExStyle |= 0x02000000; //WS_EX_COMPOSITED                
+        //        return cp;
+        //    }
+        //}
+
+        public frmThemeMessageBox()
+        {
+            InitializeComponent();
+
+            Init();
+        }
+
+
+        void Init()
+        {
+            try
+            {
+                btnCancel.Visibility = Visibility.Hidden;
+
+                this.Name = cGlobalSettings.GetProductName();
+
+              
+
+                LoadStrings();
+                
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmThemeMessageBox:: Init: ", ex);
+            }
+        }
+
+        private void LoadStrings()
+        {
+            btnCancel.Content = cResourceManager.LoadString("IDS_CANCEL");
+            btnOk.Content = cResourceManager.LoadString("DPF_MESSAGEBOX_OK_TEXT");
+        }
+
+        public int? MessageBoxTag = null;
+        public bool ContinueProcess = false;
+        public void ShowMsg(Window owner, string msgHeading, string message)
+        {
+            //this.SuspendLayout();
+
+            if (owner != null)
+                this.Owner = owner;
+
+            SetMsg(msgHeading, message);
+            SetButtons();
+            /*
+            foreach (Control ctr in panel1.Controls)
+            {
+                AppFunctions.SetDoubleBuffered(ctr);
+            }
+            */
+           // this.ResumeLayout();
+
+        }
+
+        public void SetMsg(string msgHeading, string message)
+        {
+            if (!string.IsNullOrEmpty(msgHeading))
+                lblinfo.Text = msgHeading;
+            else
+                lblinfo.Text = cGlobalSettings.GetProductName();
+
+            lblinfo.Text = message.Trim();
+
+        }
+
+        void SetButtons()
+        {
+            try
+            {
+                switch (msgBoxButtons)
+                {
+                    case MessageBoxButtons.OK:
+                        {
+                            btnOk.Visibility = Visibility.Visible;
+                            btnCancel.Visibility = Visibility.Hidden;
+
+                            btnOk.Content = cResourceManager.LoadString("DPF_MESSAGEBOX_OK_TEXT");
+                            btnCancel.Content = cResourceManager.LoadString("IDS_CANCEL");
+
+                            btnOk.Tag = System.Windows.Forms.DialogResult.OK;
+                            btnCancel.Tag = System.Windows.Forms.DialogResult.Cancel;
+                        }
+                        break;
+                    case MessageBoxButtons.OKCancel:
+                        {
+                            btnOk.Visibility = Visibility.Visible;
+                            btnCancel.Visibility = Visibility.Visible;
+
+                            btnOk.Content = cResourceManager.LoadString("DPF_MESSAGEBOX_OK_TEXT");
+                            btnCancel.Content = cResourceManager.LoadString("IDS_CANCEL");
+
+                            btnOk.Tag = System.Windows.Forms.DialogResult.OK;
+                            btnCancel.Tag = System.Windows.Forms.DialogResult.Cancel;
+                        }
+                        break;
+                    case MessageBoxButtons.AbortRetryIgnore:
+                        {
+                        }
+                        break;
+                    case MessageBoxButtons.YesNoCancel:
+                        {
+                        }
+                        break;
+                    case MessageBoxButtons.YesNo:
+                        {
+                            btnOk.Visibility = Visibility.Visible;
+                            btnCancel.Visibility = Visibility.Visible;
+
+                            btnOk.Content = cResourceManager.LoadString("IDS_YES");
+                            btnCancel.Content = cResourceManager.LoadString("IDS_NO");
+
+                            btnOk.Tag = System.Windows.Forms.DialogResult.Yes;
+                            btnCancel.Tag = System.Windows.Forms.DialogResult.No;
+                        }
+                        break;
+                    case MessageBoxButtons.RetryCancel:
+                        {
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            ContinueProcess = true;
+            MessageBoxTag = null;
+
+            if (btnOk.Tag == null)
+            {
+                result = System.Windows.Forms.DialogResult.OK;
+            }
+            else
+            {
+                result = (DialogResult)btnOk.Tag;
+            }
+
+            this.Hide();
+        }
+
+        public void btnCancel_Click(object sender, EventArgs e)
+        {
+            ContinueProcess = false;
+            MessageBoxTag = null;
+            if (btnCancel.Tag == null)
+            {
+                result = System.Windows.Forms.DialogResult.OK;
+            }
+            else
+            {
+                result = (DialogResult)btnCancel.Tag;
+            }
+
+            this.Hide();
+            //Program.oMainReference.Activate();
+        }
+
+        private void close_btn_Click(object sender, RoutedEventArgs e)
+        {
+            ContinueProcess = false;
+            MessageBoxTag = null;
+            result = System.Windows.Forms.DialogResult.None;
+            this.Hide();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        private void btnOK_Click(object sender, RoutedEventArgs e)
+        {
+            ContinueProcess = true;
+            MessageBoxTag = null;
+
+            if (btnOk.Tag == null)
+            {
+                result = System.Windows.Forms.DialogResult.OK;
+            }
+            else
+            {
+                result = (DialogResult)btnOk.Tag;
+            }
+
+            this.Hide();
+        }
+    }
+}

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DuplicatePhotosFixer.ClassDictionary
+{
+   public  class cMoveSettings
+    {
+        public bool DbMoveToLocation { get; set; }
+
+        public bool DbMoveToRecycle { get; set; }
+
+        public string DbLocationPath { get; set; }
+
+        public const bool bDMoveToLocation = false;
+        public const bool bDMoveToRecycle = true;
+       
+    }
+}

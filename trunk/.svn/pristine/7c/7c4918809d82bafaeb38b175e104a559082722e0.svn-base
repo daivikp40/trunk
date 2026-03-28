@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucChangeSettings.xaml
+    /// </summary>
+    public partial class ucChangeSettings : UserControl
+    {
+        public ucChangeSettings()
+        {
+            InitializeComponent();
+            LoadStrings();
+        }
+
+        void LoadStrings()
+        {
+            lbl_settingsDisable.Content = cResourceManager.LoadString("IDS_SETTING_DISABLED");
+            llink_changeSettings.Content = string.Format("{0}>", cResourceManager.LoadString("IDS_CHANGE_SETTINGS"));
+        }
+
+        private void llink_changeSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                App.oMainReference.ShowSettings(cClientEnum.eSettingsTab.ScanCriteria);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("llink_changeSettings_LinkClicked:: ", ex);
+            }
+        }
+    }
+}

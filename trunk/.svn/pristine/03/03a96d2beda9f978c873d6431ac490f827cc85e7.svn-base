@@ -1,0 +1,187 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Views.frmFeedBack"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cust="clr-namespace:DuplicatePhotosFixer.CustomControl"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Views"
+        mc:Ignorable="d" AllowsTransparency="True"
+        Title="frmFeedBack" Height="435" Width="571" WindowStyle="None" Background="{DynamicResource cl_bg_theme}">
+    <Window.Resources>
+        <DataTemplate x:Key="cmbScanModeTemplate">
+            <TextBlock Text="{Binding FeedBackType}"
+                           ToolTip="{Binding FeedBackType}"
+                           Margin="3 0"
+                           MinHeight="15"
+                           TextWrapping="NoWrap"
+                           TextTrimming="WordEllipsis"                      
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="{Binding cboFontSize}"
+                           Foreground="{DynamicResource cl_fg_FBCont}" />
+
+            <DataTemplate.Triggers>
+                <!--<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ComboBoxItem}},Path=IsSelected}" Value="True">
+                    <Setter TargetName="imgTick" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ComboBoxItem}},Path=IsSelected}" Value="False">
+                    <Setter TargetName="imgTick" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>-->
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="38" Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DockPanel Background="{DynamicResource cl_bg_header}">
+                <cust:ImageButton
+                            x:Name="close_btn"
+                            Width="10"
+                            Height="10"
+                            DockPanel.Dock="Right"
+                            Margin="10 0 10 0"
+                            Style="{DynamicResource imageButton}"
+                            Image="{DynamicResource img_close_plain}"
+                            HoverImage="{DynamicResource img_close_plain}"
+                            SelectedImage="{DynamicResource img_close_plain}" 
+                Click="close_btn_click"/>
+                <Image x:Name="dpf_logo" Source="/Resources/dpf_updateofr_icon.png" DockPanel.Dock="Left" Margin="10 0" Stretch="None"/>
+                <TextBlock x:Name="dpf_header" Text="Duplicate Photos Fixer Pro - " Foreground="{DynamicResource cl_fg_Heading}"
+                       FontSize="15" FontWeight="Regular" 
+                       VerticalAlignment="Center" />
+                <TextBlock x:Name="dpf_header_info" Text="FeedBack" VerticalAlignment="Center" FontSize="15" FontWeight="Regular" Foreground="{DynamicResource cl_fg_subHeading}" />
+            </DockPanel>
+
+        </Grid>
+        <Grid Grid.Row="1" Margin="5" Background="{DynamicResource cl_bg_aboutNag}" >
+            <StackPanel>
+                <TextBlock x:Name="tbDearUser" 
+                           Foreground="{DynamicResource cl_fg_FBCont}"
+                           FontWeight="Regular"
+                           Padding="8"
+                           TextWrapping="Wrap" 
+                           FontSize="12">
+                    Dear user, please share your experience by filling this feedback form. This will give us a better idea<LineBreak/> of the application's performance and help us provide better solutions to fix the issues reported.
+                </TextBlock>
+                <TextBlock x:Name="tbProvideEmail"
+                           TextWrapping="Wrap"
+                           Padding="8"
+                           FontWeight="Regular"
+                           FontSize="13"
+                           Foreground="{DynamicResource cl_fg_abthighlight}">
+                    Provide your email address and select the Feedback type from  the dropdown  list.
+                </TextBlock>
+                <DockPanel Height="40">
+                    <TextBlock x:Name="tbEmail"
+                             VerticalAlignment="Center" 
+                               MinWidth="170"
+                               Width="Auto"
+                               Padding="8"
+                               Foreground="{DynamicResource cl_fg_FBCont}"
+                               FontSize="13"
+                              >
+                        Your Email Address
+                    </TextBlock>
+                    <TextBox x:Name="txtEmail"
+                            VerticalAlignment="Center" 
+                             MinHeight="25"
+                             Background="{DynamicResource cl_bg_txt}"
+                            BorderBrush="{DynamicResource cl_br_txt}"
+                           Foreground="{DynamicResource cl_fg_FBCont}"
+                             MinWidth="250">
+                    </TextBox>
+                </DockPanel>
+                <DockPanel Height="40" >
+                    <TextBlock x:Name="tbFeedBacktype"
+                             VerticalAlignment="Center" 
+                               MinWidth="168"
+                               Width="Auto"
+                                Padding="8"
+                               Foreground="{DynamicResource cl_fg_FBCont}"
+                               FontSize="13"
+                              >
+                        FeedBack Type:
+                    </TextBlock>
+                    <ComboBox x:Name="cboFeedBacktype" Grid.Column="1"
+                                      Padding="0"
+                                      Height="30"                          
+                                      Foreground="{DynamicResource cl_fg_FBCont}" 
+                                      FontWeight="Normal"
+                                      Margin="0,0,0,0"
+                                      VerticalContentAlignment="Center"
+                                      MinWidth="250"
+                                      ItemsSource="{Binding lstFeedBack}"
+                                      ItemTemplate="{DynamicResource cmbScanModeTemplate}"
+                                      Style="{StaticResource CustomComboFeedBack}">
+                    </ComboBox>
+                </DockPanel>
+                <!--<ComboBox x:Name="cboFeedBacktype" Width="Auto" MinWidth="353"
+                              VerticalAlignment="Center" SelectionChanged="cboFeedBacktype_SelectionChanged" />-->
+                    <!--<Border 
+                            Grid.Column="1"
+                            Margin="0 10"
+                                
+                           Background="{DynamicResource cl_bg_txt}"
+                           BorderBrush="{DynamicResource cl_br_txt}" BorderThickness="1">
+                        <DockPanel>
+                            
+
+                            --><!--<Button Width="10" Height="10" Background="#ffffff" BorderBrush="#E6E8EA" BorderThickness="1,0,0,0"  >
+                            
+                            <Button.Content >
+                                    <Image Source="/Resources/down_minsize.png"/>
+                                </Button.Content>
+                            
+                        </Button>--><!--
+                        </DockPanel>
+                    </Border>
+
+                </DockPanel>-->
+                   
+
+                <TextBlock x:Name="tbBriefly"
+                           TextWrapping="Wrap"
+                           Padding="8"
+                           FontSize="14"
+                           Foreground="{DynamicResource cl_fg_abthighlight}"
+                           >
+                    Briefly describe your experience:
+                </TextBlock>
+                <TextBox x:Name="txtBrief"
+                         Width="530"
+                         Height="124"
+                         Margin="10 0"
+                         Background="{DynamicResource cl_bg_txt}"
+                         BorderBrush="{DynamicResource cl_br_txt}"
+                         BorderThickness="1"
+                         Foreground="{DynamicResource cl_fg_FBCont}"
+                         HorizontalAlignment="Left"/>
+                <DockPanel HorizontalAlignment="Right" Margin="0 10 0 0">
+                    
+                    <Button x:Name="btn_Cancel"
+                            Style="{DynamicResource btn_Transparent_style}" 
+                            Foreground="{DynamicResource cl_fg_cachecontent}"
+                            Width="110"
+                            Height="35"
+                            Content="Cancel"
+                            Margin="0 10 10 0">
+                       
+                    </Button>
+                    <Button x:Name="btnSubmit" 
+                            Foreground="{DynamicResource cl_fg_cachecontent}"
+                            Style="{DynamicResource btn_contrastTransparent}"
+                            Width="110"
+                            Height="35"
+                            Content="Submit"
+                            Margin="0 10 20 0">
+                    </Button>
+                </DockPanel>
+
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
+
+namespace DuplicatePhotosFixer
+{
+    public static class enumClass
+    {
+
+        public enum eScanMode
+        {
+            FileSearch = 0,
+            GoogleDrive = 1,
+            DropBox = 2,
+            PicasaLibrary = 3,
+            LightRoomClassic = 4,
+            PhotoOrganizer = 5,
+            BoxCloud =6,
+            AmazonS3 = 7
+
+
+        }
+
+        public enum ePathType
+        {
+            file = 0,
+            folder,
+            library
+        }
+
+
+        public enum eMatchingLevel
+        {
+            [Description("0.85")]
+            _85 = 0,
+            [Description("0.88")]
+            _88 = 1,
+            [Description("0.90")]
+            _90 = 2,
+            [Description("0.92")]
+            _92 = 3,
+            [Description("0.94")]
+            _94 = 4,
+            [Description("0.96")]
+            _96 = 5,
+            [Description("0.98")]
+            _98 = 6,
+            [Description("0.99")]
+            _100 = 7
+        }
+
+        public enum eTimeInterval
+        {
+            [Description("DPF_SETTINGS_UC_24_HOURS")]
+            _24_hours_and_less,
+            [Description("DPF_SETTINGS_UC_12_HOURS")]
+            _12_hours_and_less,
+            [Description("DPF_SETTINGS_UC_6_HOURS")]
+            _6_hours_and_less,
+            [Description("DPF_SETTINGS_UC_3_HOURS")]
+            _3_hours_and_less,
+            [Description("DPF_SETTINGS_UC_2_HOURS")]
+            _2_hours_and_less,
+            [Description("DPF_SETTINGS_UC_1_HOURS")]
+            _1_hours_and_less,
+            [Description("DPF_SETTINGS_UC_30_MINUTES")]
+            _30_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_10_MINUTES")]
+            _10_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_5_MINUTES")]
+            _5_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_3_MINUTES")]
+            _3_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_2_MINUTES")]
+            _2_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_1_MINUTES")]
+            _1_minutes_and_less,
+            [Description("DPF_SETTINGS_UC_30_SECONDS")]
+            _30_seconds_and_less,
+            [Description("DPF_SETTINGS_UC_10_SECONDS")]
+            _10_seconds_and_less,
+            [Description("DPF_SETTINGS_UC_5_SECONDS")]
+            _5_seconds_and_less,
+            [Description("DPF_SETTINGS_UC_3_SECONDS")]
+            _3_seconds_and_less,
+            [Description("DPF_SETTINGS_UC_2_SECONDS")]
+            _2_seconds_and_less,
+            [Description("DPF_SETTINGS_UC_1_SECONDS")]
+            _1_second_and_less,
+        }
+
+        public enum eBitmapSize
+        {
+            [Description("48")]
+            _48x48_pixels = 0,
+            [Description("56")]
+            _56x56_pixels,
+            [Description("64")]
+            _64x64_pixels,
+            [Description("72")]
+            _72x72_pixels,
+            [Description("80")]
+            _80x80_pixels,
+            [Description("88")]
+            _88x88_pixels,
+            [Description("96")]
+            _96x96_pixels
+        }
+
+        public enum eGPS
+        {
+            [Description("DPF_SETTINGS_UC_1_METER")]
+            _1_Meter = 0,
+            [Description("DPF_SETTINGS_UC_2_METERS")]
+            _2_Meters = 1,
+            [Description("DPF_SETTINGS_UC_5_METERS")]
+            _5_Meters = 2,
+            [Description("DPF_SETTINGS_UC_10_METERS")]
+            _10_Meters = 3,
+            [Description("DPF_SETTINGS_UC_20_METERS")]
+            _20_Meters = 4,
+            [Description("DPF_SETTINGS_UC_50_METERS")]
+            _50_Meters = 5,
+            [Description("DPF_SETTINGS_UC_100_METERS")]
+            _100_Meters = 6
+        }
+    }
+}

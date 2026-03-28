@@ -1,0 +1,301 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucResultObjectListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="409" d:DesignWidth="898"
+             Background="#494949">
+
+    <UserControl.Resources>
+        <!-- DataGrid Header Style -->
+        <Style x:Key="DataGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#494949"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="BorderBrush" Value="#5F5F5F"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0"
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalAlignment="Center"/>
+                                <Path x:Name="SortArrow"
+                                      Grid.Column="1"
+                                      Margin="4,0,0,0"
+                                      VerticalAlignment="Center"
+                                      Width="8" Height="6"
+                                      Stretch="Fill"
+                                      Visibility="Collapsed"
+                                      Fill="White"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- DataGrid Row Style -->
+        <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="#494949"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#094771"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#5F5F5F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- CheckBox Style for DataGrid -->
+        <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <!-- TextBlock Style for Cells -->
+        <Style x:Key="CellTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,0"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <!-- Main DataGrid -->
+        <DataGrid x:Name="ObjectListView1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False"
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="None"
+                  BorderThickness="0"
+                  Background="#494949"
+                  RowBackground="#494949"
+                  AlternatingRowBackground="#494949"
+                  RowHeight="22"
+                  FontFamily="Segoe UI"
+                  FontSize="11"
+                  Foreground="White"
+                  ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                  RowStyle="{StaticResource DataGridRowStyle}"
+                  CellStyle="{StaticResource DataGridCellStyle}"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="False"
+                  ScrollViewer.CanContentScroll="True"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto"
+                  SelectionChanged="ObjectListView1_SelectionChanged"
+                  MouseDoubleClick="ObjectListView1_DoubleClick"
+                  MouseEnter="ObjectListView1_MouseEnter">
+
+            <!-- Context Menu -->
+            <DataGrid.ContextMenu>
+                <ContextMenu x:Name="cmSelectionAssistant" 
+                             Opened="cmSelectionAssistant_Opening"
+                             Background="#494949"
+                             Foreground="White">
+                    <!-- Items will be added dynamically in code-behind -->
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <!-- Checkbox Column -->
+                <!--<DataGridCheckBoxColumn Width="10" 
+                                        CanUserResize="False"
+                                        Binding="{Binding isMark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridCheckBoxColumn.Header>
+                        <CheckBox x:Name="chkSelectAll" 
+                                  Checked="chkSelectAll_Checked"
+                                  Unchecked="chkSelectAll_Unchecked"
+                                  Style="{StaticResource DataGridCheckBoxStyle}"/>
+                    </DataGridCheckBoxColumn.Header>
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource DataGridCheckBoxStyle}">
+                            <EventSetter Event="Checked" Handler="ItemCheckBox_Changed"/>
+                            <EventSetter Event="Unchecked" Handler="ItemCheckBox_Changed"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.ElementStyle>
+                </DataGridCheckBoxColumn>-->
+
+                <!-- Group Column -->
+                <DataGridTextColumn Header="Group" x:Name="grp_header"
+                                    Binding="{Binding groupNumber}" 
+                                    Width="80"
+                                    MinWidth="80"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Key Column (Hidden) -->
+                <DataGridTextColumn Header="Key" 
+                                    Binding="{Binding key}" 
+                                    Width="0"
+                                    MaxWidth="0"
+                                    Visibility="Collapsed"
+                                    IsReadOnly="True"/>
+
+                <!-- File Name Column -->
+                <DataGridTemplateColumn Header="File Name" x:Name="fileName_header"
+                                        Width="300"
+                                        MinWidth="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" 
+                                        VerticalAlignment="Center">
+                                <Image Source="{Binding FileIcon}" 
+                                       Width="16" 
+                                       Height="16"
+                                       Margin="4,0,6,0"
+                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding fileName}" 
+                                           Style="{StaticResource CellTextBlockStyle}"
+                                           ToolTip="{Binding fileName}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Path Column -->
+                <DataGridTextColumn Header="Path" x:Name="path_header"
+                                    Binding="{Binding filePath}" 
+                                    Width="500"
+                                    MinWidth="50"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                            <Setter Property="ToolTip" Value="{Binding filePath}"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Size Column -->
+                <DataGridTextColumn Header="Size" x:Name="size_header"
+                                    Binding="{Binding fileSizeWithUnit}" 
+                                    Width="80"
+                                    MinWidth="50"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Created Column -->
+                <DataGridTextColumn Header="Created" x:Name="create_header"
+                                    Binding="{Binding createDate, StringFormat='dd-MM-yyyy HH:mm'}" 
+                                    Width="100"
+                                    MinWidth="50"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}"/>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Modified Column -->
+                <DataGridTextColumn Header="Modified" x:Name="modified_header"
+                                    Binding="{Binding modDate, StringFormat='dd-MM-yyyy HH:mm'}" 
+                                    Width="100"
+                                    MinWidth="30"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}"/>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- File Type Column -->
+                <DataGridTextColumn Header="File Type" x:Name="fileType_header"
+                    Binding="{Binding Filetype}" 
+                                    Width="80"
+                                    MinWidth="30"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}"/>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Image Width Column -->
+                <DataGridTextColumn Header="Image Width" x:Name="imageWidth_header"
+                                    Binding="{Binding Width}" 
+                                    Width="100"
+                                    MinWidth="30"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Image Height Column (Fills remaining space) -->
+                <DataGridTextColumn Header="Image Height" x:Name="imgHeight_header"
+                                    Binding="{Binding Height}" 
+                                    Width="*"
+                                    MinWidth="60"
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

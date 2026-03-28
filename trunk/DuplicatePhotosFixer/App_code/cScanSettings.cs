@@ -1,0 +1,1243 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using System.Data;
+using System.IO;
+using System.Collections;
+
+using Microsoft.Win32;
+//using Microsoft.Win32.TaskScheduler;
+using System.Windows.Forms;
+using System.Net;
+using System.Diagnostics;
+using System.Security.Principal;
+using DuplicatePhotosFixer;
+using DuplicatePhotosFixer;
+
+namespace DuplicatePhotosFixer
+{
+
+
+
+    public class cScanSettings
+    {
+
+        //public cScheduleSettings oSchedule = null;
+        //public cGeneralSettings oGeneral = null;        
+
+        //cSQliteFunction oDbf = new cSQliteFunction("cScanSettings", 45);
+
+        public enum eSettingDBTable
+        {
+            UserExclusionList,
+            Settings,
+            MachineDetails,
+            BackupSetting,
+        }
+        public enum SettingsColumn
+        {
+            settingid,
+            Key,
+            Value
+        }
+
+
+        public enum MachinesColumnName
+        {
+
+            MachineName,
+            UserMachineId,
+            TotalFiles,
+            TotalFilesSize,
+            MachineType,
+            LastBackupDate,
+        }
+
+        public enum ExclusionColumn
+        {
+            Id,
+            Path,
+            includeSub,
+            type,
+            mask,
+        }
+
+        #region "internet settings properties"
+        private bool m_UseProxy;
+        public bool UseProxy
+        {
+            get { return m_UseProxy; }
+            set { m_UseProxy = value; }
+        }
+
+        private bool m_UseAuthenication;
+        public bool UseAuthenication
+        {
+            get { return m_UseAuthenication; }
+            set { m_UseAuthenication = value; }
+        }
+        private bool m_AutoDetectIESettings;
+        public bool AutoDetectIESettings
+        {
+            get { return m_AutoDetectIESettings; }
+            set { m_AutoDetectIESettings = value; }
+        }
+
+        private string m_IPAddress;
+        public string IPAddress
+        {
+            get { return m_IPAddress; }
+            set { m_IPAddress = value; }
+        }
+        private int m_Port;
+        public int Port
+        {
+            get { return m_Port; }
+            set { m_Port = value; }
+        }
+        private string m_UserName;
+        public string UserName
+        {
+            get { return m_UserName; }
+            set { m_UserName = value; }
+        }
+        private string m_Passoword;
+        public string Passoword
+        {
+            get { return m_Passoword; }
+            set { m_Passoword = value; }
+        }
+        private bool m_SetInRegistry = false;
+        public bool SetInRegistry
+        {
+            get { return m_SetInRegistry; }
+            set { m_SetInRegistry = value; }
+        }
+        #endregion
+
+
+        //         #region exclusion settings
+        // 
+        //         private bool m_SkipHiddenFile = true;
+        //         public bool SkipHiddenFile
+        //         {
+        //             get { return m_SkipHiddenFile; }
+        //             set { m_SkipHiddenFile = value; }
+        //         }
+        // 
+        // 
+        //         private bool m_EnableAutoExclude = true;
+        //         public bool EnableAutoExclude
+        //         {
+        //             get { return m_EnableAutoExclude; }
+        //             set { m_EnableAutoExclude = value; }
+        //         }
+        //         #endregion
+
+        #region "backup settings"
+        private DateTime m_LastBackupTime;
+
+
+        private eErrorCodes oLastBackupError;
+        private cClientEnum.eFirstScanStatus oFirstScanStatus;
+
+        public DateTime LastBackupTime
+        {
+            get { return m_LastBackupTime; }
+            set { m_LastBackupTime = value; }
+        }
+
+
+
+        public eErrorCodes LastBackupError
+        {
+            get { return oLastBackupError; }
+            set { oLastBackupError = value; }
+        }
+
+        public cClientEnum.eFirstScanStatus FirstScanStatus
+        {
+            get { return oFirstScanStatus; }
+            set { oFirstScanStatus = value; }
+        }
+        #endregion
+
+
+
+        #region Lang Settings
+        List<cLanguageSettings> m_LanguageDetails = new List<cLanguageSettings>();
+
+        private cLanguageSettings m_CurrentLangSettings;
+
+        public cLanguageSettings CurrentLangSettings
+        {
+            get
+            {
+                return m_CurrentLangSettings
+                    ;
+            }
+            set { m_CurrentLangSettings = value; }
+        }
+
+
+        public int LanguagePref { get; set; }
+
+        bool m_ExitOnClose = true;
+        public bool ExitOnClose
+        {
+            get { return m_ExitOnClose; }
+            //special case as application is closed form this var
+            set { m_ExitOnClose = value; }
+        }
+
+
+        public List<cLanguageSettings> LanguageDetails
+        {
+            get { return m_LanguageDetails; }
+            set { m_LanguageDetails = value; }
+        }
+
+        public string LanguageCode { get; set; }
+
+        public int LanguageID { get; set; }
+
+        #endregion
+
+        #region "multiple loaction notification"
+        private bool m_MuliLocationNotify = true;
+        public bool MuliLocationNotify
+        {
+            get { return m_MuliLocationNotify; }
+            set { m_MuliLocationNotify = value; }
+        }
+        #endregion
+
+
+        #region "startup"
+        //cTaskScheduler ocSchedule = new cTaskScheduler();
+        ////cArmadilloHelper oArmadilloHelper = new cArmadilloHelper();
+
+
+        //string sRegKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+        ////string sRegContextMenuPath = @"*\shell";
+        //string sStartUpItemName = cGlobalSettings.STARTUP_SCHEDULE_NAME/*cGlobal.ASO_SP_STARTUP_SCHEDULE_NAME*/;// cGlobal.GetProductNameFromDesc() + "_startup";
+
+        #endregion
+
+        public cScanSettings()
+        {
+            //oSchedule = new cScheduleSettings();
+            //oGeneral = new cGeneralSettings();           
+            //oSchedule.SetDefaultValue();
+            //oGeneral.SetDefaultValue();
+            //  oBattaryMon.OnBatteryChargeStatusChanged += new cBatteryMonitor.BatteryChangeDelegate(oBattaryMon_OnBatteryChargeStatusChanged);
+            // oBattaryMon.GetBatteryPluggedState += new cBatteryMonitor.BatteryPluggedState(oBattaryMon_GetBatteryPluggedState);
+        }
+
+
+        //#region "battary events"
+
+
+        //internal void oBattaryMon_GetBatteryPluggedState(bool bIsBatteryPluggedIn/*, int BattaryRemaining*/)
+        //{
+        //    AllowBackupFromPowerSettings();
+
+        //}
+
+        //internal void oBattaryMon_OnBatteryChargeStatusChanged(int nBatteryPercentageRemaining, PowerModes mode)
+        //{
+        //    AllowBackupFromPowerSettings();
+
+        //}
+
+        //public eErrorCodes AllowBackupFromPowerSettings()
+        //{
+        //    eErrorCodes oRetVal = eErrorCodes.SUCCESS;
+        //    try
+        //    {
+        //        cGlobalSettings.oRegSettings.LoadGeneralSettings();
+
+        //        bool isRunningOnPower = true;
+        //        int nBattaryStatus = 100;
+        //        oBattaryMon.GetCurrentPowerStatus(out isRunningOnPower, out nBattaryStatus);
+
+        //        if (!isRunningOnPower)
+        //        {
+        //            if (oGeneral.BackupOnlyWhenPlugged)
+        //            {
+        //                cGlobalSettings.bIsScanStop = true;
+        //                cGlobalSettings.bIsBackupStop = true;
+        //                cGlobalSettings.bIsRestoreStop = true;
+        //                cGlobalSettings.StopAll();
+        //                cGlobalSettings.StoppedByPowerOption = oRetVal = eErrorCodes.CLIENT_INTRUPTED_NOT_ON_POWER;
+
+        //            }
+        //            else
+        //            {
+        //                if (nBattaryStatus <= oGeneral.BackupOnlyWhenBatteryRemains + 2)
+        //                {
+        //                    cGlobalSettings.bIsScanStop = true;
+        //                    cGlobalSettings.bIsBackupStop = true;
+        //                    cGlobalSettings.bIsRestoreStop = true;
+        //                    cGlobalSettings.StopAll();
+        //                    cGlobalSettings.StoppedByPowerOption = oRetVal = eErrorCodes.CLIENT_INTRUPTED_LOW_BATTARY;
+
+        //                }
+
+        //            }
+
+        //        }
+
+
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("cScanSettings::AllowBackupFromPowerSettings:", ex);
+        //    }
+        //    return oRetVal;
+        //}
+
+        //#endregion
+
+
+
+
+        #region "Read/write Internet Settings"
+
+        //public void AutoDetectProxySettingsInDB(bool UpdateOnModify)
+        // {            
+        //     string oOldIP = IPAddress;
+        //     int oOldPORT = m_Port;
+
+        //     try
+        //     {
+
+
+        //         WebProxy oProxy = WebProxy.GetDefaultProxy();
+        //         if (oProxy.Address != null)
+        //         {
+        //             IPAddress = oProxy.Address.Host;
+        //             m_Port = oProxy.Address.Port;
+        //             m_UseProxy = true;
+        //         }
+        //         else
+        //         {
+        //             IPAddress = string.Empty;
+        //             m_Port = 0;
+        //             m_UseProxy = false;
+        //         }
+
+        //         if (UpdateOnModify)
+        //         {
+        //             if (oOldIP != IPAddress || oOldPORT != m_Port)
+        //             {
+        //                 SetInternetSettings(m_UseProxy, true, IPAddress, m_Port, m_UseAuthenication, m_UserName, m_Passoword);
+        //             }
+        //         }
+        //         else
+        //         {
+        //             SetInternetSettings(m_UseProxy, true, IPAddress, m_Port, m_UseAuthenication, m_UserName, m_Passoword);
+        //         }
+
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|AutoDetectProxySettingsInDB|{0}", ex.Message));
+        //     }
+        // }
+
+
+        //public void VerifyInternetSettings()
+        //{
+        //    //update setting only if called from exe not from service
+        //    if (m_AutoDetectIESettings && Environment.UserInteractive)
+        //    {
+        //        AutoDetectProxySettingsInDB(true);
+        //    }
+        //}
+
+
+        public bool GetInternetSettings()
+        {
+            bool bRes = false;
+            //            try
+            //            {
+            //                m_AutoDetectIESettings = true;
+            //                m_UseProxy = false;
+            //                m_IPAddress = m_UserName = m_Passoword = string.Empty;
+            //                m_Port = 0;
+
+
+            //                bool bSettingsFound = false;
+
+            //             //   if (File.Exists(cGlobalSettings.GetUserSettingDBPath()))
+            //                {
+            //                    DataSet odsIE = oDbf.SelectData("select * from proxyserversettings");
+
+            //                    if (odsIE.Tables.Count > 0)
+            //                    {
+            //                        if (odsIE.Tables[0].Rows.Count > 0)
+            //                        {
+            //                            bSettingsFound = true;
+            //                            if (Convert.ToInt32(odsIE.Tables[0].Rows[0]["useproxyserver"]) == 1)
+            //                            {
+            //                                m_AutoDetectIESettings = Convert.ToBoolean(odsIE.Tables[0].Rows[0]["auto_detect_ie"]);
+
+            //                                m_UseProxy = Convert.ToBoolean(odsIE.Tables[0].Rows[0]["useproxyserver"]);
+
+            //                                m_IPAddress = Convert.ToString(odsIE.Tables[0].Rows[0]["ipaddress"]);
+
+            //                                m_Port = Convert.ToInt32((Convert.ToString(odsIE.Tables[0].Rows[0]["port"]) == string.Empty ? 0 : odsIE.Tables[0].Rows[0]["port"]));
+
+            //                                m_UseAuthenication = Convert.ToBoolean(odsIE.Tables[0].Rows[0]["proxy_authentication"]);
+            //                                m_UserName = Convert.ToString(odsIE.Tables[0].Rows[0]["username"]);
+
+            //                                m_Passoword = Convert.ToString(odsIE.Tables[0].Rows[0]["password"]);
+
+            //                                bRes = true;
+
+            //                                VerifyInternetSettings();
+
+            //                            }
+
+            //                        }
+
+            //                    }
+            //                }
+            ////                 else
+            ////                 {
+            ////                     cGlobalSettings.oLogger.WriteLogVerbose("GetInternetSettings::Database File Not Found {0}", cGlobalSettings.GetUserSettingDBPath());
+            ////                 }
+
+
+
+            //                if (!bSettingsFound)
+            //                {
+            //                    m_AutoDetectIESettings = true;
+            //                    m_IPAddress = m_UserName = m_Passoword = string.Empty;
+            //                    m_Port = 0;
+            //                    WebProxy oProxy = WebProxy.GetDefaultProxy();
+            //                    if (oProxy.Address != null)
+            //                    {
+            //                        IPAddress = oProxy.Address.Host;
+            //                        m_Port = oProxy.Address.Port;
+            //                    }
+            //                    else
+            //                    {
+            //                        m_UseProxy = false;
+            //                    }
+            //                    bRes = true;
+            //                }
+
+            //            }
+            //            catch (System.Exception ex)
+            //            {
+            //                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|GetInternetSettings()|error:{1}", this, ex.Message));
+            //            }
+            return bRes;
+        }
+
+        //public bool SetInternetSettings()
+        //{
+        //    return SetInternetSettings(m_UseProxy, m_AutoDetectIESettings, m_IPAddress, m_Port, m_UseAuthenication, m_UserName, m_Passoword);
+        //}
+        //public bool SetInternetSettings(bool UseProxy, bool AutoDetectIESettings, string IPAddress, int Port, bool UseAuthentication, string userName, string sPassword)
+        //{
+        //    bool res = false;
+        //    try
+        //    {
+
+        //        uint maxid = oDbf.getMax("proxyserversettings", "settingid");
+        //        if (maxid > 0)
+        //        {
+        //            oDbf.ExecuteQuery(string.Format("update proxyserversettings set useproxyserver={0} ,auto_detect_ie={1},ipaddress='{2}', port={3} , proxy_authentication={4},username='{5}',password='{6}' where settingid={7}",
+        //                Convert.ToInt32(UseProxy), Convert.ToInt32(AutoDetectIESettings), IPAddress, Port, Convert.ToInt32(UseAuthentication), userName, sPassword, maxid));
+
+        //        }
+        //        else
+        //        {
+        //            oDbf.insertData("proxyserversettings", new string[] { "useproxyserver", "auto_detect_ie", "ipaddress", "port", "proxy_authentication", "username", "password" }, new byte[] { 2, 2, 1, 1, 2, 1, 1 },
+        //                new string[] { UseProxy.ToString(), AutoDetectIESettings.ToString(), IPAddress, Port.ToString(), UseAuthentication.ToString(), userName, sPassword });
+
+        //        }
+        //        res = true;
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("{0}|SetInternetSettings()|error:{1}", this, ex.Message));
+        //    }
+        //    return res;
+        //}
+
+
+        //public WebProxy FetchProxySettings()
+        //{
+        //    System.Net.WebProxy oProxy = null;
+        //    try
+        //    {
+        //        bool FoundInDb = false;
+
+        //        if (SetInRegistry)
+        //        {
+        //            FoundInDb = GetInternetSettingsFromRegistry();
+        //        }
+        //        else
+        //        {
+        //            FoundInDb = GetInternetSettings();
+        //        }
+
+        //        if (FoundInDb/*m_UseProxy*/)
+        //        {
+
+        //            // if specific proxy has not to be provided
+        //            //if default IE proxy settings has to be taken
+        //            if (!string.IsNullOrEmpty(IPAddress)/*TypeofProxySetting != 1*/)
+        //            {
+        //                oProxy = new WebProxy(IPAddress, m_Port);
+
+        //                if (m_UseAuthenication)
+        //                {
+        //                    System.Net.NetworkCredential oNetCredentials = new NetworkCredential(m_UserName, m_Passoword);
+        //                    oProxy.Credentials = oNetCredentials;
+        //                }
+
+        //                cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|FetchProxySettings|getting default web proxy inside TypeofProxySetting=1 {0}", (oProxy == null ? "null" : Convert.ToString(oProxy.Address))));
+
+        //            }
+        //            //                     else //if default IE proxy settings has to be taken
+        //            //                     {
+        //            //                         oProxy = WebProxy.GetDefaultProxy();
+        //            //                         SetValues(oProxy);
+        //            //                         cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|FetchProxySettings|getting default web proxy inside TypeofProxySetting=0 {0}", (oProxy == null ? "null" : Convert.ToString(oProxy.Address))));
+        //            // 
+        //            //                     }
+
+        //        }
+        //        else
+        //        {
+        //            //System.Diagnostics.Debugger.Break(); // check this is coming abhinav
+        //            // oProxy = WebProxy.GetDefaultProxy();
+        //            // SetValues(oProxy);
+        //            cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|FetchProxySettings|getting default web proxy db not found can occur first time verify{0}", (oProxy == null ? "null" : Convert.ToString(oProxy.Address))));
+        //        }
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|FetchProxySettings|{0}", ex.Message));
+        //    }
+        //    return oProxy;
+        //}
+
+
+        public WebProxy LoadProxySettings()
+        {
+            System.Net.WebProxy oProxy = null;
+            try
+            {
+
+                GetInternetSettings();
+                if (m_UseProxy)
+                {
+
+                    if (!m_AutoDetectIESettings) // if specific proxy has to to be provided
+                    {
+                        oProxy = new WebProxy(m_IPAddress, m_Port);
+
+                        if (m_UseAuthenication)
+                        {
+                            System.Net.NetworkCredential oNetCredentials = new NetworkCredential(m_UserName, m_Passoword);
+                            oProxy.Credentials = oNetCredentials;
+                        }
+                    }
+                    else //if default IE proxy settings has to be taken
+                    {
+                        oProxy = WebProxy.GetDefaultProxy();
+                    }
+
+                }
+                else
+                {
+                    oProxy = WebProxy.GetDefaultProxy();
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|LoadProxySettings()|error:{1}", this, ex.Message));
+            }
+            return oProxy;
+        }
+
+
+
+        public void SetInternetSettingsInRegistry(bool bSetBlank)
+        {
+            try
+            {
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTODETECT_IE_SETTINGS, (bSetBlank ? 1 : m_AutoDetectIESettings?1:0), RegistryValueKind.DWord);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_USE_PROXY, (bSetBlank ? 0 : m_UseProxy ? 1:0), RegistryValueKind.DWord);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_ADDRESS, (bSetBlank ? string.Empty : m_IPAddress), RegistryValueKind.String);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_PORT, (bSetBlank ? 0 : m_Port), RegistryValueKind.DWord);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_USE_AUTHENTICATION, (bSetBlank ? 0 : m_UseAuthenication ? 1 : 0), RegistryValueKind.DWord);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTH_UNAME, (bSetBlank ? string.Empty : m_UserName), RegistryValueKind.String);
+                //cGlobalSettings.SetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTH_PWD, (bSetBlank ? string.Empty : m_Passoword), RegistryValueKind.String);
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|SetInternetSettingsFromRegistry|{0}", ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Will be called to the save the proxy details from registry to current user ID details
+        /// </summary>
+        //public void SetInternetSettingsInDBFromReg()
+        //{
+        //    try
+        //    {
+        //        if (SetInRegistry && GetInternetSettingsFromRegistry())
+        //        {
+
+        //            SetInternetSettings(m_UseProxy, m_AutoDetectIESettings, m_IPAddress, m_Port, m_UseAuthenication, m_UserName, m_Passoword);
+        //            //SetSettingInDB(sTableName, sCountQuery, sUpdateQuery, sInsertQuery);
+        //            SetInRegistry = false;
+        //            SetInternetSettingsInRegistry(true);
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|SetInternetSettingsInDBFromReg|{0}", ex.Message));
+        //    }
+        //}
+
+        //        /// <summary>
+        //        /// Will be called to the save the proxy details from registry to current user ID details
+        //        /// </summary>
+        //        public bool GetInternetSettingsFromRegistry()
+        //        {
+        //            bool bres = false;
+        //            try
+        //            {
+        //                int nUseProxy = 0;
+        //                int.TryParse(cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_USE_PROXY, 0).ToString(), out nUseProxy);
+        //                m_UseProxy = (nUseProxy == 1);
+
+
+        //                int nAutoDetectIE = 0;
+        //                int.TryParse(cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTODETECT_IE_SETTINGS, 1).ToString(), out nAutoDetectIE);
+        //                m_AutoDetectIESettings = (nAutoDetectIE == 1);
+        ////                 if (nUseProxy == 0)
+        ////                 {
+        ////                     TypeofProxySetting = 1;
+        ////                 }
+        ////                 else
+        ////                 {
+        ////                     TypeofProxySetting = 0;
+        ////                 }
+
+        //                int.TryParse(cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_PORT, 0).ToString(), out m_Port);
+
+
+
+        //                bool.TryParse(cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_USE_AUTHENTICATION, 0).ToString(), out m_UseAuthenication);
+
+        //                m_IPAddress = cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_ADDRESS, string.Empty).ToString();
+        //                m_UserName = cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTH_UNAME, string.Empty).ToString();
+        //                m_Passoword = cGlobalSettings.GetCommonAppDataRootRegistryValue(cRegistrySettings.REGSTR_HTTP_AUTH_PWD, string.Empty).ToString();
+        //                bres = true;
+
+        //            }
+        //            catch (System.Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLog(string.Format("cInternetSettings|GetInternetSettingsFromRegistry|{0}", ex.Message));
+        //            }
+        //            return bres;
+        //        }
+
+        #endregion
+
+
+
+
+
+
+
+        #region "language settings"
+
+
+        public void SetLanguageInRegistry()
+        {
+            try
+            {
+                try
+                {
+
+                    if (string.IsNullOrEmpty(LanguageCode)) LanguageCode = "en";
+
+                    RegistryKey oRegCurrentKey = Registry.CurrentUser.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang", true);
+                    if (oRegCurrentKey == null)
+                    {
+                        oRegCurrentKey = Registry.CurrentUser.CreateSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang");
+                    }
+                    if (oRegCurrentKey != null)
+                    {
+                        oRegCurrentKey.SetValue("LangCode", LanguageCode, RegistryValueKind.String);
+                        oRegCurrentKey.SetValue("LangId", LanguageID, RegistryValueKind.DWord);
+
+                    }
+
+                    RegistryKey oRegKey = Registry.LocalMachine.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang", true);
+                    if (oRegKey == null)
+                    {
+                        oRegKey = Registry.LocalMachine.CreateSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang");
+                    }
+                    if (oRegKey != null)
+                    {
+                        oRegKey.SetValue("LangCode", LanguageCode, RegistryValueKind.String);
+                        oRegKey.SetValue("LangId", LanguageID, RegistryValueKind.DWord);
+
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    cGlobalSettings.oLogger.WriteLog(string.Format("{0}|SetLanguageFromRegistry()|LocalMachine|Error:{1}", this, ex.Message));
+                }
+                try
+                {
+
+                    RegistryKey oRegCurrentKey = Registry.CurrentUser.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang", true);
+                    if (oRegCurrentKey != null)
+                    {
+                        if (!String.IsNullOrEmpty(oRegCurrentKey.GetValueNames().First(x => x.ToLower() == "langid")))
+                        {
+                            oRegCurrentKey.SetValue("LangCode", LanguageCode, RegistryValueKind.String);
+                            oRegCurrentKey.SetValue("LangId", LanguageID, RegistryValueKind.DWord);
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    cGlobalSettings.oLogger.WriteLog(string.Format("{0}|SetLanguageFromRegistry()|CurrentUser|Error:{1}", this, ex.Message));
+                }
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|SetLanguageFromRegistry()|Error:{1}", this, ex.Message));
+            }
+        }
+
+
+        public void GetLanguageFromRegistry()
+        {
+            string sLangCode = "en"; //by default
+            int LangId = 0;
+            try
+            {
+                //if (!GetLanguageFromPB())
+                //{
+                try
+                {
+                    RegistryKey oRegKey = Registry.LocalMachine.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang", false);
+
+                    //RegistryKey oRegKey = Registry.LocalMachine.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\LANG", false);
+                    if (oRegKey != null)
+                    {
+                        sLangCode = Convert.ToString(oRegKey.GetValue("LangCode", string.Empty));
+                        LangId = Convert.ToInt32(oRegKey.GetValue("LangId", 0));
+
+                        LanguageID = LangId;
+                        LanguageCode = sLangCode;
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    cGlobalSettings.oLogger.WriteLog(string.Format("{0}|GetLanguageFromRegistry()|checking for hklm|Error:{1}", this, ex.Message));
+                }
+
+
+                RegistryKey oRegCurrentKey = Registry.CurrentUser.OpenSubKey(cGlobalSettings.VersionIndependentCommonRootRegKeyNoHive + "\\lang", false);
+                if (oRegCurrentKey != null)
+                {
+                    if (!String.IsNullOrEmpty(oRegCurrentKey.GetValueNames().FirstOrDefault(x => x.ToLower() == "langid")))
+                    {
+                        sLangCode = Convert.ToString(oRegCurrentKey.GetValue("LangCode", string.Empty));
+                        LangId = Convert.ToInt32(oRegCurrentKey.GetValue("LangId", 0));
+
+                    }
+                }
+                // MessageBox.Show(cGlobalSettings.oScanSettings.LanguageCode);
+                LanguageID = LangId;
+                LanguageCode = sLangCode;
+
+                //}
+                //else // if lang is present in power bundle then do not search for lang in registry instead save powerbundle language in asp lang key
+                //{
+                //    SetLanguageInRegistry();
+                //}
+
+
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|GetLanguageFromRegistry()|Error:{1}", this, ex.Message));
+            }
+        }
+        #endregion
+
+
+
+
+
+
+        #region "startup entry"
+        //private bool CreateScheduleForStartup(string sParams)
+        //{
+        //    bool bRes = false;
+        //    try
+        //    {
+
+        //        TaskService oTService = new TaskService();
+
+
+        //        //if task exists then delete it
+        //        if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == sStartUpItemName.ToLower()) > 0)
+        //        {
+        //            oTService.RootFolder.DeleteTask(sStartUpItemName);
+        //        }
+
+
+        //        // Create a new task definition and assign properties
+        //        TaskDefinition oTDef = oTService.NewTask();
+        //        oTDef.Settings.Priority = ProcessPriorityClass.Normal;
+        //        oTDef.Settings.DisallowStartIfOnBatteries = false;
+        //        oTDef.Settings.StopIfGoingOnBatteries = false;
+
+        //        oTDef.Principal.GroupId = GetUserGroups();//"Users";
+        //        oTDef.Principal.LogonType = TaskLogonType.Group;
+
+
+
+        //        if (Environment.OSVersion.Version.Major > 5)
+        //        {
+        //            oTDef.Principal.RunLevel = TaskRunLevel.Highest;
+        //            oTDef.Settings.StartWhenAvailable = true;
+        //        }
+
+
+        //        cTaskScheduler.TriggerSettings oTriggerSettings = new cTaskScheduler.TriggerSettings();
+
+        //        // Create a trigger that will fire the task at this time every other day
+
+        //        oTDef.Triggers.Add((Trigger.CreateTrigger(TaskTriggerType.Logon)));
+
+
+        //        // Create an action that will launch Notepad whenever the trigger fires
+        //        oTDef.Actions.Add(new ExecAction(Application.ExecutablePath, sParams, null));
+
+        //        bRes = ocSchedule.CreateSchedule(ref oTriggerSettings, ref oTDef);
+
+        //        // Register the task in the root folder
+        //        oTService.RootFolder.RegisterTaskDefinition(sStartUpItemName, oTDef);
+
+        //        // oTService.RootFolder.RegisterTaskDefinition("Test", oTDef, TaskCreation.CreateOrUpdate, "SYSTEM", null, TaskLogonType.ServiceAccount, null);
+
+        //        oTService.Dispose();
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        bRes = false;
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("{0}|CreateScheduleForStartup()|error:{1}", this, ex.ToString()));
+        //    }
+        //    return bRes;
+        //}
+
+
+        /// <summary>
+        /// gets the users group name from system
+        /// </summary>
+        /// <returns></returns>
+        public string GetUserGroups()
+        {
+            SecurityIdentifier identifier = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+            return identifier.Translate(typeof(NTAccount)).Value;
+
+            //System.Security.Principal.WindowsIdentity currentUser =
+            //                  System.Security.Principal.WindowsIdentity.GetCurrent();
+            //return currentUser.Groups;
+
+            //oUtils.WriteToFile(string.Format("{0}|username()|error:{1}", this, identifier.Translate(typeof(NTAccount)).Value));
+
+        }
+
+        //public void AddInStartupList()
+        //{
+        //    try
+        //    {
+        //        bool bScheduleCreated = false;
+
+        //        string sCmdParam = cGlobalSettings.ASP_CMD_PARAMS_LAUNCH;
+
+
+        //        if (ocSchedule.IsSchedulerService() && Environment.OSVersion.Version.Major > 5)
+        //        {
+        //            bScheduleCreated = CreateScheduleForStartup(sCmdParam);
+        //        }
+        //        if (!bScheduleCreated)
+        //        {
+
+        //            RegistryKey oRegKey = Registry.LocalMachine.CreateSubKey(sRegKeyPath);
+        //            if (oRegKey != null)
+        //            {
+        //                //AutoScan is true then provide parameter else let it be blank
+        //                oRegKey.SetValue(sStartUpItemName, "\"" + Application.ExecutablePath + "\" " + sCmdParam);
+        //                oRegKey.Close();
+        //            }
+        //        }
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("{0}|AddInStartupList()|error:{1}", this, ex.Message));
+        //    }
+        //}
+
+
+
+
+        //public void RemoveFromStartupList()
+        //{
+        //    try
+        //    {
+        //        if (ocSchedule.IsSchedulerService())
+        //        {
+        //            TaskService oTService = new TaskService();
+
+        //            //if task exists then delete it
+        //            if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == sStartUpItemName.ToLower()) > 0)
+        //            {
+        //                oTService.RootFolder.DeleteTask(sStartUpItemName);
+        //            }
+
+        //        }
+
+        //        RegistryKey oRegKey = Registry.LocalMachine.OpenSubKey(sRegKeyPath, true);
+        //        if (oRegKey != null)
+        //        {
+        //            string[] sValueNames = oRegKey.GetValueNames();
+        //            List<string> lsValueNames = new List<string>(sValueNames.Length);
+        //            lsValueNames.AddRange(sValueNames);
+        //            if (lsValueNames.Contains(sStartUpItemName))
+        //            {
+        //                oRegKey.DeleteValue(sStartUpItemName);
+        //            }
+
+
+        //            oRegKey.Close();
+        //        }
+        //        RegistryKey oRegCurrentKey = Registry.CurrentUser.OpenSubKey(sRegKeyPath, true);
+        //        if (oRegCurrentKey != null)
+        //        {
+        //            string[] sValueNames = oRegCurrentKey.GetValueNames();
+        //            List<string> lsValueNames = new List<string>(sValueNames.Length);
+        //            lsValueNames.AddRange(sValueNames);
+        //            if (lsValueNames.Contains(sStartUpItemName))
+        //            {
+        //                oRegCurrentKey.DeleteValue(sStartUpItemName);
+        //            }
+
+
+        //            oRegKey.Close();
+        //        }
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("{0}|RemoveFromStartupList|error:{1}", this, ex.Message));
+        //    }
+
+        //}
+
+        //public string GetSchdeuleNextRun(out bool isEnabled)
+        //{
+        //    string sRes = string.Empty;
+
+        //    isEnabled = false;
+        //    try
+        //    {
+        //        isEnabled = false;
+        //        using (TaskService oTService = new TaskService())
+        //        {
+        //            //if task exists then delete it
+        //            string sScheduleName = cGlobalSettings.GetSchedulerName().ToLower();
+
+        //            if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == sScheduleName) > 0)
+        //            {
+        //                isEnabled = oTService.RootFolder.Tasks[sScheduleName].Enabled;
+
+        //                Task TCurrentTask = oTService.RootFolder.Tasks[sScheduleName];
+
+
+        //                sRes = (TCurrentTask.NextRunTime == DateTime.MinValue) ? string.Empty : TCurrentTask.NextRunTime.ToString();//.ToString("yyyy-MM-dd HH:mm");     
+
+
+        //            }
+        //            oTService.Dispose();
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException(string.Format("{0}|GetSchdeuleNextRun|error:", this), ex);
+
+        //    }
+        //    return sRes;
+        //}
+
+
+        //public bool IsLastTaskScheduleMissed()
+        //{
+
+        //    try
+        //    {
+        //        bool isEnabled = false;
+        //        using (TaskService oTService = new TaskService())
+        //        {
+        //            string sScheduleName = cGlobalSettings.GetSchedulerName().ToLower();
+        //            if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == sScheduleName) > 0)
+        //            {
+        //                Task TCurrentTask = oTService.RootFolder.Tasks[sScheduleName];
+
+        //                isEnabled = TCurrentTask.Enabled;
+        //                DateTime LastRunTime = TCurrentTask.LastRunTime;
+
+        //                if (
+        //                    /*Environment.OSVersion.Version.Major <= 5 
+        //                    && */TCurrentTask.Definition.Triggers != null 
+        //                    && TCurrentTask.Definition.Triggers.Count > 0 
+        //                    && TCurrentTask.Definition.Triggers[0].TriggerType == TaskTriggerType.Daily
+        //                    )
+        //                {
+        //                    Trigger TTrigger = TCurrentTask.Definition.Triggers[0];
+        //                    TimeSpan tsInterval = TTrigger.Repetition.Interval;
+        //                    if (LastRunTime <= DateTime.MinValue) // if schedule is never run
+        //                    {
+        //                        LastRunTime = TTrigger.StartBoundary;
+        //                    }
+
+        //                    TimeSpan tsFromLastScheduleRun = DateTime.Now - LastRunTime;
+
+        //                    /// if last run time is difference
+        //                    if (tsFromLastScheduleRun > tsInterval)
+        //                    {                                
+        //                        return true;
+        //                    }
+
+        //                }
+
+        //            }
+        //        }
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("cScanSettings::GetSchdeuleNextRun", ex);
+        //    }
+
+        //    return false;
+        //}
+
+
+        /// <summary>
+        /// Sets the existing schedule state (if exists) to enabled or disabled
+        /// required when user logoff or
+        /// </summary>
+        /// <param name="Enabled"></param>
+        /// <returns></returns>
+        //public bool SetScheduleState(bool Enabled,bool checkBackupTakenOrNot)
+        //{
+        //    bool sRes = false;
+        //    try
+        //    {
+        //        TaskService oTService = new TaskService();
+        //        //if task exists then delete it
+        //        if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == cGlobalSettings.GetSchedulerName().ToLower()) > 0)
+        //        {
+        //            //if schedule is present and backup is already taken for the same account then only enable it
+
+
+
+        //            oTService.RootFolder.Tasks[cGlobalSettings.GetSchedulerName()].Enabled = Enabled;                    
+        //        }
+        //        oTService.Dispose();
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException(string.Format("{0}|GetSchdeuleNextRun|error:", this), ex);
+
+        //    }
+        //    return sRes;
+        //}
+
+
+
+
+
+        public bool Create24HourScanSchduleIfNotExists()
+        {
+            bool bRes = false;
+
+            try
+            {
+                return true;
+
+#if OPEN_IT
+
+                //if schedule is set manually as donot create then do not create autoschedule
+               // if (cGlobalSettings.oScanSettings.oSchedule.ScheduleType == 2) return true;
+
+                TaskService oTService = new TaskService();
+
+
+                //if task exists then delete it
+                if (oTService.RootFolder.Tasks.Count(x => x.Name.ToLower() == cGlobalSettings.Get24hourSchedulerName().ToLower()) == 0)
+                {
+                    cTaskScheduler.TriggerSettings oTriggerSettings = new cTaskScheduler.TriggerSettings();
+                    // Create a new task definition and assign properties
+                    TaskDefinition oTDef = oTService.NewTask();
+                    oTDef.Settings.Priority = ProcessPriorityClass.Normal;
+                    oTDef.Settings.DisallowStartIfOnBatteries = false;
+                    oTDef.Settings.StopIfGoingOnBatteries = false;
+                    
+                    // Register the task in the root folder
+                    //  oTService.RootFolder.RegisterTaskDefinition(sStartUpItemName, oTDef);
+                    TimeSpan tsInterval = new TimeSpan(23,55, 0);
+
+                    oTriggerSettings.OneTimeOnly.Active = true;//rdDaily.Checked;
+                    oTriggerSettings.OneTimeOnly.Date = DateTime.Now.Date;
+                    oTriggerSettings.b_Once = true;
+
+                    if (Environment.OSVersion.Version.Major > 5)
+                    {
+
+                        oTDef.Principal.GroupId = GetUserGroups();//"Users";
+                        oTDef.Principal.LogonType = TaskLogonType.Group;
+
+                        oTDef.Principal.RunLevel = TaskRunLevel.Highest;
+
+                        oTDef.Settings.StartWhenAvailable = true;
+
+                    }
+
+                    cTaskScheduler oTaskScheduler = new cTaskScheduler();
+
+
+                    bRes = oTaskScheduler.CreateSchedule(ref oTriggerSettings, ref oTDef, tsInterval);
+
+                    if (bRes)
+                    {
+                        string strExeFilePath = Application.ExecutablePath; // Application.ExecutablePath;
+
+                        oTDef.Actions.Add(new ExecAction(strExeFilePath, cGlobalSettings.ASP_CMD_PARAMS_SCAN_24HOURS, null));
+
+                        oTService.RootFolder.RegisterTaskDefinition(cGlobalSettings.Get24hourSchedulerName()/*strScheduleName*/, oTDef);
+
+                        Task TCurrentTask = oTService.RootFolder.Tasks[cGlobalSettings.Get24hourSchedulerName()];
+
+                       // cGlobalSettings.oRegSettings.PbScheduleTime = TCurrentTask.NextRunTime;
+                    }
+                    oTaskScheduler = null;
+                }
+
+
+                oTService.Dispose();
+#endif
+            }
+            catch (System.Exception ex)
+            {
+                bRes = false;
+                cGlobalSettings.oLogger.WriteLog(string.Format("{0}|Create24HourScanSchduleIfNotExists()|error:{1}", this, ex.ToString()));
+            }
+            return bRes;
+        }
+
+
+
+        public void GetProductDetails(out cClientEnum.PBInstalledState InstalledState, out int ErrorFound, string sKey, string sProductFolderName, string sExename, string sKeyValueInstallPath, out string sCompletePath)
+        {
+            sCompletePath = string.Empty;
+            InstalledState = cClientEnum.PBInstalledState.NotInstalled;
+
+            ErrorFound = 0;
+            try
+            {
+                if (cWin32APIs.GetPlatform() == cWin32APIs.Platform.X64)
+                {
+                    sCompletePath = Path.Combine(cWin32APIs.GetShFolderPath(cWin32APIs.CSIDL.CSIDL_PROGRAM_FILESX86) + "\\" + sProductFolderName, sExename);
+                }
+                else
+                {
+                    sCompletePath = Path.Combine(cWin32APIs.GetShFolderPath(cWin32APIs.CSIDL.CSIDL_PROGRAM_FILES) + "\\" + sProductFolderName, sExename);
+                }
+                //string COMPLETEPATH = Path.Combine(cWin32APIs.GetShFolderPath(cEnums.CSIDL.CSIDL_PROGRAM_FILESX86) + "\\advanced driver updater", ADUEXENAME);
+
+
+
+                int isExpired = 0;
+                string sRegistered = string.Empty;
+                string sInstalledPath = string.Empty;
+
+                if (Registry.CurrentUser != null)
+                {
+                    if (Registry.CurrentUser.OpenSubKey(sKey) != null)
+                    {
+                        InstalledState = cClientEnum.PBInstalledState.Installed;
+                        
+                        //ErrorFound = Convert.ToInt32(Registry.LocalMachine.OpenSubKey(sADUKey).GetValue("TotalOutOfDateDrivers")); 
+
+                        sInstalledPath = Convert.ToString(Registry.CurrentUser.OpenSubKey(sKey).GetValue(sKeyValueInstallPath, string.Empty));
+                        if (!String.IsNullOrEmpty(sInstalledPath))
+                        {
+                            if (File.Exists(Path.Combine(sInstalledPath, sExename)))
+                            {
+                                InstalledState = cClientEnum.PBInstalledState.Installed;
+                                sCompletePath = Path.Combine(sInstalledPath, sExename);
+                            }
+                            else
+                            {
+                                if (File.Exists(sCompletePath))
+                                {
+                                    InstalledState = cClientEnum.PBInstalledState.Installed;
+                                }
+                                else
+                                {
+                                    InstalledState = cClientEnum.PBInstalledState.NotInstalled;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            InstalledState = cClientEnum.PBInstalledState.NotInstalled;
+                        }
+
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("cScanSettings:: GetProductDetails: ", ex);
+                //oUtils.WriteToFile(string.Format("{0}|GetProductDetails()|Error:{1}", this, ex.Message));
+                InstalledState = cClientEnum.PBInstalledState.NotInstalled;
+            }
+        }
+
+        #endregion
+
+
+
+    }
+
+
+}

@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using DuplicatePhotosFixer.Engine;
+
+namespace DuplicatePhotosFixer.Models
+{
+    public class vmHomeFooter
+    {
+        public UserControl ctrlOwner = null;
+        public IgnoreRules ignoreRules = null;
+
+        public ScanPhotos objScanPhotos = null;
+
+        //public void Init()
+        //{
+        //    if (ignoreRules == null)
+        //        ignoreRules = new IgnoreRules();
+        //    ignoreRules.GenerateRegEx();
+
+        //    if (objScanPhotos == null)
+        //    {
+        //        objScanPhotos = new ScanPhotos();
+        //        objScanPhotos.OnScanStart += new ScanPhotos.OnScanStartProcess(objScanPhotos_OnScanStart);
+        //        objScanPhotos.OnScanProgress += new ScanPhotos.OnScanProgressProcess(objScanPhotos_OnScanProgress);
+        //        objScanPhotos.OnScanCompleted += new ScanPhotos.OnScanCompletedProcess(objScanPhotos_OnScanCompleted);
+        //        objScanPhotos.onGroupCreated += new ScanPhotos.onGroupCreatedProcess(objScanPhotos_onGroupCreated);
+        //    }
+
+        //    if (cGlobalSettings.scanner != null)
+        //    {
+
+        //        cGlobalSettings.scanner.OnScanStart += new OnScanStartProcess(scanner_OnStartProgress);
+        //        cGlobalSettings.scanner.OnScanProgress += new OnScanProgressProcess(scanner_OnScanProgress);
+        //        cGlobalSettings.scanner.OnScanCompleted += new OnScanCompletedProcess(scanner_OnScanCompleted);
+
+        //    }
+        //}
+
+        //void objScanPhotos_OnScanStart(string startMsg)
+        //{
+        //    //this.UIThread(() =>
+        //    //{
+        //    //    WindowsFormsSynchronizationContext.Current.Post(_ =>
+        //    //    {
+        //    //        Program.oMainReference.ShowProgress(startMsg);
+        //    //    }, null);
+        //    //});
+        //}
+
+        //void objScanPhotos_OnScanProgress(cClientEnum.eScanPhase scanPhaseType, string message, int percentageCompleted, string counterMsg, string subMsg, bool showScanBar = false, bool bConfirmationBox = false)
+        //{
+           
+        //}
+    }
+}

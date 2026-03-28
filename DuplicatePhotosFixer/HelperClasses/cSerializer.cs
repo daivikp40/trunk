@@ -1,0 +1,171 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
+
+namespace DuplicatePhotosFixer.HelperClasses
+{
+	[Serializable()]
+    public class cSerializer
+    {
+        public static T DeSerializeObject<T>(string xmlFilePath)
+        {
+            string xml = File.ReadAllText(xmlFilePath);
+
+            var settings = new XmlReaderSettings { CheckCharacters = false };
+            using (var sr = new System.IO.StringReader(xml))
+            using (var reader = XmlReader.Create(sr, settings))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+
+        public static bool SerializeToXML<T>(T oObject, string FilePath)
+        {
+            bool bRes = false;
+            try
+            {
+                /*
+                string sPath = sFileName;
+                if (String.IsNullOrEmpty(Path.GetExtension(sPath))) sPath = sPath + ".xml";
+                */
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                GC.Collect();
+                using (var writer = new StreamWriter(FilePath))
+                {
+                    using (var xmlWriter = XmlWriter.Create(writer, new XmlWriterSettings { Indent = false, NewLineOnAttributes = false }))
+                    {
+                        serializer.Serialize(xmlWriter, oObject);
+                        xmlWriter.Close();
+                        writer.Close();
+                        writer.Dispose();
+                    }
+                }
+                serializer = null;
+                bRes = true;
+            }
+            catch (System.Exception ex)
+            {
+                //Trace.WriteLine(ex.ToString());
+                cGlobalSettings.oLogger.WriteLogException(string.Format("Failed - cSerializer::SerializeToXML for file {0} ", FilePath), ex);
+            }
+            return bRes;
+        }
+
+
+       static string ENCRYPT_KEY = "ASPCMDSC";
+        public static bool SerializeData<TKey, TValue>(Dictionary<TKey, TValue> oHashSet, string sFilePath)
+        {
+            bool bRes = false;
+            try
+            {
+                DESCryptoServiceProvider key = new DESCryptoServiceProvider();
+                key.Key = ASCIIEncoding.ASCII.GetBytes(ENCRYPT_KEY);
+                key.IV = ASCIIEncoding.ASCII.GetBytes(ENCRYPT_KEY);
+                using (Stream stream = File.Open(sFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    // using (CryptoStream cs = new CryptoStream(stream, key.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        BinaryFormatter bin = new BinaryFormatter();
+                        bin.Serialize(stream, oHashSet);
+                        bRes = true;
+                    }
+
+                }
+                key.Clear();
+            }
+
+            catch (System.Exception ex)
+            {
+                //Trace.WriteLine(ex);
+                cGlobalSettings.oLogger.WriteLogException(string.Format("Failed - cSerializer::SerializeData for file {0} ", sFilePath), ex);
+                bRes = false;
+            }
+            return bRes;
+        }
+
+
+        public static bool DeSerializeData<TKey, TValue>(ref Dictionary<TKey, TValue> oHashSet, string sFilePath)
+        {
+            bool bRes = false;
+            try
+            {
+                DESCryptoServiceProvider key = new DESCryptoServiceProvider();
+                key.Key = ASCIIEncoding.ASCII.GetBytes(ENCRYPT_KEY);
+                key.IV = ASCIIEncoding.ASCII.GetBytes(ENCRYPT_KEY);
+                using (Stream stream = File.Open(sFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    // using (CryptoStream cs = new CryptoStream(stream, key.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        BinaryFormatter bin = new BinaryFormatter();
+                        stream.Position = 0;
+                        oHashSet = (Dictionary<TKey, TValue>)bin.Deserialize(stream);
+                        bRes = true;
+                    }
+                }
+                key.Clear();
+            }
+
+            catch (System.Exception ex)
+            {
+                //Trace.WriteLine(ex);
+                cGlobalSettings.oLogger.WriteLogException(string.Format("Failed - cSerializer::SerializeData for file {0} ", sFilePath), ex);
+                bRes = false;
+            }
+            return bRes;
+        }
+
+        public static bool SerializeData1<TKey, TValue>(Dictionary<TKey, TValue> oHashSet, string sFilePath)
+        {
+            bool bRes = false;
+            try
+            {
+
+                using (Stream stream = File.Open(sFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(stream, oHashSet);
+                    bRes = true;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                //Trace.WriteLine(ex);
+                bRes = false;
+            }
+            return bRes;
+        }
+
+
+        public static bool DeSerializeData1<TKey, TValue>(ref Dictionary<TKey, TValue> oHashSet, string sFilePath)
+        {
+            bool bRes = false;
+            try
+            {
+                using (Stream stream = File.Open(sFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    var res = bin.Deserialize(stream);
+                    oHashSet = (Dictionary<TKey, TValue>)(res);
+                    bRes = true;
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                //Trace.WriteLine(ex);
+                bRes = false;
+            }
+            return bRes;
+        }
+
+
+    }
+}

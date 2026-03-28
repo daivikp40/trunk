@@ -1,0 +1,38 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Views.frmCustomDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Views"
+        mc:Ignorable="d"
+        Title="frmRegistration" Height="213" Width="507">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="49"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10 20">
+            <Image x:Name="img_infoicon" Source="{DynamicResource img_infoicon}" Width="20" Height="30"
+                   VerticalAlignment="Top"/>
+            <TextBlock x:Name="lbl_heading" Text="Please mark at-least one duplicate photo to delete." Foreground="Black"
+                       FontSize="12"  VerticalAlignment="Top" Padding="5 0 0 0"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Background="#F0F0F0">
+            <DockPanel>
+                <Button x:Name="btn_ok" Content="OK" Background="#F0F0F0" Width="85" Height="25"
+                        DockPanel.Dock="Right" Margin="0 0 10 0"/>
+                <TextBlock x:Name="link_action"
+                       Padding="20 0 0 0" VerticalAlignment="Center">
+                <Hyperlink>
+                    Show Quick Guide
+                </Hyperlink>
+                </TextBlock>
+
+            
+
+            </DockPanel>
+           
+            
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,107 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Views.frmAboutUs"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cust="clr-namespace:DuplicatePhotosFixer.CustomControl"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Views"
+        mc:Ignorable="d"
+        Title="frmAboutUs" Height="410" Width="590" WindowStyle="None"  Background="{DynamicResource bgrclr_solidgray}" 
+        AllowsTransparency="True" BorderBrush="#404040" BorderThickness="1" WindowStartupLocation="CenterScreen" >
+    <Window.Resources>
+
+        <Style TargetType="Button" x:Name="btn_close">
+            <Setter Property="Background" Value="#888888"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <cust:ImageButton
+                            x:Name="close_btn"
+                            Width="10"
+                            Height="10"
+                            DockPanel.Dock="Right"
+                            Margin="10 0 10 0"
+                            Style="{DynamicResource imageButton}"
+                            Image="{DynamicResource img_close_plain}"
+                            HoverImage="{DynamicResource img_close_plain}"
+                            SelectedImage="{DynamicResource img_close_plain}" Click="close_btn_Click"  />
+            <Image x:Name="dpf_logo" Source="/Resources/dpf_updateofr_icon.png" DockPanel.Dock="Left" Margin="10 0" Stretch="None"/>
+            <TextBlock x:Name="dpf_header" Text="Duplicate Photos Fixer Pro " Foreground="#f9f9f9"
+                       FontSize="15" FontWeight="Regular" 
+                       VerticalAlignment="Center" />
+            <TextBlock x:Name="divider" Foreground="#f9f9f9"
+                       FontSize="15" FontWeight="Regular" 
+                       VerticalAlignment="Center" Text="-" Padding="2 0"/>
+            <TextBlock x:Name="dpf_header_info" Text=" About" VerticalAlignment="Center" FontSize="15" FontWeight="Regular" Foreground="#919191" />
+        </DockPanel>
+        <Grid Grid.Row="1"  Margin="4 0 4 0" Background="#2F2F2F">
+            <StackPanel>
+                <Image Height="29" Source="{DynamicResource img_systweak_logo}" Width="169" Margin="0 20 0 0"/>
+                <TextBlock x:Name="versiontxt" HorizontalAlignment="Center" Foreground="#0095FE"
+                           Padding="0 5" FontSize="15">
+                    Duplicate Photos Fixer Pro 1.3.1086.385
+                </TextBlock>
+                <TextBlock x:Name="productdes" HorizontalAlignment="Center" 
+                           FontWeight="SemiBold" Foreground="#fff" FontSize="16">
+                    Duplicate Photos Fixer Pro - Non Retail Version
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <Button x:Name="Privacy_policy_btn" Style="{DynamicResource link_btn}" Content="Privacy Policy"  Margin="0 5 10 0"/>
+                    <TextBlock Foreground="#787878"  Margin="0 5 10 0">|</TextBlock>
+                    <Button x:Name="EULA_btn" Style="{DynamicResource link_btn}"  Margin="0 5 10 0" Content="EULA"/>
+                    <TextBlock Foreground="#787878"  Margin="0 5 10 0">|</TextBlock>
+                    <Button x:Name="Uninstall_instructions_btn" Style="{DynamicResource link_btn}"  Margin="0 5 5 0" Content="Uninstall Instructions"/>
+                   
+                </StackPanel>
+                <!--<TextBlock x:Name="policiestxt" HorizontalAlignment="Center" Padding="0 5 0 5" FontSize="13" FontWeight="Regular">
+                   
+                    <Hyperlink TextDecorations="None" Foreground="#0096FF">Privacy Policy</Hyperlink> <Hyperlink TextDecorations="None" Foreground="#787878">|</Hyperlink>                
+                    <Hyperlink TextDecorations="None" Foreground="#0096FF">EULA</Hyperlink>  <Hyperlink TextDecorations="None" Foreground="#787878">|</Hyperlink>
+                    <Hyperlink TextDecorations="None" Foreground="#0096FF">Uninstall Instructions</Hyperlink>
+                </TextBlock>-->
+                <DockPanel HorizontalAlignment="Center" Margin="0 10">
+                    <TextBlock x:Name="contact_info"  Foreground="#d4d4d4" FontSize="13">
+                        Contact Us :
+                    </TextBlock>
+                    <Button x:Name="support_btn" Content="support@systweak.com" HorizontalAlignment="Center" Style="{DynamicResource link_btn}" Margin="5 0"/>
+                </DockPanel>
+                <!--<TextBlock x:Name="contactinfo" HorizontalAlignment="Center" Padding="0 4 0 10" Foreground="#d4d4d4" FontSize="13">
+                    Contact us : <Hyperlink Foreground="#0096FF" TextDecorations="None">support@systweak.com</Hyperlink>
+                </TextBlock>-->
+                <Button x:Name="extBtn_Register" FontWeight="Regular" FontSize="16" Height="33" Width="205"
+                         Margin="0 5 0 10"  HorizontalAlignment="Center" Visibility="Visible"
+                        Style="{DynamicResource stl_btnScanForDuplicates}" BorderBrush="#2D689D" BorderThickness="1" Click="extBtn_Register_Click">
+                    Register Now
+                </Button>
+                <TextBlock x:Name="lblSystweakLink" Foreground="#fff" FontSize="13"
+                           HorizontalAlignment="Center" Padding="0 4">
+                    Copyright © 2023  <Hyperlink Foreground="#0096FF" TextDecorations="None">Systweak Software</Hyperlink> All Rights Reserved
+                </TextBlock>
+                <TextBlock x:Name="lbl_Warning" Foreground="#d4d4d4"  TextWrapping="Wrap" Margin="30 5"                         
+                          FontSize="12" HorizontalAlignment="Center" FontWeight="Regular">
+                    Warning: This computer program is protected by copyright law and international treaties.
+                    Unauthorized reproduction or distribution of this program, or any portion of it, may result in severe
+                     civil and criminal penalities , nd will be produces to the maximum extent possible under the law.
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="2"   Margin="4 0 4 4 ">
+            <Grid  >
+                <Image x:Name="comp_logo" Source="{DynamicResource img_systweak_logo}" HorizontalAlignment="Right" Height="13" Margin="0 0 15 0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

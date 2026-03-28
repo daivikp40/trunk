@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace DuplicatePhotosFixer
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+
+
+            InitializeComponent();
+            App.oMainReference = this;
+
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+        }
+
+        public void ShowResults()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Collapsed;
+                objResult.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowHome()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Visible;
+                objResult.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        //private void btnClose_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Close();
+        //}
+
+        //private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var winState = Application.Current.MainWindow.WindowState;
+        //    if (winState == WindowState.Normal)
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                
+        //    }
+        //    else
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Normal;
+        //    }
+        //}
+
+        //private void btnSettings_Click(object sender, RoutedEventArgs e)
+        //{
+            
+        //}
+
+        //private void btnLanguage_Click(object sender, RoutedEventArgs e)
+        //{
+        //    langpopup.IsOpen = true;
+        //}
+
+        //private void btnPopupHelp_Click(object sender, RoutedEventArgs e)
+        //{
+        //    settingspopup.IsOpen = true;
+            
+        //}
+
+        //private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var winState = Application.Current.MainWindow.WindowState;
+        //    if (winState == WindowState.Normal)
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        //    }
+        //    else
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Normal;
+        //    }
+        //}
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+    }
+}

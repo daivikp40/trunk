@@ -1,0 +1,171 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Views.frmRegistrationDPF"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Views"
+        mc:Ignorable="d"
+      Title="frmRegistration" Height="582" Width="742" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="MyWaterMarkStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid>
+                            <Border Background="#E2E2E2" BorderBrush="#cecece"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center" />
+                            <Label Margin="5,0,0,0" x:Name="WaterMarkLabel" Content="{TemplateBinding Tag}" VerticalAlignment="Center"
+                               Visibility="Collapsed" Foreground="#717171" FontSize="21"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Visibility" TargetName="WaterMarkLabel" Value="Visible"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="DimGray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Name="btn_close">
+            <Setter Property="Background" Value="#888888"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="41"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="62"/>
+        </Grid.RowDefinitions>
+        <DockPanel Background="{DynamicResource bgrclr_solidgray}">
+            <Button DockPanel.Dock="Right"  Background="Transparent"
+                    Margin="0 0 20 0" Style="{StaticResource stl_btnClose}"
+                    BorderBrush="Transparent"
+                    Click="Button_Click">
+                <Image Source="/Resources/closevpn.png" Stretch="None"/>
+            </Button>
+            <Image x:Name="dpf_logo" Source="/Resources/dpf_updateofr_icon.png" DockPanel.Dock="Left" Margin="10 0" Stretch="None"/>
+            <TextBlock x:Name="dpf_header" Text="Duplicate Photos Fixer Pro" Foreground="#f9f9f9"
+                       FontSize="13" FontWeight="Regular" 
+                       VerticalAlignment="Center" />
+
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <StackPanel Margin="30">
+                <TextBlock x:Name="lbl_heading" Text="Thank you for choosing Duplicate Photos Fixer!" FontSize="24" FontWeight="SemiBold" Foreground="#000"/>
+                <TextBlock x:Name="lbl_info" Text="To activate the full version of Duplicate Photo Fixer, you need to register the product using a license key." Foreground="#424242" FontSize="13" Padding="0 10" />
+                <StackPanel Margin="0 30">
+                    <DockPanel>
+                        <DockPanel>
+                            <Image x:Name="img" Source="{DynamicResource img_clean_duplicate}"  Width="50" Height="50"  Margin="0 0 5 0"/>
+                            <StackPanel Margin="10 0">
+                                <TextBlock x:Name="product_heading1" Text="Duplicate Photos Cleaner" FontSize="18" FontWeight="SemiBold" />
+                                <TextBlock x:Name="product_desc1" Text="Find and Delete duplicate photos" Foreground="#5B5B5B" FontSize="14" FontWeight="Regular" Padding="0 3"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <DockPanel HorizontalAlignment="Right">
+                            <Image x:Name="img1" Source="{DynamicResource img_recover}"  Width="50" Height="50" Margin="0 0 5 0"/>
+                            <StackPanel Margin="10 0" >
+                                <TextBlock x:Name="product_heading2" Text="Recover Storage Space" FontSize="18" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="product_desc2" Text="Recover amount of storage space" Foreground="#5B5B5B" FontSize="14" FontWeight="Regular" Padding="0 3"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                    </DockPanel>
+                    <DockPanel Margin="0 35">
+                        <DockPanel>
+                            <Image x:Name="img3" Source="{DynamicResource img_auto_mark}"  Width="50" Height="50"/>
+                            <StackPanel Margin="10 0">
+                                <TextBlock x:Name="product_heading3" Text="Auto Mark Delete" FontSize="18" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="product_desc3" Text="Auto-mark and delete the photos" Foreground="#5B5B5B" FontSize="14" FontWeight="Regular" Padding="0 3"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <DockPanel HorizontalAlignment="Right" Margin="0 0 30 0">
+                            <Image x:Name="img4" Source="{DynamicResource img_one_click}"  Width="50" Height="50"/>
+                            <StackPanel Margin="10 0">
+                                <TextBlock x:Name="product_heading4" Text="One click Scan" FontSize="18" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="product_desc4" Text="One click and find duplicates" Foreground="#5B5B5B" FontSize="14" FontWeight="Regular" Padding="0 3"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </DockPanel>
+                    <TextBlock x:Name="label_key" Text="Already have a license key!" FontSize="16" Foreground="#3e3e3e" FontWeight="Bold"/>
+                    <TextBlock x:Name="label_key_info1" Padding="0 5" Foreground="#3e3e3e" FontSize="13" FontWeight="Regular">1. Copy the license key from the order page or confirmation email and paste it into the box below.</TextBlock>
+                    <TextBlock x:Name="label_key_info2" Foreground="#3e3e3e" FontSize="13" FontWeight="Regular" Padding="0 0 0 5">2. Click on Activate Now button to enjoy full functionality.</TextBlock>
+                    <DockPanel Margin="0 10">
+                        <Button x:Name="activate_now_btn" Width="158" DockPanel.Dock="Right" Content="Activate Now" 
+                                FontSize="16" BorderBrush="#cecece" BorderThickness="0 1 1 1"
+                                FontWeight="SemiBold"
+                                Foreground="#fff" >
+
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#5D5D5D" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="bdr_main"  BorderThickness="1" BorderBrush="#cecece" Background="#5D5D5D">
+                                                    <ContentPresenter x:Name="cpName" HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"
+                                                              TextElement.Foreground="White">
+                                                    </ContentPresenter>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="BorderBrush" TargetName="bdr_main" Value="#494949"></Setter>
+                                                        <Setter Property="TextElement.Foreground" TargetName="cpName" Value="#FFFFFF"></Setter>
+                                                        <Setter Property="Background" TargetName="bdr_main" Value="#494949"></Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="true">
+                                                        <Setter Property="BorderBrush" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                                        <Setter Property="TextElement.Foreground" TargetName="cpName" Value="#FFFFFF"></Setter>
+                                                        <Setter Property="Background" TargetName="bdr_main" Value="#5D5D5D"></Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="cpName" Property="TextElement.Foreground" Value="#747373" />
+                                                        <Setter TargetName="bdr_main" Property="Background" Value="#b0b0b0" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+
+                        </Button>
+                        <TextBox x:Name="txt_reg_key" BorderBrush="#cecece" Height="40" Background="#E2E2E2" Style="{StaticResource MyWaterMarkStyle}" Tag="XXXX-XXXX-XXXX-XXXX">
+                        </TextBox>
+                    </DockPanel>
+                    <TextBlock x:Name="hyperlink_text" FontSize="12" FontWeight="Regular" Padding="0 5">
+                        <Hyperlink Foreground="#0095fe">Click here to paste the copied license key into the box above.</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" Background="{DynamicResource bgclr_soliddark}">
+            <DockPanel>
+                <Button x:Name="purchase_btn" FontWeight="SemiBold" DockPanel.Dock="Right" Width="158" Height="36" Style="{DynamicResource stl_btnUpgradeNow}" Content="Purchase Now" Margin="0 0 10 0"/>
+                <Image x:Name="img_mb_icon" Source="{DynamicResource img_mb}" Margin="5"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="label1" Text="No Questions Asked, 60 Days Money Back Guarantee" FontSize="14" FontWeight="SemiBold" Foreground="#D6d6d6"/>
+                    <TextBlock x:Name="lbl2" Text="If you are not satisfied with our product , contact us within 60 days for a full refund" Foreground="#979797" FontSize="12" FontWeight="Regular"/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
+

@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucResultView.xaml
+    /// </summary>
+    public partial class ucResultView : UserControl
+    {
+        public ucResultView()
+        {
+            InitializeComponent();
+
+            // LoadComboBox();
+            LoadStrings();
+
+        }
+        private void LoadStrings()
+        {
+            btn_autoMark.Content = cResourceManager.LoadString("DPF_RESULT_UC_AUTO_MARK_TEXT");
+            btn_unMarkAll.Content = cResourceManager.LoadString("DPF_RESULT_UC_UNMARK_ALL_TEXT");
+
+            //show image view as default
+            btnView.Text = cResourceManager.LoadString("IDS_IMAGE_VIEW");
+            lblSelectionAssitant.Text = cResourceManager.LoadString("DPF_RESULT_SELECTION_ASSISTANT_TEXT");
+            llbl_deleteMarked.Text = cResourceManager.LoadString("DPF_FOOTER_UC_DELETE_MARKED_TEXT");
+            //imageListView.GroupHeaderLeftText = cResourceManager.LoadString("DPF_RESULT_DUPLICATEGROUP_TEXT");
+            //imageListView.GroupHeaderRightText = cResourceManager.LoadString("DPF_RESULT_DUPLICATEPHOTO_COUNT_TEXT");
+            ////string strDuplicateInfo = "{0} " + cResourceManager.LoadString("DPF_TRIAL_PHOTO_FOUND_TEXT").Trim(new char[] { ':', ' ' }) + ", {1} " + cResourceManager.LoadString("DPF_TRIAL_SPACE_SAVED_TEXT").Trim(':');
+            ////lbl_DuplicatePhotosSubHeadingText.Text = cResourceManager.LoadString("DPF_TRIAL_PHOTO_FOUND_TEXT");
+            //lbl_DuplicateNumbers.Text = cGlobalSettings.TotalDuplicatePhotos + "";
+
+            //lbl_SaveSpaceSubHeadingText.Text = cResourceManager.LoadString("DPF_TRIAL_SPACE_SAVED_TEXT");
+            //lbl_SaveSpace.Text = AppFunctions.StrFormatByteSize(cGlobalSettings.TotalDuplicatePhotosSize);
+
+            lbl_DuplicatePhotosSubHeadingText.Text = cResourceManager.LoadString("DPF_TRIAL_PHOTO_FOUND_TEXT");
+            //lbl_DuplicateNumbers.Text = cGlobalSettings.TotalDuplicatePhotos + "";
+
+            lbl_SaveSpaceSubHeadingText.Text = cResourceManager.LoadString("DPF_TRIAL_SPACE_SAVED_TEXT");
+            //lbl_SaveSpace.Text = AppFunctions.StrFormatByteSize(cGlobalSettings.oRegSettings.GetTotalDuplicatesSpace());
+
+            //btn_duplicateInfo.Text = string.Format(strDuplicateInfo, cGlobalSettings.TotalDuplicatePhotos, AppFunctions.StrFormatByteSize(cGlobalSettings.TotalDuplicatePhotosSize));
+            llbl_deleteMarked.Text = cResourceManager.LoadString("DPF_FOOTER_UC_DELETE_MARKED_TEXT");
+
+
+        }
+        public class ComboBoxItem
+        {
+            public string ImagePath { get; set; }
+            public string Text { get; set; }
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowHome();
+        }
+
+       
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void unMarkbtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImgeView_change(object sender, RoutedEventArgs e)
+        {
+            resultViewGridSelection.IsOpen = true;
+            btnDetailedView.Visibility = Visibility.Visible;
+            btnImageView.Visibility = Visibility.Collapsed;
+            
+        }
+        private void Detailed_View_Change(object sender, RoutedEventArgs e)
+        {
+            resultViewGridSelection.IsOpen = true;
+            btnImageView.Visibility = Visibility.Visible;
+            btnDetailedView.Visibility = Visibility.Collapsed;
+        }
+        private void btnDetailedView_Click(object sender, RoutedEventArgs e)
+        {
+            imageViewbtn.Visibility = Visibility.Collapsed;
+            detailedViewbtn.Visibility = Visibility.Visible;
+            btnDetailedView.Visibility = Visibility.Collapsed;
+            ucDetailedView.Visibility = Visibility.Visible;
+            ucImageView.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnImageView_Click(object sender, RoutedEventArgs e)
+        {
+            imageViewbtn.Visibility = Visibility.Visible;
+            detailedViewbtn.Visibility = Visibility.Collapsed;
+            btnImageView.Visibility = Visibility.Collapsed;
+            ucImageView.Visibility = Visibility.Visible;
+            ucDetailedView.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void btn_selectionAssistanceOptionA_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowAssistantSelection();
+            //App.selectionAssistantfrm.ShowAssistantSelection();
+        }
+
+        private void btn_selectionAssistanceOptionB_Click(object sender, RoutedEventArgs e)
+        {
+            App.oMainReference.ShowClearCaheDialog();
+        }
+    }
+}

@@ -1,0 +1,304 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace DuplicatePhotosFixer
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+
+
+            InitializeComponent();
+            App.oMainReference = this;
+
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+        }
+        public static Views.frmExitNag ofrmExitNag = null;
+        public static Views.frmSettings oSettingsfrm = null;
+        public static Views.frmSelectionAssistant selectionAssistantfrm = null;
+        public static UserControls.ucClearCache clearCachefrm = null;
+        public static Views.frmRegistrationDPF frmRegistration = null;
+        public static Views.frmAboutUs frmAboutUs = null;
+
+        public void ShowResults()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Collapsed;
+                objResult.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowHome()
+        {
+            try
+            {
+                objHome.Visibility = Visibility.Visible;
+                objResult.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("MainWindow:: LoadResults: ", ex);
+            }
+        }
+
+        public void ShowExitNag()
+        {
+            try
+            {
+                ofrmExitNag = new Views.frmExitNag();
+                ofrmExitNag.ShowDialog();
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        public void ShowAssistantSelection()
+        {
+            try
+            {
+                selectionAssistantfrm = new Views.frmSelectionAssistant();
+                selectionAssistantfrm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void ShowClearCaheDialog()
+        {
+            try
+            {
+                clearCachefrm = new UserControls.ucClearCache();
+               clearCachefrm.ShowDialog();
+                clearCachefrm.ShowInTaskbar = false;
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        public void ShowSettings()
+        {
+            try
+            {
+                oSettingsfrm = new Views.frmSettings();
+                oSettingsfrm.ShowDialog();
+            }
+
+            catch(Exception ex)
+            {
+
+            }
+        }
+
+        public void ShowRegistration()
+        {
+            try
+            {
+                frmRegistration = new Views.frmRegistrationDPF();
+                frmRegistration.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public void ShowAboutUs()
+        {
+            try
+            {
+                frmAboutUs = new Views.frmAboutUs();
+                frmAboutUs.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        //public void Progress_Show(object frmObject, bool ShowAsDialog)
+        //{
+        //    try
+        //    {
+        //        if (!Program.bSilentScan)
+        //            ShowWindow();
+
+        //        if (this.WindowState != FormWindowState.Maximized && !isFormFullyOnScreen())
+        //        {
+        //            this.CenterToScreen();
+        //        }
+
+        //        Form oForm = (Form)frmObject;
+        //        /*if (this.Location.X < 0 || this.Location.Y < 0)
+        //        {
+        //            this.CenterToScreen();
+        //        }*/
+
+        //        if (Program.bSilentScan)
+        //        {
+        //            oForm.Opacity = 0;
+        //        }
+        //        else
+        //        {
+        //            minimizedToTray = false;
+        //        }
+
+        //        if (oForm is frmProgress)
+        //        {
+        //            oForm.Size = new System.Drawing.Size(513, 229);
+        //            //oForm.Size = new System.Drawing.Size(0, 0);
+
+        //            NotifyIconContextMenu.UIThread(() =>
+        //            {
+        //                if (NotifyIconContextMenu.Items.Count > 2) NotifyIconContextMenu.Items[2].Enabled = false;
+        //            });
+
+        //        }
+        //        //cGlobalSettings.oLogger.WriteLogVerbose(string.Format("Size::({0},{1})", oForm.Size.Width, oForm.Size.Height));
+        //        oForm.ShowInTaskbar = false;
+        //        oForm.StartPosition = FormStartPosition.CenterParent;
+
+        //        if (oShowProgressTrans.IsDisposed || oShowProgressTrans == null)
+        //        {
+        //            oShowProgressTrans = new frmShowTransDialog();
+        //        }
+
+        //        if (Program.bSilentScan)
+        //        {
+        //            oShowProgressTrans.Opacity = 0;
+        //        }
+        //        else
+        //        {
+        //            oShowProgressTrans.Opacity = 0.8;
+        //        }
+        //        oShowProgressTrans.Size = this.Size;
+        //        oShowProgressTrans.Owner = this;
+        //        oShowProgressTrans.Show(this, ref oForm, ShowAsDialog);
+
+        //        if (ShowAsDialog)
+        //        {
+        //            this.Activate();
+        //            if (!oShowProgressTrans.IsDisposed) oShowProgressTrans.Hide();
+        //        }
+
+        //        //  WindowsFormsSynchronizationContext.Current.Post(_=> Program.oMainFormReference.DisableEnableControls(true), null);
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLog(string.Format("{0}|Progress_Show()|Error:{1}", this.Name, ex.Message));
+        //    }
+        //}
+
+        //public void Progress_Close(object frmObject)
+        //{
+        //    try
+        //    {
+
+        //        this.UIThread(() =>
+        //        {
+        //            this.Activate();
+        //            Form oForm = (Form)frmObject;
+        //            if (oForm == null || oForm.IsDisposed)
+        //                return;
+        //            oShowProgressTrans.CloseShowedForm(ref oForm);
+        //        });
+
+        //        //if (oShowProgressTrans != null && !oShowProgressTrans.IsDisposed) 
+        //        //oShowProgressTrans.Dispose();
+
+        //        NotifyIconContextMenu.UIThread(() =>
+        //        {
+        //            if (NotifyIconContextMenu.Items.Count > 2) NotifyIconContextMenu.Items[2].Enabled = true;
+        //        });
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("Progress_Close", ex);
+        //    }
+        //}
+
+
+
+        //private void btnClose_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Close();
+        //}
+
+        //private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var winState = Application.Current.MainWindow.WindowState;
+        //    if (winState == WindowState.Normal)
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
+        //    }
+        //    else
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Normal;
+        //    }
+        //}
+
+        //private void btnSettings_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+        //private void btnLanguage_Click(object sender, RoutedEventArgs e)
+        //{
+        //    langpopup.IsOpen = true;
+        //}
+
+        //private void btnPopupHelp_Click(object sender, RoutedEventArgs e)
+        //{
+        //    settingspopup.IsOpen = true;
+
+        //}
+
+        //private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var winState = Application.Current.MainWindow.WindowState;
+        //    if (winState == WindowState.Normal)
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        //    }
+        //    else
+        //    {
+        //        Application.Current.MainWindow.WindowState = WindowState.Normal;
+        //    }
+        //}
+
+
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+    }
+}

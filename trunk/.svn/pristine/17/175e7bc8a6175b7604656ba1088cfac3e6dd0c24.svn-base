@@ -1,0 +1,1768 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Drawing;
+using System.IO;
+using DuplicatePhotosFixer.ClassDictionary;
+using System.Diagnostics;
+using System.Threading;
+//using System.Windows.Media
+using System.Drawing.Imaging;
+using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Windows.Media.Imaging;
+
+#region Help
+
+/// Exif info helping source : 
+/*-----------------------------------
+ * 
+https://msdn.microsoft.com/en-us/library/xddt0dz7.aspx
+http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/EXIF.html
+http://www.movable-type.co.uk/scripts/latlong.html
+http://ptforum.photoolsweb.com/ubbthreads.php?ubb=download&Number=1024&filename=1024-2006_1011_093752.jpg
+
+https://msdn.microsoft.com/en-us/library/ms534416(v=vs.85).aspx     //Property Item Descriptions
+https://msdn.microsoft.com/en-us/library/ms534414(v=vs.85).aspx     //Image Property Tag Type Constants
+
+ * http://weblogs.asp.net/bleroy/resizing-images-from-the-server-using-wpf-wic-instead-of-gdi
+ * 
+ * https://www.nuget.org/packages/ExifLib/1.6.2
+ * http://www.codeproject.com/Articles/36342/ExifLib-A-Fast-Exif-Data-Extractor-for-NET-2-0
+ * 
+ * 
+ * https://msdn.microsoft.com/en-us/library/ee719654(v=vs.85).aspx  //Extensions
+ * ---------------------------------------*/
+
+/*
+         *  CGImageSourceRef src = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:imgPath], NULL);
+    CFDictionaryRef options = (CFDictionaryRef)[[NSDictionary alloc] initWithObjectsAndKeys:
+                                                (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform,
+                                                (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageIfAbsent,
+                                                (id)[NSNumber numberWithDouble:size], (id)kCGImageSourceThumbnailMaxPixelSize,
+                                                nil];
+    CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, options); // Create scaled image
+    CFRelease(options);
+    CFRelease(src);
+    NSImage* img = [[NSImage alloc] initWithCGImage:thumbnail size:NSMakeSize(size, size)];
+    [img autorelease];
+    CGImageRelease(thumbnail);
+    return img;
+         * */
+#endregion
+
+namespace DuplicatePhotosFixer.Engine
+{
+
+
+    class ImageProcessor
+    {
+
+        public delegate void OnScanProgressProcess(cClientEnum.eScanPhase scanPhaseType, string message, int percentageCompleted, string counter, string subMessage);
+        public event OnScanProgressProcess OnScanProgress;
+
+        const float MINIMUM_LEVEL_CONSIDERED_FOR_DUPLICATES = 0.85f;
+        const float MINIMUM_LEVEL_CONSIDERED_FOR_DUPLICATES_IN_EXACT_MATCH = 0.989f;
+        const float MIN_VALUE_IF_NOT_MATCHED = 0.7f;
+        uint totLength = (uint)(cGlobalSettings.ImageResize * cGlobalSettings.ImageResize);//reSizeVal here is governed by Preferences, default value = 64
+        ulong maxScore = (ulong)((1.0f - MINIMUM_LEVEL_CONSIDERED_FOR_DUPLICATES/*0.85f*//*sliderInitialMatching.minValue*/) * (cGlobalSettings.ImageResize * cGlobalSettings.ImageResize));
+        const int SQLITE_BATCH_SIZE = 1000;
+        static bool bHelperDLLFound = false;
+        //        public void ReadAllHashes()
+        //        {
+        //            CancellationTokenSource cts = null;
+        //            int Counter = 0;
+        //            int corruptImagesCount = 0;
+
+        //            bool isExactMatch = !cGlobalSettings.isSimilarMatchChecked;
+
+        //            try
+        //            {
+        //                bHelperDLLFound = false;
+        //                string PathRawImageProcessFile = Path.Combine(Application.StartupPath, cGlobal.GetFileNameFromUrl(cGetString.GetMagickDwnUrl()));
+        //                if (File.Exists(PathRawImageProcessFile))
+        //                {
+        //                    bHelperDLLFound = true;
+        //                }
+
+        //                cts = new CancellationTokenSource();
+        //                var groups = cGlobalSettings.listImageFileInfo.Where(x =>
+        //                    {
+        //                        if (cGlobalSettings.CurrentScanMode == eScanMode.GoogleDrive ||
+        //                        cGlobalSettings.CurrentScanMode == eScanMode.Dropbox || cGlobalSettings.CurrentScanMode == eScanMode.BoxCloud || cGlobalSettings.CurrentScanMode == eScanMode.AmazonS3)
+        //                        {
+        //                            if (x.Value.ThumbnailPath == null)
+        //                                return false;
+        //                        }
+
+        //                        //bool returnValue = false;
+        //                        if (x.Value.bHashFoundInDB)
+        //                        {
+        //                            Counter++;
+        //                            return !x.Value.bHashFoundInDB;
+        //                        }
+        //                        if (isExactMatch)
+        //                        {
+        //                            if (x.Value.calcHashForExactMatch)
+        //                                return true;
+        //                            else
+        //                                return false;
+        //                        }
+        //                        return true;
+        //                    }).ToDictionary(x => x.Key, x => x.Value).Split(SQLITE_BATCH_SIZE);
+
+        //                string strSearchingForduplicates = cResourceManager.LoadString("DPF_PROCESSOR_PROGRESS_SEARCHING_DUPLICATE_TEXT");
+        //                //OnScanProgress(strSearchingForduplicates, 5, "", "");
+        //                //OnScanProgress(cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_DUPLICATES"), 100 * i / TotalGroupsCount, string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), totalPhotosProcessed += x.Count()), cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+        //                groups.ForEach(y =>
+        //                    {
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            return;
+        //                        /// here we have processed the 1K bulk
+        //                        //cGlobalSettings.listImageFileInfo/*.OrderByDescending(x => x.Value.filePath)*/
+        //                        y.AsParallel()
+        //                        .WithDegreeOfParallelism(AppFunctions.GetMaxDegreeOfParallelism())
+        //                        .WithCancellation(cts.Token)
+        //                        .ForAll(x =>
+        //                        {
+        //                            try
+        //                            {
+        //                                cGlobalSettings.oManualReset.WaitOne();
+        //                                if (cGlobalSettings.abortNow)
+        //                                    return;
+
+        //                                Counter++;
+
+        //                                if (Counter % 9 == 0)
+        //                                {
+        //                                    System.Threading.Thread.Sleep(0);
+        //                                    int percentage = ((100 * Counter) / cGlobalSettings.listImageFileInfo.Count);
+
+        //                                    OnScanProgress(cClientEnum.eScanPhase.Read, strSearchingForduplicates,
+        //                                        percentage, Counter + "",
+        //                                        cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+        //                                }
+
+        //                                /// if hash already found, just return
+        //                                if (x.Value.bHashFoundInDB)
+        //                                    return;
+
+        //                                byte[] bools = null;
+        //                                List<byte[]> arrOrientations = new List<byte[]>();
+        //                                bools = GetImageHash(x.Key, x.Value.filePath, 4, 4, ref arrOrientations);
+
+        //                                if (bools == null)
+        //                                {
+        //                                    corruptImagesCount++;
+        //                                    return;
+        //                                }
+        //                                Func<byte[]> __getimagehash = () =>
+        //                                {
+
+        //                                    /// http://stackoverflow.com/questions/713057/convert-bool-to-byte-c-sharp
+        //                                    // pack (in this case, using the first bool as the lsb - if you want
+        //                                    // the first bool as the msb, reverse things ;-p)
+        //                                    int bytes = (bools.Length + 7) / 8;
+        //                                    byte[] arr = new byte[bytes];
+        //                                    int bitIndex = 0, byteIndex = 0;
+        //                                    for (int i = 0; i < bools.Length; i++)
+        //                                    {
+        //                                        if (bools[i] == 1)
+        //                                        {
+        //                                            //x.Value.hash[byteIndex] |= (byte)(((byte)1) << bitIndex);
+        //                                            arr[byteIndex] |= (byte)(1 << (7 - bitIndex));
+        //                                        }
+        //                                        bitIndex++;
+        //                                        if (bitIndex == 8)
+        //                                        {
+        //                                            bitIndex = 0;
+        //                                            byteIndex++;
+        //                                        }
+        //                                    }
+
+        //                                    return arr;
+        //                                };
+
+        //                                if (cGlobalSettings.listImageFileInfo[x.Key].byteHash == null)
+        //                                {
+        //                                    cGlobalSettings.listImageFileInfo[x.Key].byteHash = __getimagehash(); // arr;
+        //#if ROTATE_FLIPPED_CHECK
+
+        //                                    for (int i = 0; i < arrOrientations.Count; i++)
+        //                                    {
+        //                                        bools = arrOrientations[i];
+        //                                        arrOrientations[i] = __getimagehash();
+        //                                    }
+
+        //                                    cGlobalSettings.listImageFileInfo[x.Key].byteHashArr = arrOrientations;
+        //#endif
+        //                                }
+        //#if false
+        //                        //try
+        //                        //{
+        //                        //    string basepath = @"C:\Users\sudhir.sharma\Desktop\hash check\hashes";
+        //                        //    File.WriteAllLines(PathEx.Combine(basepath, Path.GetFileNameWithoutExtension(x.Value.filePath) + "_bits.txt"), bools.Select(z => z.ToString()).ToArray());
+        //                        //    File.WriteAllLines(PathEx.Combine(basepath, Path.GetFileNameWithoutExtension(x.Value.filePath) + "_bytes.txt"), arr.Select(z => z.ToString()).ToArray());
+        //                        //    File.WriteAllLines(PathEx.Combine(basepath, Path.GetFileNameWithoutExtension(x.Value.filePath) + "_long.txt"), x.Value.hash.Select(z => z.ToString()).ToArray());
+        //                        //}
+        //                        //catch (System.Exception ex)
+        //                        //{
+
+        //                        //}
+        //#endif
+        //                            }
+        //                            catch (System.Exception ex)
+        //                            {
+        //                                cGlobalSettings.oLogger.WriteLogException("ReadAllHashes", ex);
+        //                            }
+        //                        });
+        //#if SQLITE_NEEDED
+        //                        //oSqlite.insertValuesToDB(y.Keys.ToList(), dbResult);
+
+
+        //                        cGlobalSettings.oManualReset.WaitOne();
+
+        //                        if (cGlobalSettings.abortNow)
+        //                            return;
+        //                        // Update Exif-Info info values and Delete Hash Table Values
+        //                        UpdateRecordsToDB(y.Where(z => z.Value.bFileModified).Select(z => z.Key));
+
+        //                        // Insert values
+        //                        InsertNewRecordsToDB(y.Where(z => !z.Value.bHashFoundInDB).Select(z => z.Key));
+        //#endif
+
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            return;
+        //                        /// insert to sq-lite
+        //                        /// calculate long hash for these 1K items
+        //                        ConvertByteArrayToLongArrayForBunch(y.Keys.ToList());
+        //                    });
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("ReadAllHashes", ex);
+        //            }
+        //            finally
+        //            {
+        //                try
+        //                {
+        //                    cGlobalSettings.oLogger.WriteLogVerbose("\tTotal corrupt images count:{0}", corruptImagesCount, false, true);
+
+        //                    OnScanProgress(cClientEnum.eScanPhase.Read, cResourceManager.LoadString("DPF_PROCESSOR_PROGRESS_SEARCHING_DUPLICATE_TEXT"), 100, Counter + "", cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+        //                }
+        //                catch (System.Exception ex)
+        //                {
+        //                    cGlobalSettings.oLogger.WriteLogException("ReadAllHashes-OnScanProgress", ex);
+        //                }
+
+        //                cts = null;
+        //            }
+        //        }
+
+        //void UpdateRecordsToDB(IEnumerable<int> fileIdsToUpdateInDb)
+        //{
+        //    try
+        //    {
+        //        foreach (int i in fileIdsToUpdateInDb)
+        //        {
+
+        //            Double CaptureDateSeconds = 0;
+        //            if (cGlobalSettings.listImageFileInfo[i].exifInfo.CaptureDate == DateTime.MinValue || cGlobalSettings.listImageFileInfo[i].exifInfo.CaptureDate == DateTime.MaxValue)
+        //            {
+        //                CaptureDateSeconds = DateTime.MaxValue.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        //            }
+        //            else
+        //                CaptureDateSeconds = cGlobalSettings.listImageFileInfo[i].exifInfo.CaptureDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+        //            Double ModifiedDateSeconds = 0;
+        //            if (cGlobalSettings.listImageFileInfo[i].modDate == DateTime.MinValue || cGlobalSettings.listImageFileInfo[i].modDate == DateTime.MaxValue)
+        //            {
+        //                ModifiedDateSeconds = DateTime.MaxValue.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        //            }
+        //            else
+        //                ModifiedDateSeconds = cGlobalSettings.listImageFileInfo[i].modDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+        //            cGlobalSettings.sqliteLogger.odfExifInfo.updateData(SqliteEnums.MediaDatabaseLogType.ExifInfo.ToString(),
+        //                /*FieldName*/   new string[] { SqliteEnums.ExifInfoColumnsNames.CaptureDate.ToString(), SqliteEnums.ExifInfoColumnsNames.DpiHeight.ToString(), SqliteEnums.ExifInfoColumnsNames.DpiWidth.ToString(), SqliteEnums.ExifInfoColumnsNames.FileSize.ToString(), SqliteEnums.ExifInfoColumnsNames.GpsLatitude.ToString(), SqliteEnums.ExifInfoColumnsNames.GpsLongitude.ToString(), SqliteEnums.ExifInfoColumnsNames.modDate.ToString(), SqliteEnums.ExifInfoColumnsNames.Orientation.ToString(), SqliteEnums.ExifInfoColumnsNames.PixelHeight.ToString(), SqliteEnums.ExifInfoColumnsNames.PixelWidth.ToString() },
+        //                new byte[] { 4, 4, 4, 4, 2, 2, 4, 1, 4, 4 },
+        //                new object[]{
+        //                    CaptureDateSeconds/*cGlobalSettings.listImageFileInfo[i].exifInfo.CaptureDate*/
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.VerticalResolution
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.HorizontalResolution
+        //                    ,cGlobalSettings.listImageFileInfo[i].fileSize
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.latitudeDegree
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.longitudeDegree
+        //                    ,ModifiedDateSeconds/*cGlobalSettings.listImageFileInfo[i].fileInfo.LastWriteTime*/
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.Orientation
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.ImageDimension.Height
+        //                    ,cGlobalSettings.listImageFileInfo[i].exifInfo.ImageDimension.Width
+        //                },
+        //                string.Format(" {0}={1} ", SqliteEnums.ExifInfoColumnsNames.Id.ToString(), cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId),
+        //                new string[] { SqliteEnums.ExifInfoColumnsNames.Id.ToString() },
+        //                new byte[] { 4 },
+        //                new object[] { cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId });
+
+
+        //            // =============== Delete record from Hash table ===============
+        //            string tableName = "";
+        //            if (cGlobalSettings.isSimilarMatchChecked && Enum.IsDefined(typeof(SqliteEnums.MediaDatabaseLogType), cGlobalSettings.ImageResize))
+        //            {
+        //                tableName = ((SqliteEnums.MediaDatabaseLogType)cGlobalSettings.ImageResize).ToString();
+        //            }
+        //            else
+        //            {
+        //                tableName = SqliteEnums.MediaDatabaseLogType.HashTable_80.ToString();
+        //            }
+        //            cGlobalSettings.sqliteLogger.odfExifInfo.deleteData(tableName, string.Format(" {0}={1} ", SqliteEnums.HashTableColumnsNames.FileExifID.ToString(), cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId), new string[] { SqliteEnums.HashTableColumnsNames.FileExifID.ToString() },
+        //                new byte[] { 4 },
+        //                new string[] { cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId.ToString() });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("ImageProcessor :: UpdateRecordsToDB : ", ex);
+        //    }
+        //}
+
+        //void InsertNewRecordsToDB(IEnumerable<int> fileIdsNotFoundInDb)
+        //{
+        //    try
+        //    {
+        //        /// insert these to db
+        //        cGlobalSettings.sqliteLogger.FillBlankDataSetForTableExifInfo();
+
+        //        foreach (int i in fileIdsNotFoundInDb)
+        //        {
+        //            if (cGlobalSettings.listImageFileInfo[i].exifInfo != null && cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId < 0)
+        //            {
+        //                DataRow dr = cGlobalSettings.sqliteLogger.odfExifInfo.oDsUpdate.Tables[0].NewRow();
+        //                ConvertImageFileInfoToDataRow(cGlobalSettings.listImageFileInfo[i], ref dr);
+        //                cGlobalSettings.sqliteLogger.odfExifInfo.oDsUpdate.Tables[0].Rows.Add(dr);
+        //            }
+        //        }
+
+        //        cGlobalSettings.sqliteLogger.odfExifInfo.UpdateViaDataSet("ReadAllHashes", true, true);
+
+        //        cGlobalSettings.sqliteLogger.FillTempTableWithScannedPath(cGlobalSettings.listImageFileInfo.Select(x => x.Value.filePath.ToLower()));
+
+        //        /// get all file ExifInfo ids
+        //        cGlobalSettings.sqliteLogger.LoadSqliteToDictionary(true);
+
+        //        cGlobalSettings.sqliteLogger.FillBlankDataSetForTableHash();
+        //        foreach (int i in fileIdsNotFoundInDb)
+        //        {
+        //            if (cGlobalSettings.listImageFileInfo[i].exifInfo != null)
+        //            {
+        //                DataRow dr = cGlobalSettings.sqliteLogger.odfHash.oDsUpdate.Tables[0].NewRow();
+
+        //                dr[SqliteEnums.HashTableColumnsNames.FileExifID.ToString()] = cGlobalSettings.listImageFileInfo[i].exifInfo.FileExifId;
+
+        //                //if (cGlobalSettings.isSimilarMatchChecked)
+        //                {
+        //                    dr[SqliteEnums.HashTableColumnsNames.FileHash.ToString()] = cGlobalSettings.listImageFileInfo[i].byteHashArr.SelectMany(a => a).ToArray();
+        //                }
+        //                /*else
+        //                {
+        //                    dr[SqliteEnums.HashTableColumnsNames.FileHash.ToString()] = Encoding.UTF8.GetBytes(cGlobalSettings.listImageFileInfo[i].md5);
+        //                }*/
+        //                cGlobalSettings.sqliteLogger.odfHash.oDsUpdate.Tables[0].Rows.Add(dr);
+        //            }
+        //        }
+
+        //        cGlobalSettings.sqliteLogger.odfHash.UpdateViaDataSet("ReadAllHashes", true, true);
+
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("InsertNewRecordsToDB ::", ex);
+        //    }
+        //}
+
+        //void ConvertImageFileInfoToDataRow(csImageFileInfo imageInfo, ref DataRow dr)
+        //{
+        //    try
+        //    {
+        //        dr[SqliteEnums.ExifInfoColumnsNames.FilePath.ToString()] = imageInfo.filePath.ToLower();
+
+        //        if (imageInfo.exifInfo == null)
+        //        {
+        //            return;
+        //        }
+
+        //        Double totalCaptureDateSeconds = 0;
+        //        if (imageInfo.exifInfo.CaptureDate == DateTime.MinValue || imageInfo.exifInfo.CaptureDate == DateTime.MaxValue)
+        //        {
+        //            totalCaptureDateSeconds = DateTime.MaxValue.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        //        }
+        //        else
+        //            totalCaptureDateSeconds = imageInfo.exifInfo.CaptureDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+        //        Double totalModifiedDateSeconds = 0;
+        //        if (imageInfo.modDate == DateTime.MinValue || imageInfo.modDate == DateTime.MaxValue)
+        //        {
+        //            totalModifiedDateSeconds = DateTime.MaxValue.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        //        }
+        //        else
+        //            totalModifiedDateSeconds = imageInfo.modDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+        //        dr[SqliteEnums.ExifInfoColumnsNames.CaptureDate.ToString()] = totalCaptureDateSeconds;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.modDate.ToString()] = totalModifiedDateSeconds;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.GpsLatitude.ToString()] = imageInfo.exifInfo.latitudeDegree;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.GpsLongitude.ToString()] = imageInfo.exifInfo.longitudeDegree;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.PixelWidth.ToString()] = imageInfo.exifInfo.ImageDimension.Width;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.PixelHeight.ToString()] = imageInfo.exifInfo.ImageDimension.Height;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.DpiWidth.ToString()] = imageInfo.exifInfo.HorizontalResolution;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.DpiHeight.ToString()] = imageInfo.exifInfo.VerticalResolution;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.Orientation.ToString()] = imageInfo.exifInfo.Orientation;
+        //        dr[SqliteEnums.ExifInfoColumnsNames.FileSize.ToString()] = imageInfo.fileSize;
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        cGlobalSettings.oLogger.WriteLogException("ConvertImageFileInfoToDataRow", ex);
+        //    }
+        //}
+
+
+        /// <summary>
+        /// convert byte array to long array for comparison
+        /// after sqlite db insertion
+        /// </summary>
+        /// <param name="bunchOfDict"></param>
+        /// 
+
+
+        public void compareForExactPhotos()
+        {
+            cGlobalSettings.arrAllFilesGrouping = null;
+            cGlobalSettings.arrAllFilesGrouping = new BlockingCollection<csDuplicatesGroup>();
+            CancellationTokenSource cts = null;
+
+            try
+            {
+                int TotalPhotos = cGlobalSettings.listImageFileInfo.Keys.Count;
+                var groupsOfFilesWithSize = cGlobalSettings.listImageFileInfo.Where(p => p.Value.fileSize > 0).GroupBy(s => s.Value.fileSize).Where(s => s.Count() > 1);
+
+                int i = 0;
+                cts = new CancellationTokenSource();
+                int TotalGroupsCount = groupsOfFilesWithSize.Count();
+
+                groupsOfFilesWithSize.AsParallel()
+                .WithDegreeOfParallelism(/*AppFunctions.GetMaxDegreeOfParallelism()*/1)
+                .WithCancellation(cts.Token)
+                .ForAll(x =>
+                {
+                    cGlobalSettings.oManualReset.WaitOne();
+                    if (cGlobalSettings.abortNow)
+                        return;
+                    Thread.Sleep(0);
+                    //OnScanProgress("Comparing duplicates", 100 * i / TotalGroupsCount, (totalPhotosProcessed += groupsOfFilesWithSize.ElementAt(i).Count()) + " processed", cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+                    //OnScanProgress(cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_DUPLICATES"), 100 * i / TotalGroupsCount, string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), totalPhotosProcessed += x.Count()), cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+                    i++;
+
+                    foreach (var imageFile in x)
+                    {
+                        cGlobalSettings.oManualReset.WaitOne();
+                        if (cGlobalSettings.abortNow)
+                            break;
+
+                        cGlobalSettings.listImageFileInfo[imageFile.Key].calcHashForExactMatch = true;
+                    }
+
+                    cGlobalSettings.oManualReset.WaitOne();
+                    if (cGlobalSettings.abortNow)
+                        return;
+
+                });
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("compareForExactPhotos() :: ", ex);
+            }
+            finally
+            {
+                cts = null;
+            }
+
+        }
+
+        private void ConvertByteArrayToLongArrayForBunch(List<int> bunchOfDict)
+        {
+            CancellationTokenSource cts = null;
+            try
+            {
+                cts = new CancellationTokenSource();
+                bunchOfDict/*.OrderByDescending(x => x.Value.filePath)*/
+                    .AsParallel()
+                    .WithDegreeOfParallelism(/*AppFunctions.GetMaxDegreeOfParallelism()*/1)
+                    .WithCancellation(cts.Token)
+                    .ForAll(x =>
+                    {
+                        cGlobalSettings.oManualReset.WaitOne();
+                        if (cGlobalSettings.abortNow)
+                            return;
+
+                        if (cGlobalSettings.listImageFileInfo[x].byteHash == null)
+                            return;
+
+                        byte[] arr = cGlobalSettings.listImageFileInfo[x].byteHash;
+
+                        ConvertByteArrayToLongArray(x, ref arr);
+#if ROTATE_FLIPPED_CHECK
+
+                        if (cGlobalSettings.listImageFileInfo[x].byteHashArr!=null && cGlobalSettings.listImageFileInfo[x].byteHashArr.Count>0)
+                        {
+                            for(int i=0; i< cGlobalSettings.listImageFileInfo[x].byteHashArr.Count; i++)
+                            {
+                                ConvertByteArrayToLongArray(x, i, cGlobalSettings.listImageFileInfo[x].byteHashArr[i]);
+                            }
+                        }
+#endif
+
+                    });
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ImageProcessor :: startCalcLongHash : ", ex);
+            }
+        }
+
+
+        public static void ConvertByteArrayToLongArray(int index, ref byte[] arr)
+        {
+            try
+            {
+                //const int BytesInInt32 = 4;
+                const int BytesInInt64 = 8;
+                int length1 = (arr.Length + 7) / BytesInInt64;
+                cGlobalSettings.listImageFileInfo[index].hash = new ulong[length1];
+
+                for (int i = 0, pos = 0; i < length1; i++, pos += BytesInInt64)
+                {
+                    cGlobalSettings.listImageFileInfo[index].hash[i] = BitConverter.ToUInt64(arr, pos);
+                }
+
+                cGlobalSettings.listImageFileInfo[index].byteHash = null;
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("Converting Byte to Int32/64", ex);
+            }
+        }
+// ROTATE_FLIPPED_CHECK
+
+        public static void ConvertByteArrayToLongArray(int index, int arrIndex, byte[] arr)
+        {
+            try
+            {
+                //const int BytesInInt32 = 4;
+                const int BytesInInt64 = 8;
+                int length1 = (arr.Length + 7) / BytesInInt64;
+                if (cGlobalSettings.listImageFileInfo[index].arrHash == null)
+                    cGlobalSettings.listImageFileInfo[index].arrHash = new List<ulong[]>();
+                cGlobalSettings.listImageFileInfo[index].arrHash.Add(new ulong[length1]);
+
+                for (int i = 0, pos = 0; i < length1; i++, pos += BytesInInt64)
+                {
+                    cGlobalSettings.listImageFileInfo[index].arrHash[arrIndex][i] = BitConverter.ToUInt64(arr, pos);
+                }
+
+                if (cGlobalSettings.listImageFileInfo[index].byteHashArr != null && cGlobalSettings.listImageFileInfo[index].byteHashArr.Count <= arrIndex)
+                    cGlobalSettings.listImageFileInfo[index].byteHashArr[arrIndex] = null;
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("Converting Byte to Int32/64", ex);
+            }
+        }
+
+
+        //public static byte[] GetImageHash(int keyNode, string originalImage, int rows, int columns, ref List<byte[]> arrOrientations)
+        //{
+        //    byte[] bools = null;
+        //    List<byte[]> boolsArr = null;
+        //    try
+        //    {
+        //        arrOrientations = new List<byte[]>();
+        //        if (cGlobalSettings.CurrentScanMode == eScanMode.GoogleDrive ||
+        //            cGlobalSettings.CurrentScanMode == eScanMode.BoxCloud ||
+        //            cGlobalSettings.CurrentScanMode == eScanMode.Dropbox || cGlobalSettings.CurrentScanMode == eScanMode.AmazonS3)
+        //        {
+        //            originalImage = Program.oMainReference.GetSaveThumbnailImage(cGlobalSettings.listImageFileInfo[keyNode]);
+        //            bools = _GetImageHash(keyNode, originalImage, rows, columns, false, ref arrOrientations);
+        //            return bools;
+        //        }
+
+        //        / If file is of RAW format then first try to convert the image and get hash value
+        //        if (!cGlobalSettings.listImageFileInfo[keyNode].bRAWFormat)
+        //            bools = _GetImageHash(keyNode, originalImage, rows, columns, false, ref arrOrientations);
+
+        //        if (bools == null && bHelperDLLFound &&
+        //            (cGlobalSettings.CurrentScanMode == eScanMode.FileSearch || cGlobalSettings.CurrentScanMode == eScanMode.PicasaLibrary || cGlobalSettings.CurrentScanMode == eScanMode.Lightroom))
+        //        {
+        //            Thread.Sleep(0);
+        //            try with new library
+        //            string strThumbPath = "";
+        //            string originalImageConverted = csImageMagick.ConvertRAWToJPG(originalImage, keyNode, ref strThumbPath);
+        //            if (!File.Exists(originalImageConverted))
+        //            {
+        //                / Not able to convert image via ImageMagick, so return
+        //                return bools;
+        //            }
+        //            cGlobalSettings.listImageFileInfo[keyNode].bRAWFormat = true;
+        //            cGlobalSettings.listImageFileInfo[keyNode].ThumbnailPath = strThumbPath;
+        //            bools = _GetImageHash(keyNode, originalImageConverted, rows, columns, true, ref arrOrientations);
+
+        //            if (!(string.Compare(originalImage, originalImageConverted) == 0))
+        //            {
+        //                Delete converted image and save only thumbnail image in app data folder
+        //                File.Delete(originalImageConverted);
+        //            }
+        //            }
+        //    }
+        //    catch (Exception ex)
+        //        {
+        //            cGlobalSettings.oLogger.WriteLogException("GetImageHashExtended:: ", ex);
+        //        }
+        //        return bools;
+        //    }
+
+        //static byte[] _GetImageHash(int keyNode, string originalImage, int rows, int columns, bool isConvertedImage, ref List<byte[]> arrOrientations)
+
+        //Computes the hash array of the image
+        //rows = number of rows for part comparison
+        //columns = number of columns for part comparison
+        //The Image is divided into (rows x columns) parts for comparison = So (rows x columns) means will be calculated
+        /// <summary>
+        /// How to call: updateImageHash(_image, 4, 4);        
+        /// </summary>        
+        //            static byte[] _GetImageHash(int keyNode, string originalImage, int rows, int columns, bool isConvertedImage, ref List<byte[]> arrOrientations)
+        //        {
+        //            FileStream stream = null;
+        //            Image image = null;
+        //            Bitmap reSizedImage = null;
+        //            List<int> arrColors = null;
+        //            int[] means = null;
+        //            byte[] hash = null;
+        //            csExifInfo oExifInfo = null;
+
+        //            const UseEmbeddedThumbnails useEmbeddedThumbnails = UseEmbeddedThumbnails.Never;
+        //            const bool useExifOrientation = true, useWIC = true;
+        //            try
+        //            {
+        //                //Trace.WriteLine(originalImage);
+        //                using (stream = File.OpenRead(originalImage))
+        //                using (image = Image.FromStream(stream, false, false))
+        //                {
+        //                    //image.ExifRotate();
+        //#if _old_method_
+        //                    Size imgSize = GetThumbnailSize(image);
+        //                    reSizedImage = (Bitmap)(image.GetThumbnailImage(imgSize.Width, imgSize.Height, null, IntPtr.Zero));
+        //                    //SaveImage(reSizedImage, originalImage, "_0");
+        //#endif
+
+        //                    // create thumbnail with scaled image ratio - 64x48 in case of 64x64                    
+        //                    Size imgSize = ImageFunctions.GetThumbnailSize(image, cGlobalSettings.ImageResize);
+        //                    //reSizedImage = (Bitmap)(image.GetThumbnailImage(imgSize.Width, imgSize.Height, null, IntPtr.Zero));
+        //                    //if (reSizedImage == null) 
+        //                    //    return null;
+
+
+        //#if true
+        //                    //SaveImage(reSizedImage, originalImage, "_0");
+        //                    if ((reSizedImage = ((Bitmap)(ThumbnailExtractor.FromFile(originalImage, new Size(cGlobalSettings.ImageResize, cGlobalSettings.ImageResize), useEmbeddedThumbnails, useExifOrientation, useWIC)))) == null)
+        //                        return null;
+
+        //                    if ((reSizedImage = (ImageFunctions.GetThumbnailImageHighQuality(reSizedImage, imgSize.Width, imgSize.Height))) == null)
+        //                        return null;
+        //#else
+        //                    reSizedImage = GetThumbnailImage(image, 64, 64, InterpolationMode.NearestNeighbor);
+        //                    if (reSizedImage == null)
+        //                        return null;
+        //#endif
+        //                    // gray scaled image                    ;
+        //                    if ((reSizedImage = ImageFunctions.MakeGrayscale3(reSizedImage)) == null)
+        //                        return null;
+
+        //                    if ((reSizedImage = (ImageFunctions.GetThumbnailImageHighQuality(reSizedImage, cGlobalSettings.ImageResize, cGlobalSettings.ImageResize))) == null)
+        //                        return null;
+
+        //                    //reSizedImage.ExifRotate();
+
+        //                    if (isConvertedImage)
+        //                    {
+        //                        Size imgSizeThumb = ImageFunctions.GetThumbnailSize(image, 250);
+
+        //                        SaveImage(ImageFunctions.GetThumbnailImageHighQuality((Bitmap)image, imgSizeThumb.Width, imgSizeThumb.Height), cGlobalSettings.listImageFileInfo[keyNode].ThumbnailPath);
+        //                    }
+        //#if false
+
+        //                    if (cGlobalSettings.bCreateThumbnail)
+        //                    {
+        //                        string thumbnailPath = Path.Combine(cGlobalSettings.getCommonAppDataApplicationPath(), Path.GetFileName(originalImage));
+        //                        SaveImage(reSizedImage, thumbnailPath, "_"+cGlobalSettings.ImageResize ); // High quality B/W thumbnail.
+        //                    }
+
+        //#endif
+
+        //                    //exifInfo = null;
+        //                    if (cGlobalSettings.listImageFileInfo[keyNode].exifInfo == null) // Case if record no found in db
+        //                    {
+        //                        cGlobalSettings.listImageFileInfo[keyNode].exifInfo = new csExifInfo(keyNode, image);
+        //                        cGlobalSettings.listImageFileInfo[keyNode].Height = cGlobalSettings.listImageFileInfo[keyNode].exifInfo.ImageDimension.Height;
+        //                        cGlobalSettings.listImageFileInfo[keyNode].Width = cGlobalSettings.listImageFileInfo[keyNode].exifInfo.ImageDimension.Width;
+        //                    }
+        //                    else if (cGlobalSettings.listImageFileInfo[keyNode].bFileModified) // In case if file is modified
+        //                    {
+        //                        int exifFileId = cGlobalSettings.listImageFileInfo[keyNode].exifInfo.FileExifId;
+        //                        cGlobalSettings.listImageFileInfo[keyNode].exifInfo = new csExifInfo(keyNode, image);
+        //                        cGlobalSettings.listImageFileInfo[keyNode].exifInfo.FileExifId = exifFileId;
+
+        //                        //adding dimensions required to show in detail view
+        //                        cGlobalSettings.listImageFileInfo[keyNode].Height = cGlobalSettings.listImageFileInfo[keyNode].exifInfo.ImageDimension.Height;
+        //                        cGlobalSettings.listImageFileInfo[keyNode].Width = cGlobalSettings.listImageFileInfo[keyNode].exifInfo.ImageDimension.Width;
+        //                    }
+        //                    if (reSizedImage == null)
+        //                        return null;
+        //                    int counter = 0;
+
+        //                    Func<byte[]> __getimagehash = () =>
+        //                    {
+
+        //                        //reSizedImage.Save(string.Format(@"C:\Users\pranav.khuteta\Desktop\DPF\RotateFilpptest\{0}.jpg", counter++));
+
+        //                        //using (reSizedImage)
+        //                        {
+
+        //                            //reSizedImage.Save(@"C:\Users\pranav.khuteta\Desktop\thubmnail_img\thumbNew64_4\" + cGlobalSettings.listImageFileInfo[keyNode].fileName);
+
+        //                            //return null;
+
+        //                            //return null;
+        //                            int m_width = cGlobalSettings.ImageResize;
+        //                            int m_height = cGlobalSettings.ImageResize;
+        //                            //reSizedImage = new LockBitmap(reSizedImage_);
+
+        //                            arrColors = new List<int>();
+
+        //                            //make Mean array for (rows * columns) == Number of parts comparison
+        //                            means = new int[rows * columns];
+        //                            int indexMean = 0;
+        //                            int pHeight = m_height / rows;
+        //                            int pWidth = m_width / columns;
+        //                            //parse the rows
+        //                            for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+        //                            {
+        //                                //parse the columns
+        //                                for (int colIndex = 0; colIndex < columns; colIndex++)
+        //                                {
+        //                                    int countTotal = 0;
+        //                                    int indexCount = 0;
+
+        //                                    //get the pixel start and end for both height and width, as these will vary as per the image part
+        //                                    int stHeight = (pHeight * rowIndex);
+        //                                    int enHeight = (pHeight * (rowIndex + 1)) - 1;
+        //                                    int stWidth = (pWidth * colIndex);
+        //                                    int enWidth = (pWidth * (colIndex + 1)) - 1;
+
+        //                                    //read the part image pixels value (0-255)
+        //                                    for (int y = stHeight; y <= enHeight; y++)
+        //                                    {
+        //                                        for (int x = stWidth; x <= enWidth; x++)
+        //                                        {
+        //                                            indexCount++;
+        //                                            Color originalColor = reSizedImage.GetPixel(x, y);
+        //                                            int greyScaleColorAverage = (int)((originalColor.R) + (originalColor.G) + (originalColor.B)) / (int)3;
+        //                                            //int greyScaleColorAverage = (int)((originalColor.R * 0.3) + (originalColor.G * 0.59) + (originalColor.B * 0.11)) / (int) 3;
+        //                                            //Color greyColor = Color.FromArgb(greyScale, greyScale, greyScale);
+
+        //#if _____NOT_NEEDED____
+        //#if NEEDED
+        //                                //Trace.WriteLine(string.Format("Pixel:({0},{1}), Block:(Height:({2}, {3}), (Width:({4}, {5})))", x, y, stHeight, enHeight, stWidth, enWidth));
+        //#endif
+
+        //#if false
+
+
+        //                                        int rgbPixel = originalColor.ToArgb();
+        //                                        int sum = 0, count = 0;
+        //                                        sum += (rgbPixel >> 24) & 255; count++; 
+        //                                        sum += (rgbPixel >> 16) & 255; count++; 
+        //                                        sum += (rgbPixel >> 8) & 255; count++; 
+        //#else
+        //                                        int sum = 0, count = 0;
+        //                                        sum += greyColor.R; count++;
+        //                                        sum += greyColor.G; count++;
+        //                                        sum += greyColor.B; count++;
+        //#endif
+        //#endif //_____NOT_NEEDED____
+
+        //                                            arrColors.Add(greyScaleColorAverage);
+        //                                            countTotal += greyScaleColorAverage;
+        //                                        }
+        //                                    }
+        //                                    //get the MEAN for this part
+        //                                    int mean = countTotal / indexCount;
+        //                                    //add the MEAN for this part to the MEANS array
+        //                                    means[indexMean] = mean;
+        //                                    indexMean++;
+        //                                }
+        //                            }
+
+        //                            int index = 0;
+        //                            int reSizeVal = cGlobalSettings.ImageResize;
+        //                            hash = new byte[reSizeVal * reSizeVal];
+
+        //                            indexMean = 0;
+        //                            //Parse through the Image parts
+        //                            for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+        //                            {
+        //                                for (int colIndex = 0; colIndex < columns; colIndex++)
+        //                                {
+        //                                    int stHeight = (pHeight * rowIndex);
+        //                                    int enHeight = (pHeight * (rowIndex + 1)) - 1;
+        //                                    int stWidth = (pWidth * colIndex);
+        //                                    int enWidth = (pWidth * (colIndex + 1)) - 1;
+
+        //                                    //get the mean of this part (calculated earlier)
+        //                                    int mean = means[indexMean];
+        //                                    for (int y = stHeight; y <= enHeight; y++)
+        //                                    {
+        //                                        for (int x = stWidth; x <= enWidth; x++)
+        //                                        {
+        //                                            int val = arrColors[index];
+        //                                            //HASH IS UPDATED HERE
+        //                                            //if the value is > mean value assign 1 to hash element else assign 0 to to hash element
+        //                                            if (val > mean)
+        //                                                hash[index++] = 1;
+        //                                            else
+        //                                                hash[index++] = 0;
+        //                                        }
+        //                                    }
+        //                                    indexMean++;
+        //                                }
+        //                            }
+        //                        }
+
+        //                        return hash;
+        //                    };
+
+        //#if ROTATE_FLIPPED_CHECK
+
+        //                    /*string SaveFileName = cGlobalSettings.listImageFileInfo[keyNode].fileName;
+        //                    string SaveFolderPath = @"C:\Users\pranav.khuteta\Desktop\DPF\Save";
+        //                    string path = Path.Combine(SaveFolderPath, Path.GetFileNameWithoutExtension(SaveFileName));
+        //                    */
+        //                    arrOrientations.Add(__getimagehash());// 0 degree
+        //                    //reSizedImage.Save(path + "0.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate90FlipNone);// 90 degree
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "1.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate180FlipNone);// 270 degree (previous 90 + this 180)
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "2.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate270FlipNone);// 180 degree (previous 270 + 270 = 540 or 180)
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "3.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.RotateNoneFlipNone); // Reset orientation
+        //                    reSizedImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "4.jpg");
+
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "5.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate180FlipNone);
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "6.jpg");
+
+        //                    reSizedImage.RotateFlip(RotateFlipType.Rotate270FlipNone);
+        //                    arrOrientations.Add(__getimagehash());
+        //                    //reSizedImage.Save(path + "7.jpg");
+
+        //                    hash = arrOrientations[0];
+
+        //#else
+        //                    int rotateVal = Convert.ToInt32(cGlobalSettings.listImageFileInfo[keyNode].exifInfo.Orientation);
+
+        //                    if (rotateVal > 1)
+        //                        reSizedImage.ExifRotate(rotateVal);
+        //                    __getimagehash();
+        //#endif
+        //                }
+        //            }
+        //            catch (System.Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException(string.Format("GetImageHash failed for : {0}", originalImage), ex);
+        //            }
+        //            finally
+        //            {
+        //                //reSizedImage.UnlockBits();
+        //                stream.TryDispose(); stream = null;
+        //                if (image != null) image.TryDispose(); image = null;
+        //                reSizedImage.TryDispose(); reSizedImage = null;
+        //                if (means != null) means = null;
+        //                if (arrColors != null) arrColors.Clear(); arrColors = null;
+        //                oExifInfo.TryDispose();
+
+        //                //if (exifInfo != null) exifInfo = null;
+        //            }
+        //            return hash;
+        //        }
+
+        //        public void compareForExactPhotos()
+        //        {
+        //            cGlobalSettings.arrAllFilesGrouping = null;
+        //            cGlobalSettings.arrAllFilesGrouping = new BlockingCollection<csDuplicatesGroup>();
+        //            CancellationTokenSource cts = null;
+
+        //            try
+        //            {
+        //                int TotalPhotos = cGlobalSettings.listImageFileInfo.Keys.Count;
+        //                var groupsOfFilesWithSize = cGlobalSettings.listImageFileInfo.Where(p => p.Value.fileSize > 0).GroupBy(s => s.Value.fileSize).Where(s => s.Count() > 1);
+
+        //                int i = 0;
+        //                cts = new CancellationTokenSource();
+        //                int TotalGroupsCount = groupsOfFilesWithSize.Count();
+
+        //                groupsOfFilesWithSize.AsParallel()
+        //                .WithDegreeOfParallelism(/*AppFunctions.GetMaxDegreeOfParallelism()*/1)
+        //                .WithCancellation(cts.Token)
+        //                .ForAll(x =>
+        //                {
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        return;
+        //                    Thread.Sleep(0);
+        //                    //OnScanProgress("Comparing duplicates", 100 * i / TotalGroupsCount, (totalPhotosProcessed += groupsOfFilesWithSize.ElementAt(i).Count()) + " processed", cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+        //                    //OnScanProgress(cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_DUPLICATES"), 100 * i / TotalGroupsCount, string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), totalPhotosProcessed += x.Count()), cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+        //                    i++;
+
+        //                    foreach (var imageFile in x)
+        //                    {
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            break;
+
+        //                        cGlobalSettings.listImageFileInfo[imageFile.Key].calcHashForExactMatch = true;
+        //                    }
+
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        return;
+
+        //                });
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("compareForExactPhotos() :: ", ex);
+        //            }
+        //            finally
+        //            {
+        //                cts = null;
+        //            }
+
+        //        }
+
+        //        public void compareForExactPhotos_Cloud()
+        //        {
+
+        //            if (cGlobalSettings.arrAllFilesGrouping == null)
+        //                cGlobalSettings.arrAllFilesGrouping = new BlockingCollection<csDuplicatesGroup>();
+
+        //            List<int> keysListToInsert = null;
+        //            List<int> keysListToUpdate = null;
+        //            try
+        //            {
+        //                //int TotalPhotos = cGlobalSettings.listImageFileInfo.Keys.Count;
+
+        //                var groupsOfFilesWithSameHash = cGlobalSettings.listImageFileInfo.Where(p => !string.IsNullOrEmpty(p.Value.md5) && string.IsNullOrEmpty(p.Value.ThumbnailPath)).GroupBy(p => p.Value.md5).Where(p => p.Count() > 1);
+        //                keysListToInsert = new List<int>();
+        //                keysListToUpdate = new List<int>();
+
+        //                int nDuplicateFiles = groupsOfFilesWithSameHash.Sum(p => p.Count());
+
+        //                int i = cGlobalSettings.listImageFileInfo.Count - nDuplicateFiles;
+        //                foreach (var finalGroup in groupsOfFilesWithSameHash)
+        //                {
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        break;
+        //                    csDuplicatesGroup group = new csDuplicatesGroup();
+        //                    foreach (KeyValuePair<int, csImageFileInfo> gp in finalGroup)
+        //                    {
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            break;
+
+        //                        i++;
+        //                        if (i % 9 == 0)
+        //                        {
+        //                            Thread.Sleep(0);
+        //                            OnScanProgress(cClientEnum.eScanPhase.Compare, cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_PHOTOS"), 100 * i / cGlobalSettings.listImageFileInfo.Count, i + "" /*string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), i)*/, cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PATIENT_WHILE_COMPARING_MSG")); // (int)((((double)i + 1) / nodes.Count()) * 90)
+        //                        }
+
+        //                        cGlobalSettings.listImageFileInfo[gp.Key].matchesWithNodeKey = gp.Key;
+        //                        cGlobalSettings.listImageFileInfo[gp.Key].match = 1.0f;//default match score 1 is allotted, later it will be updated if there is a match found
+        //                        cGlobalSettings.listImageFileInfo[gp.Key].ThumbnailPath = AppFunctions.DownloadCloudThumnail(cGlobalSettings.listImageFileInfo[gp.Key].ThumbnailPath, cGlobalSettings.listImageFileInfo[gp.Key].md5);
+        //                        group.childrenKey.Add(gp.Key);//Create group with selfNode
+        //                        cGlobalSettings.listImageFileInfo[gp.Key].parent = group;
+        //                        cGlobalSettings.listImageFileInfo[gp.Key].calcHashForExactMatch = false;
+        //                        if (cGlobalSettings.listImageFileInfo[gp.Key].bFileModified)
+        //                        {
+        //                            keysListToUpdate.Add(gp.Key);
+        //                        }
+        //                        if (!cGlobalSettings.listImageFileInfo[gp.Key].bHashFoundInDB)
+        //                        {
+        //                            if (cGlobalSettings.listImageFileInfo[gp.Key].exifInfo == null || cGlobalSettings.listImageFileInfo[gp.Key].exifInfo.FileExifId < 0)
+        //                            {
+        //                                //imageFile.Value.md5 = AppFunctions.calcMD5(imageFile.Value.filePath);
+        //                                keysListToInsert.Add(gp.Key); // Add key to list whose entry not found in DB
+        //                            }
+        //                        }
+
+        //                    }
+        //                    //keysListToInsert.AddRange(finalGroup.Select(p => p.Key));
+        //                    if (group != null)
+        //                        cGlobalSettings.arrAllFilesGrouping.Add(group);
+
+        //                     ///Do not insert or update since there is no exif info required to save in DB for Google Drive scan
+        //                    if (keysListToUpdate.Count > 1000 || keysListToInsert.Count > 1000)
+        //                    {
+        //                        UpdateRecordsToDB(keysListToUpdate);
+
+        //                        InsertNewRecordsToDB(keysListToInsert);
+
+        //                        keysListToUpdate.Clear();
+        //                        keysListToInsert.Clear();
+        //                    }
+        //                }
+
+        //                if (keysListToUpdate.Count > 0 || keysListToInsert.Count > 0)
+        //                {
+        //                    UpdateRecordsToDB(keysListToUpdate);
+
+        //                    InsertNewRecordsToDB(keysListToInsert);
+
+        //                    keysListToUpdate.Clear();
+        //                    keysListToInsert.Clear();
+        //                }
+
+        //                groupsOfFilesWithSameHash = null;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("compareForExactPhotos() :: ", ex);
+        //            }
+        //        }
+
+
+        //        [Obsolete]
+        //        public void compareForExactPhotos_ob(DataTable dbResult)
+        //        {
+        //            cGlobalSettings.arrAllFilesGrouping = null;
+        //            cGlobalSettings.arrAllFilesGrouping = new BlockingCollection<csDuplicatesGroup>();
+        //            CancellationTokenSource cts = null;
+
+
+        //            List<int> keysListToUpdate = null;
+        //            List<int> keysListToInsert = null;
+
+        //            try
+        //            {
+
+        //                keysListToUpdate = new List<int>();
+        //                keysListToInsert = new List<int>();
+        //                //oSqlite.insertValuesToDB(y.Keys.ToList(), dbResult);
+
+        //                int TotalPhotos = cGlobalSettings.listImageFileInfo.Keys.Count;
+        //                int totalPhotosProcessed = 0;
+        //                var groupsOfFilesWithSize = cGlobalSettings.listImageFileInfo.Where(p => p.Value.fileSize > 0).GroupBy(s => s.Value.fileSize).Where(s => s.Count() > 1);
+
+        //                int i = 0;
+        //                cts = new CancellationTokenSource();
+        //                int TotalGroupsCount = groupsOfFilesWithSize.Count();
+
+        //                groupsOfFilesWithSize.AsParallel()
+        //                .WithDegreeOfParallelism(/*AppFunctions.GetMaxDegreeOfParallelism()*/1)
+        //                .WithCancellation(cts.Token)
+        //                .ForAll(x =>
+        //                {
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        return;
+        //                    Thread.Sleep(0);
+        //                    //OnScanProgress("Comparing duplicates", 100 * i / TotalGroupsCount, (totalPhotosProcessed += groupsOfFilesWithSize.ElementAt(i).Count()) + " processed", cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+        //                    OnScanProgress(cClientEnum.eScanPhase.Compare, cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_DUPLICATES"), 100 * i / TotalGroupsCount, (totalPhotosProcessed += x.Count()) + "" /*string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), totalPhotosProcessed += x.Count())*/, cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PLEASE_BE_PATIENT_MSG"));
+
+        //                    i++;
+
+        //                    foreach (var imageFile in x)
+        //                    {
+        //#if SQLITE_NEEDED
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            break;
+
+        //#endif
+
+        //                        //-------- Calculate MD5 is not yet calculated.-----------
+        //                        //if (string.IsNullOrEmpty(imageFile.Value.md5)) 
+        //                        if (!imageFile.Value.bHashFoundInDB)
+        //                        {
+        //                            imageFile.Value.md5 = AppFunctions.calcMD5(imageFile.Value.filePath);
+        //                            keysListToInsert.Add(imageFile.Key); // Add key to list whose entry not found in DB
+        //                        }
+
+        //#if SQLITE_NEEDED
+        //                        if (imageFile.Value.bFileModified)
+        //                        {
+        //                            keysListToUpdate.Add(imageFile.Key);
+        //                        }
+
+        //                        if (keysListToUpdate.Count > 1000 || keysListToInsert.Count > 1000)
+        //                        {
+        //                            UpdateRecordsToDB(keysListToUpdate);
+
+        //                            InsertNewRecordsToDB(keysListToInsert);
+
+        //                            keysListToUpdate.Clear();
+        //                            keysListToInsert.Clear();
+        //                        }
+        //#endif
+        //                    }
+
+
+
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        return;
+
+        //                    var groupsOfFilesWithSameHash = x.Where(p => p.Value.md5 != null).GroupBy(p => p.Value.md5).Where(p => p.Count() > 1);
+
+        //                    foreach (var finalGroup in groupsOfFilesWithSameHash)
+        //                    {
+        //                        cGlobalSettings.oManualReset.WaitOne();
+        //                        if (cGlobalSettings.abortNow)
+        //                            break;
+        //                        csDuplicatesGroup group = new csDuplicatesGroup();
+        //                        foreach (KeyValuePair<int, csImageFileInfo> gp in finalGroup)
+        //                        {
+        //                            cGlobalSettings.oManualReset.WaitOne();
+        //                            if (cGlobalSettings.abortNow)
+        //                                break;
+
+        //                            // ----------------- Get exifInfo -----------------
+        //                            Stream stream = null;
+        //                            Image image = null;
+
+        //                            try
+        //                            {
+        //                                if (cGlobalSettings.listImageFileInfo[gp.Key].exifInfo == null)
+        //                                {
+        //                                    // In case if .gif | .vlc  extension files are added for match
+        //                                    using (stream = File.OpenRead(gp.Value.filePath))
+        //                                    using (image = Image.FromStream(stream, false, false))
+        //                                    {
+        //                                        cGlobalSettings.listImageFileInfo[gp.Key].exifInfo = new csExifInfo(gp.Key, image);
+        //                                    }
+        //                                }
+        //                            }
+        //                            catch (Exception ex)
+        //                            {
+        //                                cGlobalSettings.oLogger.WriteLogException("ExifInfo for ExactMatch ::", ex);
+
+        //                                try
+        //                                {
+        //                                    cGlobalSettings.listImageFileInfo[gp.Key].exifInfo = new csExifInfo(-1, null);
+        //                                }
+        //                                catch (Exception exx)
+        //                                {
+        //                                    cGlobalSettings.oLogger.WriteLogException("ImageProcessor :: ExifInfo for ExactMatch(Retry) ::", exx);
+        //                                }
+
+        //                            }
+        //                            finally
+        //                            {
+        //                                if (stream != null) { stream.Dispose(); stream = null; }
+        //                                if (image != null) { image.Dispose(); image = null; }
+        //                            }
+        //                            // ------------------------------------------------
+
+        //                            cGlobalSettings.listImageFileInfo[gp.Key].matchesWithNodeKey = gp.Key;
+        //                            cGlobalSettings.listImageFileInfo[gp.Key].match = 1.0f;//default match score 1 is allotted, later it will be updated if there is a match found
+
+        //                            group.childrenKey.Add(gp.Key);//Create group with selfNode
+        //                            cGlobalSettings.listImageFileInfo[gp.Key].parent = group;
+
+        //                            //keysListToUpdate.Add(gp.Key);
+
+        //                        }
+
+
+
+        //                        if (group != null)
+        //                            cGlobalSettings.arrAllFilesGrouping.Add(group);
+        //                    }
+        //                });
+
+        //#if SQLITE_NEEDED
+
+        //                if (keysListToUpdate.Count > 0 || keysListToInsert.Count > 0)
+        //                {
+        //                    UpdateRecordsToDB(keysListToUpdate); // Update Modified files
+
+        //                    InsertNewRecordsToDB(keysListToInsert); // Insert new files
+
+        //                    keysListToUpdate.Clear(); // Clear list
+        //                    keysListToInsert.Clear(); // Clear list
+        //                }
+        //#endif
+
+
+        //                groupsOfFilesWithSize = null;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("compareForExactPhotos() :: ", ex);
+        //            }
+        //            finally
+        //            {
+        //                cts = null;
+
+        //                if (keysListToUpdate != null) keysListToUpdate.Clear(); keysListToUpdate = null;
+        //                if (keysListToInsert != null) keysListToInsert.Clear(); keysListToInsert = null;
+
+        //            }
+
+        //        }
+
+
+        //        //Compare and make the duplicate groups here
+        //        //The image node HASH are assumed to be previously calculated
+        //        public void compareForSimilarPhotos(uint maxImageTimeDiff, uint userSelectedGpsValue)
+        //        {
+        //            cGlobalSettings.arrAllFilesGrouping = null;
+        //            cGlobalSettings.arrAllFilesGrouping = new BlockingCollection<csDuplicatesGroup>();
+
+        //            int i = 0;
+        //            int TotalPhotos = cGlobalSettings.listImageFileInfo.Keys.Count;
+
+        //            /*Stopwatch watch = new Stopwatch();
+        //            watch.Start();*/
+
+        //            //cGlobalSettings.listImageFileInfo.Keys.AsParallel().ForAll(KeyNode =>
+        //            {
+
+        //                foreach (int KeyNode in cGlobalSettings.listImageFileInfo.Keys)
+        //                {
+        //                    //cGlobalSettings.oLogger.WriteLogVerbose(string.Format("------Compare photos in progress : \tIndex: \t{0}, \tTime Taken: \t{1} ", i, watch.GetTimeSpanEx()));
+        //                    i++;
+        //                    if (i % 9 == 0)
+        //                    {
+        //                        Thread.Sleep(0);
+        //                        OnScanProgress(cClientEnum.eScanPhase.Compare, cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_PHOTOS"), 100 * i / TotalPhotos, i + "" /*string.Format(cResourceManager.LoadString("DPF_PROCESSOR_PROCESSED"), i)*/, cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PATIENT_WHILE_COMPARING_MSG")); // (int)((((double)i + 1) / nodes.Count()) * 90)
+        //                    }
+
+
+        //                    cGlobalSettings.oManualReset.WaitOne();
+        //                    if (cGlobalSettings.abortNow)
+        //                        //return;
+        //                        break;
+        //                    if (cGlobalSettings.listImageFileInfo[KeyNode].hash == null)
+        //                        continue;
+        //                    comparePhotoNode(KeyNode, maxImageTimeDiff, userSelectedGpsValue);
+
+        //                    //cGlobalSettings.oLogger.WriteLogVerbose(string.Format("Compare photos in progress : \tIndex: \t{0}, \tTime Taken: \t{1} ", i, watch.GetTimeSpanEx()));
+
+        //                }
+        //                if (!cGlobalSettings.abortNow)
+        //                    OnScanProgress(cClientEnum.eScanPhase.Compare, cResourceManager.LoadString("DPF_PROCESSOR_COMPARING_PHOTOS"), 99, i + "", cResourceManager.LoadString("DFP_PROCESSOR_SCAN_PATIENT_WHILE_COMPARING_MSG"));
+
+        //            }
+        //            //);
+
+        //            /*watch.Stop();
+        //            cGlobalSettings.oLogger.WriteLogVerbose("Time taken in compare photos - " + watch.GetTimeSpanEx());
+        //            watch = null;*/
+        //        }
+
+
+
+        //        class TempClass
+        //        {
+        //            public int indexMatched = 0;
+        //            public float match_ = 0.0f;
+        //            public int matchingFileNode_ = 0;
+        //        }
+
+        //        void comparePhotoNode(int selfNode, uint maxImageTimeDiff, uint userSelectedGpsValue)
+        //        {
+        //            bool isAdded = false;
+        //            int index = 0;
+
+        //            //selfNode is compared with existing dup group children, here the groups are parsed
+        //            foreach (csDuplicatesGroup group in cGlobalSettings.arrAllFilesGrouping)
+        //            {
+        //                cGlobalSettings.oManualReset.WaitOne();
+        //                if (cGlobalSettings.abortNow)
+        //                    break;
+        //                //string fPath;
+        //                float match = 0.0f;//This "match" variable keeps the track of BEST Match score within the duplicate group.
+        //                //csImageFileInfo matchingFileNode = null;//This "matchingFileNode" object keeps the track of BEST Matching NODE within the duplicate group.
+        //                int matchingFileNode = 0;//This "matchingFileNode" object keeps the track of BEST Matching NODE within the duplicate group.
+        //                float tMatch = 0.0f;
+
+        //                try
+        //                {
+
+        //                    //here the group children are parsed and are compared with selfNode passed
+        //                    foreach (int fileNode in group.childrenKey)
+        //                    //group.children.AsParallel().WithDegreeOfParallelism(Math.Max(Environment.ProcessorCount - 2, 2)).All(fileNode =>
+        //                    {
+        //                        //fPath = fileNode.filePath;
+        //                        //get the matching percent of selfNode here
+        //                        tMatch = compareHashForPhotoNode(selfNode, fileNode, maxImageTimeDiff, userSelectedGpsValue);
+
+
+        //                        //if the match percent (tMatch) is < 0.85 the node is NOT treated as duplicate
+        //                        if (tMatch >= (cGlobalSettings.isSimilarMatchChecked ? 0.85 : 0.99)/*sliderInitialMatching.minValue*/)//here sliderInitialMatching.minValue = 0.85
+        //                        {
+        //                            //The selfNode passed meets the match criteria and is treated as duplicate
+        //                            if (tMatch > match)
+        //                            {
+        //                                //update "match" variable to keep the BEST Match score
+        //                                match = tMatch;
+        //                                //update "matchingFileNode" object to keep the track of the BEST Matching NODE
+        //                                matchingFileNode = fileNode;
+        //                            }
+        //                            //update the BOOL "isAdded" as YES to add the node to the group children later
+        //                            isAdded = true;
+        //                        }
+        //                        else
+        //                        {
+        //                            //selfNode object will be added to the duplicate group ONLY when it matches with ALL THE GROUP CHILDREN, if NOT parse and compare with next group
+        //                            //here isAdded is marked NO, break to stop comparing with the current left children and pass on to compare with next group
+        //                            isAdded = false;
+        //                            break;
+        //                            //return false;
+        //                        }
+        //                        //return true;
+        //                    }
+
+        //                    //});
+        //                    if (isAdded)
+        //                    {
+        //                        if (group.childrenKey.Count == 1)//Done because first node was given 1 match with itself, so now as matchingFileNode matches with selfNode, update the matches with Node and the match score
+        //                        {
+        //                            cGlobalSettings.listImageFileInfo[matchingFileNode].match = match;
+        //                            cGlobalSettings.listImageFileInfo[matchingFileNode].matchesWithNodeKey = selfNode;
+        //                        }
+        //                        //update selfNode's matching Node and the matching score here
+        //                        cGlobalSettings.listImageFileInfo[selfNode].match = match;
+        //                        cGlobalSettings.listImageFileInfo[selfNode].matchesWithNodeKey = matchingFileNode;
+        //                        //if the matching Node has a match node that has match score greater than the current "match" value, update the matching Node here to track the BEST MATCH NODE and score
+        //                        if (cGlobalSettings.listImageFileInfo[matchingFileNode].match < match)
+        //                        {
+        //                            cGlobalSettings.listImageFileInfo[matchingFileNode].match = match;
+        //                            cGlobalSettings.listImageFileInfo[matchingFileNode].matchesWithNodeKey = selfNode;
+        //                        }
+        //                        //update the parent here
+        //                        cGlobalSettings.listImageFileInfo[selfNode].parent = group;
+        //                        //add selfNode to the group children array
+        //                        group.childrenKey.Add(selfNode);
+        //                        break;
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    cGlobalSettings.oLogger.WriteLogException("comparePhotoNode", ex);
+        //                }
+        //                finally
+        //                {
+        //                    //matchingFileNode = null;
+        //                }
+
+        //                index++;
+        //            }
+
+        //            if (!cGlobalSettings.abortNow)
+        //            {
+        //                //If selfNode is NOT added to any of the groups, create a group with this node as the first child
+        //                if (!isAdded)
+        //                {
+        //                    csDuplicatesGroup group = null;
+        //                    try
+        //                    {
+        //                        cGlobalSettings.listImageFileInfo[selfNode].matchesWithNodeKey = selfNode;
+        //                        cGlobalSettings.listImageFileInfo[selfNode].match = 1.0f;//default match score 1 is allotted, later it will be updated if there is a match found
+        //                        group = new csDuplicatesGroup();
+        //                        group.childrenKey.Add(selfNode);//Create group with selfNode
+        //                        cGlobalSettings.listImageFileInfo[selfNode].parent = group;
+        //                        cGlobalSettings.arrAllFilesGrouping.Add(group);
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        cGlobalSettings.oLogger.WriteLogException("comparePhotoNode() :: ", ex);
+        //                    }
+        //                    finally
+        //                    {
+        //                        group = null;
+        //                    }
+
+        //                }
+        //            }
+        //        }
+
+        //        float compareHashForPhotoNode(int keynode1, int keynode2, uint maxImageTimeDiff, uint userSelectedGpsValue)
+        //        {
+        //            float match = 0;
+        //            try
+        //            {
+        //                csImageFileInfo node1 = cGlobalSettings.listImageFileInfo[keynode1];
+        //                csImageFileInfo node2 = cGlobalSettings.listImageFileInfo[keynode2];
+
+        //                if (node1.hash == null || node2.hash == null)
+        //                {
+        //                    return MIN_VALUE_IF_NOT_MATCHED;
+        //                }
+
+        //                if (!cGlobalSettings.isSimilarMatchChecked && node1.fileSize != node2.fileSize)
+        //                {
+        //                    return MIN_VALUE_IF_NOT_MATCHED;
+        //                }
+        //                if ((node1.exifInfo != null && node2.exifInfo != null))
+        //                {
+        //                    // compare the capture times ONLY when BOTH the images have CAPTURE DATE in EXIF Info
+        //                    //if (((node1.exifInfo.CaptureDate != DateTime.MinValue) && (node2.exifInfo.CaptureDate != DateTime.MinValue)))
+
+
+        //                    if (cGlobalSettings.bConsiderTimeInterval && cGlobalSettings.isSimilarMatchChecked)
+        //                    {
+        //                        if (node1.exifInfo.CaptureDate != DateTime.MinValue && node1.exifInfo.CaptureDate != DateTime.MaxValue && node2.exifInfo.CaptureDate != DateTime.MinValue && node2.exifInfo.CaptureDate != DateTime.MaxValue)
+        //                        {
+        //                            if (maxImageTimeDiff < System.Math.Abs(node1.exifInfo.CaptureDate.Subtract(node2.exifInfo.CaptureDate).TotalSeconds))
+        //                            {
+        //                                return MIN_VALUE_IF_NOT_MATCHED;
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            if (cGlobalSettings.bConsiderTimeNoCaptureDt)
+        //                            {
+        //                                if (maxImageTimeDiff < System.Math.Abs(node1.createDate.Subtract(node2.createDate).TotalSeconds))
+        //                                {
+        //                                    return MIN_VALUE_IF_NOT_MATCHED;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+
+        //                    if (cGlobalSettings.bConsiderGPS && cGlobalSettings.isSimilarMatchChecked)
+        //                    {
+        //                        // Compare the distance between to points, if GPS information is there
+        //                        if (node1.exifInfo.latitudeDegree != 360 && node2.exifInfo.latitudeDegree != 360 &&
+        //                            node1.exifInfo.longitudeDegree != 360 && node2.exifInfo.longitudeDegree != 360)
+        //                        {
+
+        //#if false
+
+        //                        double R = 6371; // km
+
+        //                        double sLat1 = Math.Sin(AppFunctions.degreeToRadian(node1.exifInfo.latitudeDegree));
+        //                        double sLat2 = Math.Sin(AppFunctions.degreeToRadian(node2.exifInfo.latitudeDegree));
+        //                        double cLat1 = Math.Cos(AppFunctions.degreeToRadian(node1.exifInfo.latitudeDegree));
+        //                        double cLat2 = Math.Cos(AppFunctions.degreeToRadian(node2.exifInfo.latitudeDegree));
+        //                        double cLon = Math.Cos(AppFunctions.degreeToRadian(node2.exifInfo.longitudeDegree) - AppFunctions.degreeToRadian(node1.exifInfo.longitudeDegree));
+
+        //                        double cosD = sLat1 * sLat2 + cLat1 * cLat2 * cLon;
+
+        //                        double d = Math.Acos(cosD);
+
+        //                        double dist = R * d;
+
+        //                        //return dist;
+        //#else
+
+        //                            var R = 6378100.0; // Radius of an earth (meters)
+
+        //                            var φ1 = AppFunctions.degreeToRadian(node1.exifInfo.latitudeDegree);// node1.exifInfo.latitudeRadian;
+        //                            var φ2 = AppFunctions.degreeToRadian(node2.exifInfo.latitudeDegree); //node2.exifInfo.latitudeRadian;
+        //                            var Δφ = AppFunctions.degreeToRadian(node2.exifInfo.latitudeDegree - node1.exifInfo.latitudeDegree);
+        //                            //var Δφ = (lat2 - lat1).toRadians();
+        //                            var Δλ = AppFunctions.degreeToRadian(node2.exifInfo.longitudeDegree - node1.exifInfo.longitudeDegree);
+        //                            //var Δλ = (lon2 - lon1).toRadians();
+
+        //                            var a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
+        //                                    Math.Cos(φ1) * Math.Cos(φ2) *
+        //                                    Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
+        //                            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        //                            double d = R * c;
+        //                            if (userSelectedGpsValue < d)
+        //                            {
+        //                                return MIN_VALUE_IF_NOT_MATCHED;
+        //                            }
+        //#endif
+        //                        }
+        //                    }
+        //                }
+
+        //                ulong score = 0;
+
+        //                //maxScore is taken to optimize the comparison: Any match score < 0.85 means we will not treat it as duplicate
+        //                //This means other ways we can say any diff in hash > 0.15 means the match score will be < 0.85
+        //                //So we can say the mismatch counts if pass 0.15% of totLength, that means THERE IS A MISMATCH, so we do not compare the remaining hash values.
+
+        //#if true
+        //                bool bMatched = false;
+        //                //int matchCount = 0;
+        //                for (int i = 0; i < node1.hash.Length; i++)
+        //                {
+        //                    score += NumberOfSetBits(node1.hash[i] ^ node2.hash[i]);
+        //                    if (score > maxScore)
+        //                    {
+        //                        bMatched = false;
+        //                        break;
+        //                        //return MIN_VALUE_IF_NOT_MATCHED;//For optimization, if mismatch is greater than 0.15... return 0.7 (means NO MATCH)
+        //                    }
+        //                    else
+        //                        bMatched = true;
+        //                }
+
+
+        //                if (!bMatched && cGlobalSettings.isSimilarMatchChecked)
+        //                {
+        //#if ROTATE_FLIPPED_CHECK
+        //                    int StartIndex;
+        //                    int EndIndex;
+        //                    if (GetStartEndIndex(out StartIndex, out EndIndex))
+        //                    {
+        //                        if (node1.arrHash != null && node1.arrHash.Count > 0)
+        //                        {
+        //                            for (int p = StartIndex; p <= EndIndex; p++)
+        //                            {
+        //                                if (bMatched)
+        //                                    break;
+        //                                if (node1.arrHash.Count <= p)
+        //                                    break;
+        //                                score = 0;
+        //                                for (int i = 0; i < node1.arrHash[p].Length; i++)
+        //                                {
+        //                                    score += NumberOfSetBits(node1.arrHash[p][i] ^ node2.hash[i]);
+        //                                    if (score > maxScore)
+        //                                    {
+        //                                        bMatched = false;
+        //                                        break;
+        //                                        //return MIN_VALUE_IF_NOT_MATCHED;//For optimization, if mismatch is greater than 0.15... return 0.7 (means NO MATCH)
+        //                                    }
+        //                                    else
+        //                                        bMatched = true;
+        //                                }
+        //                            }
+        //                        }
+        //                        else if (node2.arrHash != null && node2.arrHash.Count > 0)
+        //                        {
+        //                            for (int p = StartIndex; p <= EndIndex; p++)
+        //                            {
+        //                                if (bMatched)
+        //                                    break;
+
+        //                                if (node2.arrHash.Count <= p)
+        //                                    break;
+        //                                score = 0;
+        //                                for (int i = 0; i < node2.arrHash[p].Length; i++)
+        //                                {
+        //                                    score += NumberOfSetBits(node2.arrHash[p][i] ^ node1.hash[i]);
+        //                                    if (score > maxScore)
+        //                                    {
+        //                                        bMatched = false;
+        //                                        break;
+        //                                        //return MIN_VALUE_IF_NOT_MATCHED;//For optimization, if mismatch is greater than 0.15... return 0.7 (means NO MATCH)
+        //                                    }
+        //                                    else
+        //                                        bMatched = true;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //#endif
+        //                    if(!bMatched)
+        //                        return MIN_VALUE_IF_NOT_MATCHED;
+        //                }
+
+        //#else
+        //                for (int i = 0; i < totLength; i++)
+        //                {
+        //                    if (node1.hash[i] != node2.hash[i])//Node HASH is a stream of 1/0 (Array of length reSizeVal*reSizeVal)
+        //                    {
+        //                        score++;
+        //                        if (score > maxScore)
+        //                            return MIN_VALUE_IF_NOT_MATCHED;//For optimization, if mismatch is greater than 0.15... return 0.7 (means NO MATCH)
+        //                    }
+        //                }
+        //#endif
+        //                match = (float)(totLength - score) / (float)totLength;
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("compareHashForPhotoNode", ex);
+        //            }
+        //            return match;//return the actual match score
+        //        }
+
+        //        bool GetStartEndIndex(out int StartIndex, out int EndIndex)
+        //        {
+        //            bool bConsiderotatedFlippedImages = false;
+        //            StartIndex = -1;
+        //            EndIndex = -1;
+        //            try
+        //            {
+        //                if(cGlobalSettings.bIncludeFlippedImages)
+        //                {
+        //                    StartIndex = 4;
+        //                    EndIndex = 7;
+        //                    bConsiderotatedFlippedImages = true;
+        //                }
+
+        //                if(cGlobalSettings.bIncludeRotatedImages)
+        //                {
+        //                    StartIndex = 1;
+        //                    EndIndex = EndIndex > -1 ? 7 : 3;
+        //                    bConsiderotatedFlippedImages = true;
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                cGlobalSettings.oLogger.WriteLogException("GetStartEndIndex:: ", ex);
+        //            }
+        //            return bConsiderotatedFlippedImages;
+        //        }
+
+        //        //for 32 bit integers
+        //        public static int NumberOfSetBits32(int i)
+        //        {
+        //            i = i - ((i >> 1) & 0x55555555);
+        //            i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+        //            i = ((i + (i >> 4)) & 0x0F0F0F0F);
+        //            return (i * (0x01010101)) >> 56;
+        //        }
+
+        //        public static ulong NumberOfSetBits(ulong i)
+        //        {
+        //            i = i - ((i >> 1) & 0x5555555555555555);
+        //            i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
+        //            return (((i + (i >> 4)) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56;
+        //        }
+
+
+        //        public static string GetThumbSavePath(string filePath, string identifier)
+        //        {
+        //            return Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(filePath)) + "\\thumbs", Path.GetFileNameWithoutExtension(filePath) + identifier + Path.GetExtension(filePath));
+        //        }
+
+        //        public static void SaveImage(Image img, string filePath /*, string identifier*/)
+        //        {
+        //            try
+        //            {
+        //                string strPath = filePath; // GetThumbSavePath(filePath, identifier);
+
+        //                if (File.Exists(strPath))
+        //                    File.Delete(strPath);
+        //                if (!Directory.Exists(Path.GetDirectoryName(strPath)))
+        //                    Directory.CreateDirectory(Path.GetDirectoryName(strPath));
+
+        //                img.Save(strPath, ImageFormat.Jpeg);
+        //            }
+        //            catch (System.Exception) { }
+        //        }
+
+        //        public cClientEnum.eDownloadStatus DownloadComponents()
+        //        {
+        //            cClientEnum.eDownloadStatus status = cClientEnum.eDownloadStatus.DownloadError;
+        //            try
+        //            {
+        //                /// Download ImageMagick dll and save on installed path of application.
+        //                ///
+        //                string dwnLink = cGetString.GetMagickDwnUrl();
+        //                string fullDownloadedPath = Path.Combine(Application.StartupPath, cGlobal.GetFileNameFromUrl(dwnLink));
+
+        //                //fullDownloadedPath = Path.Combine(@"C:\Program Files (x86)\Duplicate Photos Fixer Pro", cGlobal.GetFileNameFromUrl(dwnLink));
+
+        //                if (File.Exists(fullDownloadedPath))
+        //                {
+        //                    // Return, component already downloaded
+        //                    return cClientEnum.eDownloadStatus.AlreadyDownload;
+        //                }
+
+
+        //                if (!AppFunctions.isInternetConnected())
+        //                {
+        //                    status = cClientEnum.eDownloadStatus.NoInternetConnection;
+        //                    return status;
+        //                }
+
+        //                /*
+        //                DialogResult result = Program.oMainReference.showYesNoMessage(cResourceManager.LoadString("IDS_CONFIRM_DOWNLOAD_COMPONENT"));
+
+        //                if (result == DialogResult.No)
+        //                    return cClientEnum.eDownloadStatus.DownloadAborted;
+        //                    */
+        //                //status = oDownload.DownloadFile(dwnLink, cGlobal.GetFileNameFromUrl(dwnLink), Path.GetDirectoryName(fullDownloadedPath) /*Application.StartupPath*/, out fullDownloadedPath);
+        //                //dwnurl="";
+        //                string AppExecutablePath = Application.ExecutablePath;
+        //                Process process = new Process();
+        //                process.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(AppExecutablePath), "DPFHelper.exe");
+        //                {
+        //                    process.StartInfo.Arguments = "dwnurl=\"" + cGetString.GetMagickDwnUrl() + "\"";
+        //                }
+        //                process.StartInfo.CreateNoWindow = true;
+        //                process.StartInfo.Verb = "runas";
+        //                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        //                process.Start();
+        //                process.WaitForExit();
+        //                int nStatus = process.ExitCode;
+        //                status = (cClientEnum.eDownloadStatus)nStatus;
+        //                /*
+        //                if (!File.Exists(fullDownloadedPath))
+        //                {
+        //                    cGlobalSettings.oLogger.WriteLogVerbose("DownloadComponents:: Downloaded file not found on system");
+        //                    return status;
+        //                }
+        //                else
+        //                {
+        //                    status = cClientEnum.eDownloadStatus.DownloadSucessFull;
+        //                }
+        //                */
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                status = cClientEnum.eDownloadStatus.AccessDenied;
+        //                cGlobalSettings.oLogger.WriteLogException("DownloadComponents:: ", ex);
+        //            }
+        //            finally
+        //            {
+        //                //cGlobalSettings.b_COMPONENT_INSTALL_STARTED = false;
+        //            }
+
+        //            return status;
+        //        }
+    }
+}
+
+

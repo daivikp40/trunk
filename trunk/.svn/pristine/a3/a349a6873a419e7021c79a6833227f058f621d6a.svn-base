@@ -1,0 +1,220 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucHomeComparisonMethod"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="628" d:DesignWidth="335">
+    <UserControl.Resources>
+        <!--<Style x:Key="HoverRadioButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Foreground" Value="#000000"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <DockPanel HorizontalAlignment="Left">
+                            <Ellipse x:Name="OuterEllipse" Width="20" Height="20" Stroke="Transparent" StrokeThickness="1"/>
+                            <Ellipse x:Name="InnerEllipse" Width="10" Height="10" Fill="{TemplateBinding Foreground}"/>
+                            <ContentControl Content="{TemplateBinding Content}" Padding="20 0 0 0"/>
+                            </DockPanel>
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="InnerEllipse" Property="Stroke" Value="Blue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource bgclr_dark}">
+        <StackPanel Margin="0 0">
+            <Border  BorderBrush="{DynamicResource bgclr_dark}"  BorderThickness="0 1 0 0">
+                <Border.Background>
+                    <ImageBrush ImageSource="{DynamicResource img_top_header}"/>
+                </Border.Background>
+                <DockPanel Height="47"  Margin="0 0">
+                    <TextBlock x:Name="lbl_comparisonMethod" Text="Comparison Method" FontSize="14" VerticalAlignment="Center" Padding="20 0" FontWeight="Medium" Foreground="{DynamicResource frgclr_white}"/>
+                    <Image x:Name="picComparisonMethod" Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0"
+                       Cursor="Hand">
+                        <!--<Image.ToolTip>
+                        <TextBlock Width="150"  Text="Choose between Exact Match and Similar Match to search for duplicate and similar images."
+                                   TextWrapping="Wrap"/>
+                    </Image.ToolTip>-->
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Choose between Exact Match and Similar Match to search for duplicate and similar images."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+            <StackPanel Height="146" Margin="0 0">
+                <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                    <RadioButton x:Name="rdbtnExactMatch" GroupName="gnComparisonMethod"  VerticalAlignment="Center" 
+                                Margin="20 5 0 0" Click="rdbtnExactMatch_Click" Checked="rdbtnExactMatch_Checked"
+                                 Padding="3 -3 0 5" Foreground="{DynamicResource frgclr_white}"
+                               FontSize="14" FontWeight="SemiBold"
+                                 Content="Exact Match"/>
+                    
+
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource bgclr_dark}" BorderThickness="0 1 0 0"/>
+                <StackPanel Margin="0 0 0 10 " Orientation="Horizontal">
+                    <RadioButton x:Name="rdbtnSimilarMatch" GroupName="gnComparisonMethod"   
+                                   Padding="3 -3 0 5" Foreground="{DynamicResource frgclr_white}" 
+                               FontSize="14" FontWeight="SemiBold"                                 
+                                  Margin="20 5 0 0 " Click="rdbtnSimilarMatch_Click" Content="Similar Match" />
+                    
+                </StackPanel>
+                
+                <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 5">
+                    <Image Source="{DynamicResource img_compare1}" Width="136" Margin="10 0"/>
+                    <Image x:Name="imgMatchLevel" Width="136" Margin="10 0"/>
+                </DockPanel>
+            </StackPanel>
+            <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+            <StackPanel x:Name="similarMatchPropertiesPanel" Visibility="Visible">
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_matchingLevel" Text="Matching Level" FontSize="14" VerticalAlignment="Bottom" Padding="15 0" FontWeight="Medium" Foreground="{DynamicResource frgclr_white}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Matching Level defines a degree of similarity between photos which can be adjusted from Low to High.The level can be changes in results on the go!"
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="matchLevelSlider"  TickPlacement="TopLeft" TickFrequency="1" Minimum="0" Maximum="7" Margin="25 15 25 5"
+                        IsSnapToTickEnabled="True" ValueChanged="matchLevelSlider_ValueChanged">
+                    </Slider>
+
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_lowMatching" Text="Low" FontSize="11" Foreground="{DynamicResource frgclr_whitish}"/>
+                        <TextBlock x:Name="lbl_highMatching" Text="High" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right"/>
+                        <TextBlock  FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_bitmapSize" Text="Bitmap Size" FontSize="14" VerticalAlignment="Center" Padding="15 0" FontWeight="Medium" Foreground="{DynamicResource frgclr_white}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Manage the accuracy of search results by adjusting the slider between Performance and Quality. Slide towards Performance for speedy and nearly accurate results and towards Quality for highly accurate results."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="bitmapSizeSlider" TickPlacement="TopLeft" TickFrequency="1" Minimum="1" Maximum="7" Margin="25 15 25 5" ValueChanged="bitmapSlider_ValueChanged" 
+                        IsSnapToTickEnabled="True" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_performance" Text="Performace" FontSize="11" Foreground="{DynamicResource frgclr_whitish}"/>
+                        <TextBlock x:Name="lbl_quality" Text="Quality" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxBitmapsize"  FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_timeInterval" Text="Time Interval" FontSize="14" VerticalAlignment="Center" Padding="15 0" FontWeight="Medium" Foreground="{DynamicResource frgclr_white}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Time interval determines a time gap between photos ranging from less than a second to 24 hours. Choose an interval of your choice for preferred results."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="timeIntervalSlider" TickPlacement="TopLeft" TickFrequency="1" Minimum="1" Maximum="18" Margin="25 15 25 5" ValueChanged="timeIntervalSlider_ValueChanged" 
+                        IsSnapToTickEnabled="True" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_moreTime" Text="More" FontSize="11" Foreground="{DynamicResource frgclr_whitish}"/>
+                        <TextBlock x:Name="lbl_lessTime" Text="Less" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxTimeInterval" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 0"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_GPS"  Text="GPS" FontSize="14" VerticalAlignment="Center" Padding="15 0" FontWeight="Medium" Foreground="{DynamicResource frgclr_white}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="GPS checks the embedded coordinates of photos. Location coordinates between photos should fall within the ranges of 0 to 100 meters"
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="gpsSlider" TickPlacement="TopLeft" TickFrequency="1" Minimum="1" Maximum="7" Margin="25 15 25 5" ValueChanged="gpsSlider_ValueChanged" 
+                        IsSnapToTickEnabled="True" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_LessGPS" Text="Less" FontSize="11" Foreground="{DynamicResource frgclr_whitish}"/>
+                        <TextBlock x:Name="lbl_MoreGPS" Text="More" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxGPS" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                    
+                <StackPanel Orientation="Vertical" Margin="20,0">
+                    <DockPanel>
+                        <CheckBox x:Name="chk_rotatedImages"
+                                  VerticalAlignment="Center"                               
+                                  Margin="0 0 8 0"                                 
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource frgclr_whitish}"
+                                  Content="Include Rotated Images" Checked="chk_rotatedImages_Checked_1"                                  
+                                  />
+                       
+                    </DockPanel>
+                    <DockPanel>
+                        <CheckBox x:Name="chk_flippedImages"
+                                  VerticalAlignment="Center"                               
+                                  Margin="0 0 8 0"
+                                  Content="Include Flipped Images"        
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                
+                                   Foreground="{DynamicResource frgclr_whitish}"
+                                  />
+                       
+                    </DockPanel>
+
+                </StackPanel>
+                <StackPanel >
+
+                    <TextBlock x:Name="btn_OpenSettings" Text="Load Defaults" FontSize="13" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{DynamicResource frgclr_whitish}" TextDecorations="Underline" Margin="10 0 10 0"/>
+                </StackPanel>
+            </StackPanel>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

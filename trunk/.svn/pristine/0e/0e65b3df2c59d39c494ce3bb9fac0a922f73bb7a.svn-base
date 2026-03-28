@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotoFixer;
+using DuplicatePhotosFixer.Models;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucExtraSettings.xaml
+    /// </summary>
+    public partial class ucExtraSettings : UserControl
+    {
+        
+        public ucExtraSettings()
+        {
+            InitializeComponent();
+            PreInit();
+            Init();
+        }
+
+        void PreInit()
+        {
+            try
+            {
+                if (App.oMainReference.objExtra == null)
+                    App.oMainReference.objExtra = new vmExtraSettings();
+                this.DataContext = App.oMainReference.objExtra;
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucExtraSettings:: PreInit: ", ex);
+            }
+        }
+
+        void Init()
+        {
+            try
+            {
+                LoadStrings();
+                UpdateUIData();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucExtraSettings:: Init: ", ex);
+            }
+        }
+        public void LoadStrings()
+        {
+            scan_heading.Text = cResourceManager.LoadString("IDS_MANAGE_SCAN_CRITERIA");
+            heading_info.Text = cResourceManager.LoadString("IDS_SCAN_CRITERIA_INFO");
+            chk_TimeInterval.Content = cResourceManager.LoadString("IDS_CONSIDER_TIME_INTERVAL");
+            lbl_TimeIntervalInfo.Text = cResourceManager.LoadString("DPF_SETTINGS_UC_TIME_INFO");
+            chk_GPS.Content = cResourceManager.LoadString("IDS_CONSIDER_GPS_SETTING");
+            lbl_GPSInfo.Text = cResourceManager.LoadString("DPF_SETTINGS_UC_GPS_INFO");
+            //chk_captureDate.Content = cResourceManager.LoadString("IDS_MANAGE_SCAN_CRITERIA");
+            lbl_CaptureDateInfo.Text = cResourceManager.LoadString("IDS_SETTINGS_CONSIDER_CAPTURE_DATE_INFO");
+            chk_rotatedImages.Content = cResourceManager.LoadString("IDS_INCLUDE_ROTATED_IMAGES");
+            chk_flippedImages.Content = cResourceManager.LoadString("IDS_INCLUDE_FLIPPED_IMAGES");
+
+        }
+
+        public void UpdateUIData()
+        {
+            try
+            {
+                App.oMainReference.objExtra.SetUIPropertiesValue();
+                return;
+
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("ucExtraSettings:: UpdateUIData: ", ex);
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //UpdateUIData();
+        }
+
+        private void chk_TimeInterval_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+
+        private void chk_GPS_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void chk_captureDate_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+
+        }
+
+        private void chk_rotatedImages_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void chk_flippedImages_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation();
+            fadeOutAnimation.From = 1.0; // Starting opacity (fully visible)
+            fadeOutAnimation.To = 0.0;   // Ending opacity (completely transparent)
+            fadeOutAnimation.Duration = TimeSpan.FromSeconds(1); // Duration of the animation
+
+            // Set up an event handler for when the animation completes
+            fadeOutAnimation.Completed += FadeOutAnimation_Completed;
+
+            // Apply the animation to the Opacity property of the label
+            lbl_settingsApplied.BeginAnimation(Label.OpacityProperty, fadeOutAnimation);
+            lbl_settingsApplied.Visibility = Visibility.Visible;
+        }
+
+        private void FadeOutAnimation_Completed(object sender, EventArgs e)
+        {
+            // Reset the label's opacity once the fade out animation is complete
+            lbl_settingsApplied.Opacity = 1.0;
+            lbl_settingsApplied.Visibility = Visibility.Hidden;
+        }
+    }
+}

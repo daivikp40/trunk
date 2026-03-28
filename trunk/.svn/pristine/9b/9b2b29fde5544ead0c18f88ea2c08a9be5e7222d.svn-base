@@ -1,0 +1,167 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using static DuplicatePhotosFixer.enumClass;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucHomeComparisonMethod.xaml
+    /// </summary>
+    public partial class ucHomeComparisonMethod : UserControl
+    {
+        public ucHomeComparisonMethod()
+        {
+            InitializeComponent();
+
+            gpsSlider.Value = cGlobalSettings.gpsValue;
+            timeIntervalSlider.Value = cGlobalSettings.timeInterval;
+            matchLevelSlider.Value = cGlobalSettings.matchingLevel;
+            bitmapSizeSlider.Value = cGlobalSettings.bitMapSizeValue;
+            
+
+            txtbxBitmapsize.Text = txtbxBitmapsize.Text = $"{Helpers.AppFunctions.getBitmapValue((int)bitmapSizeSlider.Value)}x{Helpers.AppFunctions.getBitmapValue((int)bitmapSizeSlider.Value)} pixels";
+            txtbxTimeInterval.Text = Helpers.AppFunctions.getTimeInterval((int)timeIntervalSlider.Value);
+            txtbxGPS.Text = $"{Helpers.AppFunctions.getGPSValue((int)gpsSlider.Value)} meters";
+
+            var imagePath = Helpers.AppFunctions.getMatchingLevel((int)matchLevelSlider.Value);
+            Uri i = new Uri(imagePath.Item2, UriKind.Relative);
+            imgMatchLevel.Source = new BitmapImage(i);
+
+            rdbtnSimilarMatch.IsChecked = true;
+            cGlobalSettings.isSimilarMatchChecked = true;
+        }
+
+        
+       
+        private void bitmapSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //int val = Convert.ToInt32(e.NewValue);
+            //var val1 = Helpers.AppFunctions.getBitmapValue(val);
+            //txtbxBitmapsize.Text = val.ToString();
+            if (txtbxBitmapsize != null)
+            {
+                var val = Convert.ToInt32(e.NewValue);
+                var msg = Helpers.AppFunctions.getBitmapValue(val);
+                txtbxBitmapsize.Text = $"{msg}x{msg} pixels";
+            }
+           
+            
+        }
+
+        private void timeIntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(txtbxTimeInterval != null)
+            {
+                int val = Convert.ToInt32(e.NewValue);
+                var msg = Helpers.AppFunctions.getTimeInterval(val);
+                txtbxTimeInterval.Text = msg;
+            }
+            
+        }
+
+        private void gpsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(txtbxGPS != null)
+            {
+                int val = Convert.ToInt32(e.NewValue);
+                var msg = Helpers.AppFunctions.getGPSValue(val);
+                txtbxGPS.Text = $"{msg} meters";
+            }
+            
+        }
+
+        private void matchLevelSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(imgMatchLevel != null)
+            {
+                int val = Convert.ToInt32(e.NewValue);
+                var path = Helpers.AppFunctions.getMatchingLevel(val);
+                Uri i = new Uri(path.Item2, UriKind.Relative);
+                imgMatchLevel.Source = new BitmapImage(i);
+            }
+        }
+
+        private void rdbtnExactMatch_Click(object sender, RoutedEventArgs e)
+        {
+            similarMatchPropertiesPanel.Visibility = Visibility.Collapsed;
+
+            Uri img = new Uri("/HelpingFiles/Compare/campare7.png", UriKind.Relative);
+            imgMatchLevel.Source = new BitmapImage(img);
+        }
+
+        private void rdbtnSimilarMatch_Click(object sender, RoutedEventArgs e)
+        {
+            similarMatchPropertiesPanel.Visibility = Visibility.Visible;
+
+            var path = Helpers.AppFunctions.getMatchingLevel((int)matchLevelSlider.Value);
+            Uri i = new Uri(path.Item2, UriKind.Relative);
+            imgMatchLevel.Source = new BitmapImage(i);
+        }
+
+        public void ChangeScanMode(eScanMode scanMode)
+        {
+
+            chk_rotatedImages.IsChecked= true;
+            chk_flippedImages.IsChecked = true;
+            switch (scanMode)
+            {
+                case eScanMode.GoogleDrive:
+                    {
+                        //rbtn_exactMatch.Checked = true;
+                    }
+                    break;
+                case eScanMode.DropBox:
+                    {
+                        chk_rotatedImages.IsChecked = true;
+                        chk_flippedImages.IsChecked = true;
+                    }
+                    break;
+                case eScanMode.BoxCloud:
+                    {
+                        chk_rotatedImages.IsChecked = true;
+                        chk_flippedImages.IsChecked = true;
+                    }
+                    break;
+                case eScanMode.AmazonS3:
+                    {
+                        chk_rotatedImages.IsChecked = true;
+                        chk_flippedImages.IsChecked = true;
+                    }
+                    break;
+                //case eScanMode.DeleteEmptyFolder:
+                    break;
+                case eScanMode.FileSearch:
+                default:
+                    //rbtn_FileSystem.Checked = true;
+                    break;
+            }
+        }
+
+        private void chk_rotatedImages_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void rdbtnExactMatch_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void chk_rotatedImages_Checked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
+}

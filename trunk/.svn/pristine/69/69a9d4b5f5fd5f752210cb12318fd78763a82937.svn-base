@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DuplicatePhotosFixer.ClassDictionary
+{
+    public class csScanPaths
+    {
+        public string strPath { get; set; }
+        public enumClass.ePathType pathType { get; set; }
+        public bool isSelected { get; set; }
+            
+        public bool IncludeSubFolder { get; set; }
+        
+        public bool isExcluded { get; set; }
+
+        public string FolderId { get; set; }
+
+        public bool ScanIncludeSubfolder { get; set; }
+
+        //
+        public string fileIcon { get; set; }
+
+        public string deleteButtonIcon { get; set; }
+    }
+}

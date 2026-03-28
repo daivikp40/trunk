@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DuplicatePhotosFixer.Views
+{
+    public class cNagDialogue
+    {
+        public enum FORM_RETURN_CODES
+        {
+            DO_NOTHING,
+            UPGRADE_NOW,
+            START_CLEAN,
+            SHOW_ENTER_KEY_DIALOG,
+            SHOW_ENTER_FREE_KEY_DIALOG,
+            AUTO_MARK,
+            RESET_DEFAULT,
+            SHOW_SETTINGS,
+            REQUEST_FREE_LICENSE_KEY,
+            NO_THANKS,
+            EULA,
+            PRIVACY_POLICY,
+            GET_RB,
+            UPGRADE_NOW_RP,
+            UPDATE_PROFILE_RP,
+            QUIT_WINDOW,
+            SHOW_REMOVE_DUPLICATE_GUIDE,
+            CLOSE_TO_TRAY,
+            UPGRADE_NOW_N_SHOW_ENTER_KEY_DIALOG,
+            YES_PROCEED,
+            START_SCAN,
+            InstallUtility,
+            GetAuthorization, // get authorization
+
+        }
+
+        public enum eSetupType
+        {
+            REGULAR = 1, // Site build no path is added by default in scan list.
+            THEME_VISTA = 2,
+            THEME_NEW_1 = 3,
+            THEME_NEW_2 = 4,
+            THEME_MESSAGE = 5,
+            NL_ONE_TIME_EMAIL_REGISTER = 6,///Add some new updates of SetupType = 9. From type 9 remove quick guide and feedback form.
+
+            SCAN_DEFAULT = 7, // Add OS drive by default and 
+            SCAN_ALL = 8, // Add all drives in scan list and start scan.
+            ADD_All = 9, // Add all drives in scan list
+            NL_EQUIVALENT = 10, /// Same as NL build except functionality of One time free key as in NL build
+
+            ADG_CAPMPAIGN = 11, /// For goggle Ad word's campaign
+            ADG_CAPMPAIGN_PADDLE = 12, /// For goggle Ad word's campaign
+
+            //REGULAR_OFFER_UPDATE = 11, // This is a regular build, only difference is REGULAR type build read utm_source and utm_campaign from Params while this from its registry.
+        }
+    }
+}

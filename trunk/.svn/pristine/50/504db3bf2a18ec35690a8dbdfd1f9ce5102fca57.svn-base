@@ -1,0 +1,1468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{34110D8F-A8C3-4A09-99BA-ADE2E6D3314F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>DuplicatePhotosFixer</RootNamespace>
+    <AssemblyName>DuplicatePhotosFixer</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Application.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DuplicatePhotosFixer.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CircularProgressBar, Version=2.8.0.16, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>..\packages\CircularProgressBar.2.8.0.16\lib\net40\CircularProgressBar.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unnoficial.Microsoft.Expression.Drawing.1.0.0\lib\Microsoft.Expression.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WinFormAnimation, Version=1.6.0.4, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>..\packages\WinFormAnimation.1.6.0.4\lib\net40\WinFormAnimation.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App_code\cClientEnum.cs" />
+    <Compile Include="App_code\cGetString.cs" />
+    <Compile Include="App_code\cRegistrySettings.cs" />
+    <Compile Include="App_code\cScanSettings.cs" />
+    <Compile Include="App_code\csMappedDrive.cs" />
+    <Compile Include="App_code\enumClass.cs" />
+    <Compile Include="App_code\RegistryTool.cs" />
+    <Compile Include="App_code\SerializableDictionary.cs" />
+    <Compile Include="cGlobal.cs" />
+    <Compile Include="cGlobalSettings.cs" />
+    <Compile Include="CircularProgressBar.cs" />
+    <Compile Include="ClassDictionary\cExtraSettings.cs" />
+    <Compile Include="ClassDictionary\cFeedBackList.cs" />
+    <Compile Include="ClassDictionary\cGeneralSettings.cs" />
+    <Compile Include="ClassDictionary\cMatchSettings.cs" />
+    <Compile Include="ClassDictionary\cMoveSettings.cs" />
+    <Compile Include="ClassDictionary\cNagSettings.cs" />
+    <Compile Include="ClassDictionary\csDuplicatesGroup.cs" />
+    <Compile Include="ClassDictionary\csExcludedPath.cs" />
+    <Compile Include="ClassDictionary\csFileTypes.cs" />
+    <Compile Include="ClassDictionary\csImageFileInfo.cs" />
+    <Compile Include="ClassDictionary\csPriority.cs" />
+    <Compile Include="ClassDictionary\csScanPaths.cs" />
+    <Compile Include="ClassDictionary\cUserSettings.cs" />
+    <Compile Include="ClassDictionary\ExtensionsData.cs" />
+    <Compile Include="ClassDictionary\FileRecord.cs" />
+    <Compile Include="ClassDictionary\ScanModeData.cs" />
+    <Compile Include="cLogger.cs" />
+    <Compile Include="Communication\ErrorCodes.cs" />
+    <Compile Include="CustomControl\ImageButton.cs" />
+    <Compile Include="CustomExtendClass\FolderSelectDialog.cs" />
+    <Compile Include="CustomExtendClass\Reflector.cs" />
+    <Compile Include="Engine\IgnoreRules.cs" />
+    <Compile Include="Engine\ImageProcessor.cs" />
+    <Compile Include="Engine\MainScanHelper.cs" />
+    <Compile Include="Engine\IScannerWrapper.cs" />
+    <Compile Include="Engine\ScanModes\FileSystem\SystemScanHelper.cs" />
+    <Compile Include="Engine\ScanModes\FileSystem\SystemScanWrapper.cs" />
+    <Compile Include="Engine\ScanPhotos.cs" />
+    <Compile Include="Engine\WinApiScan\FileFunctions.cs" />
+    <Compile Include="Engine\WinApiScan\NativeMethod.cs" />
+    <Compile Include="HelperClasses\cLogger.cs" />
+    <Compile Include="HelperClasses\cSelectFilesFolders.cs" />
+    <Compile Include="HelperClasses\cSerializer.cs" />
+    <Compile Include="HelperClasses\ScannerRules.cs" />
+    <Compile Include="Helpers\csExcludedXmlOperations.cs" />
+    <Compile Include="Helpers\csXmlOperations.cs" />
+    <Compile Include="Models\ucHomeViewModel.cs" />
+    <Compile Include="Models\vmExcludedFolderSettings.cs" />
+    <Compile Include="Models\vmExtraSettings.cs" />
+    <Compile Include="Models\vmFeedBack.cs" />
+    <Compile Include="Models\vmFileFormatSettings.cs" />
+    <Compile Include="Models\vmGeneralSettings.cs" />
+    <Compile Include="Models\vmHomeComparisonMethod.cs" />
+    <Compile Include="Models\vmMoveSettings.cs" />
+    <Compile Include="Models\vmNagThemeSettings.cs" />
+    <Compile Include="Notifier\Notifier.cs" />
+    <Compile Include="UserControls\ucfooterPromoADU.xaml.cs">
+      <DependentUpon>ucfooterPromoADU.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucNagSettings.xaml.cs">
+      <DependentUpon>ucNagSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucpromotionalADU.xaml.cs">
+      <DependentUpon>ucpromotionalADU.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucRecommendedApp.xaml.cs">
+      <DependentUpon>ucRecommendedApp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucResImageViewer.xaml.cs">
+      <DependentUpon>ucResImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmAfterClean.xaml.cs">
+      <DependentUpon>frmAfterClean.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\AppFunctions.cs" />
+    <Compile Include="Helpers\cGloballEnum.cs" />
+    <Compile Include="Helpers\csFileFormats.cs" />
+    <Compile Include="Helpers\csSelectedFiles.cs" />
+    <Compile Include="Langs\cInfRead.cs" />
+    <Compile Include="Langs\cLanguageSettings.cs" />
+    <Compile Include="Langs\cResourceManager.cs" />
+    <Compile Include="Nags\frmLimitedTimeOffer.xaml.cs">
+      <DependentUpon>frmLimitedTimeOffer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\frmTaskbarNotification.xaml.cs">
+      <DependentUpon>frmTaskbarNotification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\frmTrayNagDupsList.xaml.cs">
+      <DependentUpon>frmTrayNagDupsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\frmTrayNagGrabOffer.xaml.cs">
+      <DependentUpon>frmTrayNagGrabOffer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\frmTrayNagOffer.xaml.cs">
+      <DependentUpon>frmTrayNagOffer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\frmTrayOfferFixFiles.xaml.cs">
+      <DependentUpon>frmTrayOfferFixFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagCooldown.xaml.cs">
+      <DependentUpon>nagCooldown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagMessageEmailDuplicateCount.xaml.cs">
+      <DependentUpon>nagMessageEmailDuplicateCount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagMessageEmailNoScanPerform.xaml.cs">
+      <DependentUpon>nagMessageEmailNoScanPerform.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagMessageEmailPlzWait.xaml.cs">
+      <DependentUpon>nagMessageEmailPlzWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagMessageUpgradeNow.xaml.cs">
+      <DependentUpon>nagMessageUpgradeNow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagNewTheamEmail1.xaml.cs">
+      <DependentUpon>nagNewTheamEmail1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagNewTheamEmail2.xaml.cs">
+      <DependentUpon>nagNewTheamEmail2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagNewTheamUpgradeNow.xaml.cs">
+      <DependentUpon>nagNewTheamUpgradeNow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagRequestFreeKey.xaml.cs">
+      <DependentUpon>nagRequestFreeKey.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagTrialExpire.xaml.cs">
+      <DependentUpon>nagTrialExpire.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOfferAPM.xaml.cs">
+      <DependentUpon>nagUpdateOfferAPM.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOfferTp.xaml.cs">
+      <DependentUpon>nagUpdateOfferTp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOfferTSR.xaml.cs">
+      <DependentUpon>nagUpdateOfferTSR.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOfferTweakshot.xaml.cs">
+      <DependentUpon>nagUpdateOfferTweakshot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOffer_New.xaml.cs">
+      <DependentUpon>nagUpdateOffer_New.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagUpdateOffer_VPN.xaml.cs">
+      <DependentUpon>nagUpdateOffer_VPN.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagVistaEmail.xaml.cs">
+      <DependentUpon>nagVistaEmail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nags\nagVistaUpgradeNow.xaml.cs">
+      <DependentUpon>nagVistaUpgradeNow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Selection Assistant\ucFileFormat.xaml.cs">
+      <DependentUpon>ucFileFormat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Selection Assistant\ucFolders.xaml.cs">
+      <DependentUpon>ucFolders.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Selection Assistant\ucProtectedFolders.xaml.cs">
+      <DependentUpon>ucProtectedFolders.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Selection Assistant\ucSelectionPriority.xaml.cs">
+      <DependentUpon>ucSelectionPriority.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucActionCentre.xaml.cs">
+      <DependentUpon>ucActionCentre.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucAfterClean.xaml.cs">
+      <DependentUpon>ucAfterClean.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucAutoMark.xaml.cs">
+      <DependentUpon>ucAutoMark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucChangeSettings.xaml.cs">
+      <DependentUpon>ucChangeSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucClearCache.xaml.cs">
+      <DependentUpon>ucClearCache.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucExcludeSettings.xaml.cs">
+      <DependentUpon>ucExcludeSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucExtraSettings.xaml.cs">
+      <DependentUpon>ucExtraSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucFooter.xaml.cs">
+      <DependentUpon>ucFooter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucHomeFooter.xaml.cs">
+      <DependentUpon>ucHomeFooter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucImageInfo.xaml.cs">
+      <DependentUpon>ucImageInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucMainBoder.xaml.cs">
+      <DependentUpon>ucMainBoder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucOneDayAfterClean.xaml.cs">
+      <DependentUpon>ucOneDayAfterClean.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucRBOffer.xaml.cs">
+      <DependentUpon>ucRBOffer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucResultObjectListView.xaml.cs">
+      <DependentUpon>ucResultObjectListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucResultView.xaml.cs">
+      <DependentUpon>ucResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSettings.xaml.cs">
+      <DependentUpon>ucSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSettingsFileFormat.xaml.cs">
+      <DependentUpon>ucSettingsFileFormat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSettingsGeneral.xaml.cs">
+      <DependentUpon>ucSettingsGeneral.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucHomeComparisonMethod.xaml.cs">
+      <DependentUpon>ucHomeComparisonMethod.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucHomeDragDrop.xaml.cs">
+      <DependentUpon>ucHomeDragDrop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucHomeMain.xaml.cs">
+      <DependentUpon>ucHomeMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSettingsMove.xaml.cs">
+      <DependentUpon>ucSettingsMove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmAmazonFolderView.xaml.cs">
+      <DependentUpon>frmAmazonFolderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmAmazonLogin.xaml.cs">
+      <DependentUpon>frmAmazonLogin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmBoxCloudInput.xaml.cs">
+      <DependentUpon>frmBoxCloudInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmBoxFolderStructure.xaml.cs">
+      <DependentUpon>frmBoxFolderStructure.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmDropBoxFolder.xaml.cs">
+      <DependentUpon>frmDropBoxFolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmDropBoxInput.xaml.cs">
+      <DependentUpon>frmDropBoxInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmGoogleDriveFolder.xaml.cs">
+      <DependentUpon>frmGoogleDriveFolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cloud\frmMessageDriveAuthorize.xaml.cs">
+      <DependentUpon>frmMessageDriveAuthorize.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\cNagDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ControlExtensions.cs" />
+    <Compile Include="Views\cTaskbar.cs" />
+    <Compile Include="Views\cWin32APIs.cs" />
+    <Compile Include="Views\DrawingControl.cs" />
+    <Compile Include="Views\frmAboutUs.xaml.cs">
+      <DependentUpon>frmAboutUs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmAccountConfirm.xaml.cs">
+      <DependentUpon>frmAccountConfirm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmAfterPhotosFound.xaml.cs">
+      <DependentUpon>frmAfterPhotosFound.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmAfterScan.xaml.cs">
+      <DependentUpon>frmAfterScan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmCustomConfirmationBox.xaml.cs">
+      <DependentUpon>frmCustomConfirmationBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmCustomDialog.xaml.cs">
+      <DependentUpon>frmCustomDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmExitNag.xaml.cs">
+      <DependentUpon>frmExitNag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmFeedBack.xaml.cs">
+      <DependentUpon>frmFeedBack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucResultImageViewer.xaml.cs">
+      <DependentUpon>ucResultImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmProcessing.xaml.cs">
+      <DependentUpon>frmProcessing.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmProgress.xaml.cs">
+      <DependentUpon>frmProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmRegistrationDPF.xaml.cs">
+      <DependentUpon>frmRegistrationDPF.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmScanProgress.xaml.cs">
+      <DependentUpon>frmScanProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmSelectionAssistant.xaml.cs">
+      <DependentUpon>frmSelectionAssistant.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmSettings.xaml.cs">
+      <DependentUpon>frmSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmShowProgress.xaml.cs">
+      <DependentUpon>frmShowProgress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmThemeMessageBox.xaml.cs">
+      <DependentUpon>frmThemeMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmUpdateNotification.xaml.cs">
+      <DependentUpon>frmUpdateNotification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\frmUpdator.xaml.cs">
+      <DependentUpon>frmUpdator.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Themes\GenericTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\LightTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucfooterPromoADU.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucNagSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucpromotionalADU.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucRecommendedApp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucResImageViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmAfterClean.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Nags\frmLimitedTimeOffer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\frmTaskbarNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\frmTrayNagDupsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\frmTrayNagGrabOffer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\frmTrayNagOffer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\frmTrayOfferFixFiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagCooldown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagMessageEmailDuplicateCount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagMessageEmailNoScanPerform.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagMessageEmailPlzWait.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagMessageUpgradeNow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagNewTheamEmail1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagNewTheamEmail2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagNewTheamUpgradeNow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagRequestFreeKey.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagTrialExpire.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOfferAPM.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOfferTp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOfferTSR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOfferTweakshot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOffer_New.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagUpdateOffer_VPN.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagVistaEmail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nags\nagVistaUpgradeNow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Selection Assistant\ucFileFormat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Selection Assistant\ucFolders.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Selection Assistant\ucProtectedFolders.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Selection Assistant\ucSelectionPriority.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucActionCentre.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucAfterClean.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucAutoMark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucChangeSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucClearCache.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucExcludeSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucExtraSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucFooter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucHomeFooter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucImageInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucMainBoder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\ucOneDayAfterClean.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucRBOffer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucResultObjectListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSettingsFileFormat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSettingsGeneral.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucHomeComparisonMethod.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucHomeDragDrop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucHomeMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSettingsMove.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Cloud\frmAmazonFolderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmAmazonLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmBoxCloudInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmBoxFolderStructure.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmDropBoxFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmDropBoxInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmGoogleDriveFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cloud\frmMessageDriveAuthorize.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmAboutUs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmAccountConfirm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmAfterPhotosFound.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmAfterScan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmCustomConfirmationBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmCustomDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmExitNag.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmFeedBack.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucResultImageViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmProcessing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmRegistrationDPF.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmScanProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmSelectionAssistant.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmShowProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmThemeMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmUpdateNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\frmUpdator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="lang-strings\Chinese_dpf_zh-cn.ini" />
+    <None Include="lang-strings\Danish_dpf_da.ini" />
+    <None Include="lang-strings\Dutch_dpf_nl.ini" />
+    <None Include="lang-strings\eng_dpf_en.ini" />
+    <None Include="lang-strings\Finnish_dpf_fi.ini" />
+    <None Include="lang-strings\French_dpf_fr.ini" />
+    <None Include="lang-strings\German_dpf_de.ini" />
+    <None Include="lang-strings\Italian_dpf_it.ini" />
+    <None Include="lang-strings\Japanese_dpf_ja.ini" />
+    <None Include="lang-strings\Norwegian_dpf_no.ini" />
+    <None Include="lang-strings\portuguese_dpf_PT-BR.ini" />
+    <None Include="lang-strings\russian_dpf_ru.ini" />
+    <None Include="lang-strings\spanish_dpf_es.ini" />
+    <None Include="lang-strings\swedish_dpf_sv.ini" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dropdown_arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\photos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Application.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\drive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Restore_btn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\contact-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cache_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feedback-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\help_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\registration_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\update_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\setting_icon_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\setting_ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_separator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\action-center-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_btn_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_btn_clicked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_btn_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\max_btn_clicked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\max_btn_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\max_btn_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mini_btn_clicked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mini_btn_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mini_btn_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\btn_pic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\btn_folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\Compare\campare7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\auto_mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\auto_mark_over.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mark_over.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\image_view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\image_view_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\selection_assistant_A_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\selection_assistant_A_icon_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\selection_assistant_B_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\selection_assistant_B_icon_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alert_icon_trans.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pipe-devider.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\seprator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\detailed_view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\detailed_view_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\back_btn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\back_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\boxCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\btn_google_dark_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\btn_google_signin_dark_normal_web.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dpf-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dpf-256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\driveadd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\driveclick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\drivefill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\driveicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dropbox_img.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Dropbox_Windows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Lightroom_15x15.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\nag_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\picasa15x15.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\po_logo_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alert_trial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\orange-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\right-backup-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\right_backup.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\right-backup-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_-right-mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info_bottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\back_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\play_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\down_arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_btn_flat.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mbc_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mscp_logo_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_btn_modified.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\device_list.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dpf_tsr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error_outdate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\scanBar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dpf_update_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mscp_logo_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\duplicate_info_box.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\grab_close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\corner_50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red_counts_middle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dff-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\clock_cooldown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\alert_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\popup_photo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\yellow_gradient_middle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vista_gradient.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\app_icon_vista.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow_below.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\limited_time_offer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue_right_mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dpf_updateofr_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\closevpn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vpn_graphics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\limited-time-offer-clock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vpn-app-screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\install-now-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tweakshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\nag_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\close_tsr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\graphic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tsr-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrowvpn-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\button-orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\apm_ss.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\apm_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\apm_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\en.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\da.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\de.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\du.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\es.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\it.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ja.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\no.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pt-br.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ru.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Application-0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about_systweak_logo_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\top_left_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Application.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Top-sub-header.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bottom_mid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\detailed_view_ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\image_view_ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\up_maxSize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\down_minsize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Top-sub-header-vertical.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrowDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrowUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\systweak_logo_about.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HelpingFiles\duplicate_number_bg_orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\duplicate_number_bg_orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\photo-scan-complete-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\reset_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_contact.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_register_key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_feedabck.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_clear_cache.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_check_updates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_about.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\money-back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\checkmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\adu-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\greenbullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lock_exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feature_one_click_scan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feature_auto_mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feature_recover_storage_space.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feature_clean_duplicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\feature_clean_duplicate %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\adu-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\divider-line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\disk_space.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\remaining_photos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cross_lt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bullet_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn_d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn_h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\green_btn_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tsr-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vpn_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flags_strip.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\backup_log_arrow_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\action_center.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Flags\Danske.png" />
+    <Resource Include="Resources\Flags\Deutsch.png" />
+    <Resource Include="Resources\Flags\English.png" />
+    <Resource Include="Resources\Flags\Finnish.png" />
+    <Resource Include="Resources\Flags\Francais.png" />
+    <Resource Include="Resources\Flags\Italiano.png" />
+    <Resource Include="Resources\Flags\Japanese.png" />
+    <Resource Include="Resources\Flags\Nederlands.png" />
+    <Resource Include="Resources\Flags\Norsk.png" />
+    <Resource Include="Resources\Flags\Portugues.png" />
+    <Resource Include="Resources\Flags\Russian.png" />
+    <Resource Include="Resources\Flags\Spanish.png" />
+    <Resource Include="Resources\Flags\Swedish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrowDown1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrowUp1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\campare\campare.png" />
+    <Resource Include="Resources\campare\campare1.png" />
+    <Resource Include="Resources\campare\campare2.png" />
+    <Resource Include="Resources\campare\campare3.png" />
+    <Resource Include="Resources\campare\campare4.png" />
+    <Resource Include="Resources\campare\campare5.png" />
+    <Resource Include="Resources\campare\campare6.png" />
+    <Resource Include="Resources\campare\campare7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_video_lt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\menu_help_lt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\reset_icon_dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about_systweak_logo_sm1.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)lang-strings\*.*"  "$(TargetDir)*.*" /y</PostBuildEvent>
+  </PropertyGroup>
+</Project>

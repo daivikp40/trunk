@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer.Models;
+
+namespace DuplicatePhotosFixer.Views
+{
+    /// <summary>
+    /// Interaction logic for frmSettings.xaml
+    /// </summary>
+    public partial class frmSettings : Window
+    {
+       
+        public frmSettings()
+        {
+            if (App.oMainReference.objGeneral == null)
+                App.oMainReference.objGeneral = new vmGeneralSettings();
+            this.DataContext = App.oMainReference.objGeneral;
+
+            InitializeComponent();
+            Init();
+          
+        }
+
+        void Init()
+        {
+            UpdateUIData();
+        }
+
+       
+       
+      public void UpdateUIData()
+        {
+            try
+            {
+                App.oMainReference.objGeneral.SetUIPropertiesValue();
+                App.oMainReference.objFileFormat.SetUIPropertiesValue();
+                App.oMainReference.objExcluded.LoadDefaultValue();
+                App.oMainReference.objExtra.SetUIPropertiesValue();
+                App.oMainReference.objMove.SetUIPropertiesValue();
+                return;
+            }
+            catch (Exception)
+            {
+
+               
+            }
+        }
+
+     public bool ResetDefaultSettings()
+        {
+            bool bReset = false;
+            try
+            {
+                App.oMainReference.objGeneral.LoadGeneralMethodSettings(true);
+                App.oMainReference.objFileFormat.LoadFileFormatSettings(true);
+                App.oMainReference.objExtra.LoadExtraSettings(true);
+                App.oMainReference.objMove.LoadMoveSettings(true);
+
+                bReset = true;
+            }
+            catch(Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmSettings :: ResetDefaultSettings :", ex);
+                bReset = false;
+            }
+          
+
+            return bReset;
+
+        }
+        private void btnReset_Click_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ResetDefaultSettings())
+                {
+                    UpdateUIData();
+                    App.oMainReference.showMessage(cResourceManager.LoadString("IDS_DEFAULT_SETTINGS_APPLICATED"), "");
+                }
+                
+                   // LoadSavedSettings();
+                 
+                
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void close_btn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                this.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("btnClose::", ex);
+            }
+
+        }
+
+
+    }
+}

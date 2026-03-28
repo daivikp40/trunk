@@ -1,0 +1,20 @@
+﻿DuplicatePhotosFixer
+
+
+winexe
+C#
+.cs
+D:\MyProjects\DPF\DuplicatePhotosFixerPro_WPF\trunk\DuplicatePhotosFixer\obj\Debug\
+DuplicatePhotosFixer
+none
+false
+TRACE;DEBUG;ROTATE_FLIPPED_CHECK;
+
+91-1478865671
+
+213-321306291
+88-1833739427
+App.xaml;Nags\frmInstallNowUtilities.xaml;Themes\GenericTheme.xaml;Themes\LightTheme.xaml;UserControls\CircularProgressBar.xaml;UserControls\ucfooterPromoADU.xaml;UserControls\ucNagSettings.xaml;UserControls\ucpromotionalADU.xaml;UserControls\ucResImageViewer.xaml;Views\frmAfterClean.xaml;MainWindow.xaml;Nags\frmLimitedTimeOffer.xaml;Nags\frmTaskbarNotification.xaml;Nags\frmTrayNagDupsList.xaml;Nags\frmTrayNagGrabOffer.xaml;Nags\frmTrayNagOffer.xaml;Nags\frmTrayOfferFixFiles.xaml;Nags\nagCooldown.xaml;Nags\nagMessageEmailDuplicateCount.xaml;Nags\nagMessageEmailNoScanPerform.xaml;Nags\nagMessageEmailPlzWait.xaml;Nags\nagMessageUpgradeNow.xaml;Nags\nagNewTheamEmail1.xaml;Nags\nagNewTheamEmail2.xaml;Nags\nagNewTheamUpgradeNow.xaml;Nags\nagRequestFreeKey.xaml;Nags\nagTrialExpire.xaml;Nags\nagUpdateOfferAPM.xaml;Nags\nagUpdateOfferTp.xaml;Nags\nagUpdateOfferTSR.xaml;Nags\nagUpdateOfferTweakshot.xaml;Nags\nagUpdateOffer_New.xaml;Nags\nagUpdateOffer_VPN.xaml;Nags\nagVistaEmail.xaml;Nags\nagVistaUpgradeNow.xaml;Themes\DarkTheme.xaml;UserControls\Selection Assistant\ucFileFormat.xaml;UserControls\Selection Assistant\ucFolders.xaml;UserControls\Selection Assistant\ucProtectedFolders.xaml;UserControls\Selection Assistant\ucSelectionPriority.xaml;UserControls\ucActionCentre.xaml;UserControls\ucAfterClean.xaml;UserControls\ucAutoMark.xaml;UserControls\ucChangeSettings.xaml;UserControls\ucClearCache.xaml;UserControls\ucExcludeSettings.xaml;UserControls\ucExtraSettings.xaml;UserControls\ucFooter.xaml;UserControls\ucHomeFooter.xaml;UserControls\ucImageInfo.xaml;UserControls\ucMainBoder.xaml;UserControls\ucOneDayAfterClean.xaml;UserControls\ucRBOffer.xaml;UserControls\ucResultObjectListView.xaml;UserControls\ucResultView.xaml;UserControls\ucSettings.xaml;UserControls\ucSettingsFileFormat.xaml;UserControls\ucSettingsGeneral.xaml;UserControls\ucHomeComparisonMethod.xaml;UserControls\ucHomeDragDrop.xaml;UserControls\ucHomeMain.xaml;UserControls\ucSettingsMove.xaml;Views\Cloud\frmAmazonFolderView.xaml;Views\Cloud\frmAmazonLogin.xaml;Views\Cloud\frmBoxCloudInput.xaml;Views\Cloud\frmBoxFolderStructure.xaml;Views\Cloud\frmDropBoxFolder.xaml;Views\Cloud\frmDropBoxInput.xaml;Views\Cloud\frmGoogleDriveFolder.xaml;Views\Cloud\frmMessageDriveAuthorize.xaml;Views\frmAboutUs.xaml;Views\frmAccountConfirm.xaml;Views\frmAfterPhotosFound.xaml;Views\frmAfterScan.xaml;Views\frmCustomConfirmationBox.xaml;Views\frmCustomDialog.xaml;Views\frmExitNag.xaml;Views\frmFeedBack.xaml;UserControls\ucResultImageViewer.xaml;Views\frmInstallUtilities.xaml;Views\frmProcessing.xaml;Views\frmProgress.xaml;Views\frmRegistrationDPF.xaml;Views\frmScanProgress.xaml;Views\frmSelectionAssistant.xaml;Views\frmSettings.xaml;Views\frmShowProgress.xaml;Views\frmThemeMessageBox.xaml;Views\frmUpdateNotification.xaml;Views\frmUpdator.xaml;Views\frmYTTutorial.xaml;
+
+False
+

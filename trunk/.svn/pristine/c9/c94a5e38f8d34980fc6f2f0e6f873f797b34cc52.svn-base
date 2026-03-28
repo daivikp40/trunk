@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer.Models;
+
+namespace DuplicatePhotosFixer.Views
+{
+    /// <summary>
+    /// Interaction logic for frmFeedBack.xaml
+    /// </summary>
+    public partial class frmFeedBack : Window
+    {
+        public frmFeedBack()
+        {
+
+            InitializeComponent();
+            PreInit();
+            Init();
+        }
+
+        void PreInit()
+        {
+            try
+            {
+                if (App.oMainReference.objFeedBack == null)
+                    App.oMainReference.objFeedBack = new vmFeedBack();
+                this.DataContext = App.oMainReference.objFeedBack;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmFeedBck:: PreInit: ", ex);
+            }
+        }
+
+        void Init()
+        {
+            try
+            {
+                LoadStrings();
+                UpdateData();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmFeedBack:: Init: ", ex);
+            }
+        }
+
+        private void LoadStrings()
+        {
+            
+        }
+        void UpdateData()
+        {
+            try
+            {
+                
+              
+                if (cboFeedBacktype.SelectedIndex < 0)
+                    cboFeedBacktype.SelectedIndex = 0;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+       
+
+       
+
+        private void close_btn_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                this.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+    }
+}

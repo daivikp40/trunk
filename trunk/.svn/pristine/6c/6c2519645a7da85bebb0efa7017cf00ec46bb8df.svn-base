@@ -1,0 +1,228 @@
+﻿using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.HelperClasses;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DuplicatePhotosFixer.Models
+{
+    class vmHomeComparisonMethod
+    {
+
+        public vmHomeComparisonMethod()
+        {
+            LoadScanMethodSettings();
+        }
+
+        public void LoadScanMethodSettings(bool bLoadDefaultFocefully = false)
+        {
+            try
+            {
+                if (bLoadDefaultFocefully)
+                {
+                    LoadDefaultSettings();
+                    return;
+                }
+
+                LoadSavedSettings();
+
+                if (cGlobalSettings.MatchSettingsData == null)
+                    LoadScanMethodSettings(true);
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmHomeComparisonMethod:: LoadScanMethodSettings: ", ex);
+            }
+        }
+
+        void LoadDefaultSettings()
+        {
+
+            cGlobalSettings.MatchSettingsData = new ClassDictionary.cMatchSettings()
+            {
+                bConsiderFlipped = cMatchSettings.DbCondiserFlipped,
+                bConsiderGPS = cMatchSettings.DbConsiderGPS,
+                bConsiderRotated = cMatchSettings.DbConsiderRotated,
+                bConsiderTimeInterval = cMatchSettings.DbConsiderTimeInterval,
+                BitmapSize = cMatchSettings.DBitmapSize,
+                GPS = cMatchSettings.DGPS,
+                MatchLevel = cMatchSettings.DMatchLevel,
+                MatchMethod = cMatchSettings.DMatchMethod,
+                TimeInterval = cMatchSettings.DTimeInterval,
+            };
+        }
+
+        void LoadSavedSettings()
+        {
+            try
+            {
+                if (File.Exists(cGlobalSettings.xmlMatchSettings))
+                {
+                    /// Desearlize the strings
+                    /// Fill MatchSettingsData
+                    /// 
+                    cGlobalSettings.MatchSettingsData = cSerializer.DeSerializeObject<cMatchSettings>(cGlobalSettings.xmlMatchSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void SaveMatchSettings()
+        {
+            try
+            {
+                /// Save cGlobalSettings.MatchSettingsData in xml file 
+                /// 
+                cSerializer.SerializeToXML<cMatchSettings>(cGlobalSettings.MatchSettingsData, cGlobalSettings.xmlMatchSettings);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        public static uint GetTimeInterval()
+        {
+            return GetTimeIntervalEx(cGlobalSettings.MatchSettingsData.TimeInterval);
+        }
+
+
+        public static uint GetTimeIntervalEx(enumClass.eTimeInterval timeInterval)
+        {
+            switch (timeInterval)
+            {
+                case enumClass.eTimeInterval._24_hours_and_less:
+                    return 86400; // 60 * 60 * 24
+                case enumClass.eTimeInterval._12_hours_and_less:
+                    return 43200;
+                case enumClass.eTimeInterval._6_hours_and_less:
+                    return 21600;
+                case enumClass.eTimeInterval._3_hours_and_less:
+                    return 10800;
+                case enumClass.eTimeInterval._2_hours_and_less:
+                    return 7200;
+                case enumClass.eTimeInterval._1_hours_and_less:
+                    return 3600;
+                case enumClass.eTimeInterval._30_minutes_and_less:
+                    return 1800;
+                case enumClass.eTimeInterval._10_minutes_and_less:
+                    return 600;
+                case enumClass.eTimeInterval._5_minutes_and_less:
+                    return 300;
+                case enumClass.eTimeInterval._3_minutes_and_less:
+                    return 180;
+                case enumClass.eTimeInterval._2_minutes_and_less:
+                    return 120;
+                case enumClass.eTimeInterval._1_minutes_and_less:
+                    return 60;
+                case enumClass.eTimeInterval._10_seconds_and_less:
+                    return 10;
+                case enumClass.eTimeInterval._5_seconds_and_less:
+                    return 5;
+                case enumClass.eTimeInterval._3_seconds_and_less:
+                    return 3;
+                case enumClass.eTimeInterval._2_seconds_and_less:
+                    return 2;
+                case enumClass.eTimeInterval._1_second_and_less:
+                    return 1;
+                case enumClass.eTimeInterval._30_seconds_and_less:
+                default:
+                    return 30;
+            }
+        }
+
+        public static uint GetGPS()
+        {
+            return GetGPSEx(cGlobalSettings.MatchSettingsData.GPS);
+        }
+        public static uint GetGPSEx(enumClass.eGPS gps)
+        {
+            switch (gps)
+            {
+                case enumClass.eGPS._1_Meter:
+                    return 1;
+                case enumClass.eGPS._2_Meters:
+                    return 2;
+                case enumClass.eGPS._10_Meters:
+                    return 10;
+                case enumClass.eGPS._20_Meters:
+                    return 20;
+                case enumClass.eGPS._50_Meters:
+                    return 50;
+                case enumClass.eGPS._100_Meters:
+                    return 100;
+                case enumClass.eGPS._5_Meters:
+                default:
+                    return 5;
+            }
+        }
+
+        public static uint GetBitmapSize()
+        {
+            return GetBitmapSizeEx(cGlobalSettings.MatchSettingsData.BitmapSize);
+        }
+
+        public static uint GetBitmapSizeEx(enumClass.eBitmapSize bmpSize)
+        {
+            switch (bmpSize)
+            {
+                case enumClass.eBitmapSize._48x48_pixels:
+                    return 48;
+                case enumClass.eBitmapSize._56x56_pixels:
+                    return 56;
+                case enumClass.eBitmapSize._72x72_pixels:
+                    return 72;
+                case enumClass.eBitmapSize._80x80_pixels:
+                    return 80;
+                case enumClass.eBitmapSize._88x88_pixels:
+                    return 88;
+                case enumClass.eBitmapSize._96x96_pixels:
+                    return 96;
+                case enumClass.eBitmapSize._64x64_pixels:
+                default:
+                    return 64;
+            }
+
+        }
+
+        public static float GetMatchingLevel()
+        {
+            return GetMatchingLevelEx(cGlobalSettings.MatchSettingsData.MatchLevel);
+        }
+        public static float GetMatchingLevelEx(enumClass.eMatchingLevel matchingLevel)
+        {
+            switch (matchingLevel)
+            {
+                case enumClass.eMatchingLevel._85:
+                    return 0.85f;
+                case enumClass.eMatchingLevel._88:
+                    return 0.88f;
+                case enumClass.eMatchingLevel._90:
+                    return 0.90f;
+                case enumClass.eMatchingLevel._92:
+                    return 0.92f;
+                case enumClass.eMatchingLevel._94:
+                    return 0.94f;
+                case enumClass.eMatchingLevel._96:
+                    return 0.96f;
+                case enumClass.eMatchingLevel._98:
+                    return 0.98f;
+                case enumClass.eMatchingLevel._100:
+                default:
+                    return 0.99f;
+            }
+        }
+
+
+
+
+    }
+}

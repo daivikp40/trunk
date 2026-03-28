@@ -1,0 +1,117 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Nags.frmTaskbarNotification"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Nags"
+        xmlns:cust="clr-namespace:DuplicatePhotosFixer.CustomControl"
+        mc:Ignorable="d"
+        Title="frmTaskbarNotification" Height="335" Width="297" WindowStyle="None" AllowsTransparency="False"
+        Background="{DynamicResource cl_bg_notifyNag}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"  >
+            <DockPanel>
+                <cust:ImageButton
+                            x:Name="close_btn"
+                            Width="10"
+                            Height="10"
+                            DockPanel.Dock="Right"
+                            Margin="10 0 10 0"
+                            Style="{DynamicResource imageButton}"
+                            Image="{DynamicResource img_close_light}"
+                            HoverImage="{DynamicResource img_close_light}"
+                            SelectedImage="{DynamicResource img_close_light}" />
+                <TextBlock x:Name="lbl_head"
+                           VerticalAlignment="Center"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource cl_fg_primary}"
+                           Margin="3 0 3 0">
+                    Attention
+                </TextBlock>
+            </DockPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Background="{DynamicResource cl_fg_primary}" Margin="0 0 0 10">
+            <StackPanel >
+                <TextBlock x:Name="lbl_attention"
+                       Margin="10"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource cl_fg_notifyNagHeader}">
+                Your PC requires Attention
+                </TextBlock>
+                
+                <Border BorderBrush="{DynamicResource cl_br_notifyNag}" BorderThickness="1" Margin="10">
+                <DockPanel Margin="10 15"  >
+                    <Image x:Name="alert_icon" Source="{DynamicResource img_Alert}" Stretch="None"/>
+                        <StackPanel Margin="10 0">
+                        <DockPanel Margin="0 5" >
+                                <TextBlock x:Name="lbl_dupsCount" 
+                                       Padding="4 0"
+                                       Foreground="{DynamicResource cl_br_notifyNag}"
+                                       FontSize="14">
+                            {0} 
+                            </TextBlock>
+                            <TextBlock x:Name="lbl_duplicates" 
+                                       FontSize="14"
+                                       Foreground="{DynamicResource cl_fg_notifyNag}">
+                            duplicate photos found
+                            </TextBlock>
+                        </DockPanel>
+
+                        <DockPanel>
+                            <TextBlock x:Name="txt_space"
+                                        Padding="4 0"
+                                         FontSize="14"
+                                        Foreground="{DynamicResource cl_br_notifyNag}">
+                            {0}
+                            </TextBlock>
+                            <TextBlock x:Name="lbl_space"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource cl_fg_notifyNag}" >
+                            MB space to be saved
+                            </TextBlock>
+                        </DockPanel>
+
+                    </StackPanel>
+                </DockPanel>
+                </Border>
+
+                <DockPanel Margin="20 0">
+                    <Image x:Name="img_green_tick" Source="{DynamicResource img_green_tick}" 
+                           
+                           Width="20"
+                           Height="20"
+                         />
+                    <TextBlock x:Name="lbl_removeAll" Text="Remove All Duplicate Photos"
+                               Padding="10 0 0 0"
+                               
+                               FontWeight="Bold"/>
+                </DockPanel>
+
+                <TextBlock x:Name="lbl_upgradeNow" Foreground="{DynamicResource cl_fg_notifyNag}"
+                           TextWrapping="Wrap" Padding="4 0 ">
+                    Upgrade Now to remove all duplicate photos from your PC and recover tons of space
+                </TextBlock>
+
+                <DockPanel Margin="0 5">
+                    <StackPanel HorizontalAlignment="Left" Margin="10 0">
+                        <Button x:Name="btn_upgradeNow" Style="{DynamicResource stylGreenBtn}" Content="Upgrade Now"
+                                Width="150" Height="32" />
+
+                        <Button x:Name="llink_haveKey" Style="{DynamicResource link_btn}"  Margin="0 2 0 0" BorderBrush="Transparent"                             
+                                Content=" I have a license code" Foreground="{DynamicResource cl_fg_grnlnkbtn}"/>
+                    </StackPanel>
+                    <Image DockPanel.Dock="Right" x:Name="img_mbg" Source="{DynamicResource img_mb }" Stretch="None"/>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+        
+        
+    </Grid>
+</Window>

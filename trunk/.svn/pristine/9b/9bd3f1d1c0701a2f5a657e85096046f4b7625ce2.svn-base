@@ -1,0 +1,281 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DuplicatePhotosFixer.App_Code;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.CustomExtendClass;
+using DuplicatePhotosFixer.HelperClasses;
+using DuplicatePhotosFixer.UserControls;
+using Microsoft.Win32;
+
+namespace DuplicatePhotosFixer.Models
+{
+  public  class vmMoveSettings : INotifyPropertyChanged
+    {
+        public ucSettingsMove parentControl { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+
+        bool _bMoveToRecycleBin = true;
+      
+        public bool bMoveToRecycleBin
+        {
+            get
+            {
+                return _bMoveToRecycleBin;
+            }
+            set
+            {
+                if (_bMoveToRecycleBin != value)
+                {
+                    _bMoveToRecycleBin = value;
+                    cGlobalSettings.MoveSettings.DbMoveToRecycle = value;
+                    SaveMoveSettings();
+                    OnPropertyChanged(nameof(bMoveToRecycleBin));
+
+                    // Uncheck the other radio button
+                    bMoveToLocation = !value;
+                }
+
+            }
+        }
+
+        bool _bMoveToLocation = false;
+        public bool bMoveToLocation
+        {
+            get
+            {
+                return _bMoveToLocation;
+            }
+            set
+            {
+                if (_bMoveToLocation != value)
+                {
+                    _bMoveToLocation = value;
+                    cGlobalSettings.MoveSettings.DbMoveToLocation = value;
+                    OnPropertyChanged(nameof(bMoveToLocation));
+                    SaveMoveSettings();
+
+                    // Uncheck the other radio button
+                    bMoveToRecycleBin = !value;
+                }
+
+            }
+        }
+
+        string _bLocationPath;
+
+       
+        public string bLocationPath
+        {
+            get
+            {
+                string strLoc = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeletedPhotos");
+
+                try
+                {
+                    strLoc = Convert.ToString(GetUserAppDataRegistryValue(cRegistrySettings.REGSTR_MOVE_LOCATION, ""));
+
+                    if (string.IsNullOrEmpty(strLoc))
+                    {
+                        strLoc = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeletedPhotos");
+                    }
+                    _bLocationPath = strLoc;
+
+                    /*if (Directory.Exists(strLoc))
+                    {
+                        return strLoc;
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(strLoc);
+                    }
+                    if (Directory.Exists(strLoc))
+                    {
+                        return strLoc;
+                    }
+                    else
+                    {
+                        strLoc = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeletedPhotos");
+                        strMoveLocation = strLoc;
+                        return strMoveLocation;
+                    }*/
+                }
+                catch
+                {
+                    strLoc = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DeletedPhotos");
+                    _bLocationPath = strLoc;
+                }
+                return strLoc;
+            }
+            set
+            {
+                
+                SetUserAppDataRegistryValue(cRegistrySettings.REGSTR_MOVE_LOCATION, value, RegistryValueKind.String);
+                cGlobalSettings.MoveSettings.DbLocationPath = _bLocationPath;
+                SaveMoveSettings();
+                OnPropertyChanged("bLocationPath");
+
+            }
+        }
+       
+
+        public vmMoveSettings()
+        {
+            LoadMoveSettings();
+        }
+
+        public void SetUIPropertiesValue()
+        {
+            if (cGlobalSettings.MoveSettings == null)
+                LoadMoveSettings();
+
+            bMoveToLocation = cGlobalSettings.MoveSettings.DbMoveToLocation;
+            bMoveToRecycleBin = cGlobalSettings.MoveSettings.DbMoveToRecycle;
+            bLocationPath = cGlobalSettings.MoveSettings.DbLocationPath;
+
+
+        }
+
+        public void LoadMoveSettings(bool bLoadDefaultFocefully = false)
+        {
+            try
+            {
+                if (bLoadDefaultFocefully)
+                {
+                    LoadDefaultSettings();
+                    return;
+                }
+                LoadSavedSettings();
+
+                if (cGlobalSettings.MoveSettings == null)
+                    LoadMoveSettings(true);
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmExtraSettings:: LoadExtraSettings: ", ex);
+            }
+        }
+
+        void LoadDefaultSettings()
+        {
+            try
+            {
+                if(cGlobalSettings.MoveSettings == null)
+                {
+                    cGlobalSettings.MoveSettings = new cMoveSettings();
+                }
+                cGlobalSettings.MoveSettings = new cMoveSettings()
+                {
+                    DbMoveToLocation = cMoveSettings.bDMoveToLocation,
+                    DbMoveToRecycle = cMoveSettings.bDMoveToRecycle,
+                    DbLocationPath = cGlobalSettings.MoveSettings.DbLocationPath
+                };
+
+            }
+
+
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("vmMoveSettings:: LoadDefaultSettings: ", ex);
+            }
+        }
+
+        void LoadSavedSettings()
+        {
+            try
+            {
+                if (File.Exists(cGlobalSettings.xmlMoveSettings))
+                {
+                    /// Desearlize the strings
+                    /// Fill SettingsData
+                    /// 
+                    cGlobalSettings.MoveSettings = cSerializer.DeSerializeObject<cMoveSettings>(cGlobalSettings.xmlMoveSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void SaveMoveSettings()
+        {
+            try
+            {
+                /// Save cGlobalSettings.MoveSettingsData in xml file 
+                /// 
+                cSerializer.SerializeToXML<cMoveSettings>(cGlobalSettings.MoveSettings, cGlobalSettings.xmlMoveSettings);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void BrowseLocation()
+        {
+            try
+            {
+                var fsd = new FolderSelectDialog();
+                fsd.Title = cResourceManager.LoadString("DPF_HOME_UC_CUSTOM_FOLDER_DIALOG_TITLE");
+                //fsd.InitialDirectory = @"c:\";
+                if (fsd.ShowDialog())
+                {
+                    bLocationPath = fsd.FileName;
+                    cGlobalSettings.MoveSettings.DbLocationPath = bLocationPath;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
+
+        public static object GetUserAppDataRegistryValue(string name, object defaultValue)
+        {
+            return Registry.GetValue(cGlobalSettings.VersionIndependentRegKey, name, defaultValue) ?? defaultValue;
+        }
+
+        public static void SetUserAppDataRegistryValue(string name, object value, RegistryValueKind kind)
+        {
+            if (Registry.CurrentUser.OpenSubKey(VersionIndependentRegKeyNoHive) == null)
+            {
+                Registry.CurrentUser.CreateSubKey(VersionIndependentRegKeyNoHive);
+            }
+            Registry.SetValue(cGlobalSettings.VersionIndependentRegKey, name, value, kind) ;
+        }
+        public static string VersionIndependentRegKeyNoHive
+        {
+            get
+            {
+                string versionDependent = System.Windows.Forms.Application.UserAppDataRegistry.Name;
+                string versionIndependent =
+                       versionDependent.Substring(0, versionDependent.LastIndexOf("\\"));
+
+                versionIndependent = versionIndependent.Substring(versionIndependent.IndexOf("\\") + 1);
+
+                // versionIndependent = string.Format("{0}\\{1}", versionIndependent, cGlobalSettings.nUserMachineId);
+
+                return versionIndependent;
+            }
+        }
+
+
+    }
+}

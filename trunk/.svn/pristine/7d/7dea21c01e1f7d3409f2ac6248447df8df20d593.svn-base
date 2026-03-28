@@ -1,0 +1,168 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Permissions;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer.Helpers;
+using static DuplicatePhotosFixer.Helper.cTrackingParameters;
+
+
+namespace DuplicatePhotosFixer.Views
+{
+    /// <summary>
+    /// Interaction logic for frmYTTutorial.xaml
+    /// </summary>
+    /// 
+
+    [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    [System.Runtime.InteropServices.ComVisibleAttribute(true)]
+
+    public partial class frmYTTutorial : Window
+    {
+
+        string _sUrl { get; set; }
+
+        public bool canReleasecapture = true;
+        public IntPtr BaseHandle = IntPtr.Zero;
+
+
+       
+        public frmYTTutorial(string sUrl)
+        {
+           
+
+            InitializeComponent();
+           // BaseHandle = this.Handle;
+            _sUrl = sUrl;
+          
+            //this.Text = cGlobalSettings.GetProductName();
+            //webBrowserOfferADU.AllowWebBrowserDrop = false;
+            //webBrowserOfferADU.IsWebBrowserContextMenuEnabled = true;
+            //webBrowserOfferADU.WebBrowserShortcutsEnabled = false;
+            webBrowserOfferADU.ObjectForScripting = this;
+            //webBrowserOfferADU.ScriptErrorsSuppressed = true;
+            //webBrowserOfferADU.Document += new WebBrowserDocumentCompletedEventHandler(webBrowserOfferADU_DocumentCompleted);
+            //webBrowserOfferADU.DocumentText = "<html><body style='background-color:Black'></body></html>";
+            App.oMainReference.FireEventTrackingPixelInThread("{0}{1}", eUTM_BTN_TYPE.FrmWatchVideo.ToString(), "-Show");
+
+        }
+
+        public void CloseMain()
+        {
+            try
+            {
+                //App.oMainReference.FireEventTrackingPixelInThread("{0}{1}", eUTM_BTN_TYPE.AfterUpdateADUOfferShow_close_fifteen.ToString(), "-aduoffer");
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmUpdateOffer_ADU:: CloseMain: ", ex);
+                //objUtils.WriteToFile(string.Format("{0}|CloseMain()|Error:{1}", this.Name, ex.Message));
+            }
+        }
+
+        
+       
+        int counter = 0;
+
+        void ValidateConnection()
+        {
+            try
+            {
+                if (!AppFunctions.isInternetConnected())
+                {
+                    if (counter <= 0)
+                    {
+                        this.UIThread(() =>
+                        {
+                            App.oMainReference.showMessage("", cResourceManager.LoadString("IDS_ERROR_CONNECTING_INTERNET"));
+                            CloseMain();
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmYTTutorial:: ValidateConnection: ", ex);
+            }
+        }
+
+        
+
+        private void btn_close_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                App.oMainReference.FireEventTrackingPixelInThread("{0}{1}", eUTM_BTN_TYPE.FrmWatchVideo.ToString(), "-Close");
+                CloseMain();
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var winState = Application.Current.MainWindow.WindowState;
+                if (winState == WindowState.Normal)
+                {
+                    Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
+                }
+                else
+                {
+                    Application.Current.MainWindow.WindowState = WindowState.Normal;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
+
+       
+
+        private void formYTTutorial_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            var embed = "<html><head>" +
+          "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"/>" +
+          "</head><body style=\"margin:0px;padding:0px;border:0px;background-color:Black;\">" +
+          "<iframe style=\"border:none;overflow:hidden;margin:0px;padding:0px;display:block;background-color:Black;height:100vh;width:100%\" " +
+          //"width=\"{1}\" height=\"{2}\" src=\"{0}\" " +
+          "width=\"100%\" height=\"100vh\" src=\"{0}\" " +
+          "frameborder = \"0\" allow = \"autoplay; encrypted-media\" allowfullscreen></iframe>" +
+          "</body></html>";
+            this.webBrowserOfferADU.DataContext = string.Format(embed, _sUrl, webBrowserOfferADU.Width, webBrowserOfferADU.Height);
+
+            new Thread(() =>
+            {
+                ValidateConnection();
+            })
+            { Name = "Th-TutConnection" }.Start();
+
+        }
+
+        private void webBrowserOfferADU_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+
+        }
+    }
+}

@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Models;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucExcludeSettings.xaml
+    /// </summary>
+    public partial class ucExcludeSettings : UserControl
+    {
+       
+        public ucExcludeSettings()
+        {
+            if(App.oMainReference.objExcluded == null)
+                App.oMainReference.objExcluded = new vmExcludedFolderSettings();
+            this.DataContext = App.oMainReference.objExcluded;
+
+            InitializeComponent();
+            Init();
+        }
+
+        private void Init()
+        {
+            App.oMainReference.objExcluded.ctrlOwner = this;
+            LoadStrings();
+            LoadExcludeFolderPath(false);
+         
+        }
+        
+        public void LoadStrings()
+        {
+            try
+            {
+                lbl_heading1.Text = cResourceManager.LoadString("DPF_PREFERENCES_EXCLUSION_MANAGE_FOLDER_TEXT");
+                lbl_heading2.Text = cResourceManager.LoadString("DPF_PREFERENCES_EXCLUSION_MANAGE_FOLDER_NOTE_TEXT");
+                colExcludeFolder.Text = cResourceManager.LoadString("DPF_PREFERENCES_EXCLUSION_EXCLUDED_TEXT");
+                btnremove.Content = cResourceManager.LoadString("DPF_PREFERENCES_EXCLUSION_REMOVE_TEXT");
+                btnadd.Content = cResourceManager.LoadString("DPF_PREFERENCES_EXCLUSION_ADD_TEXT");
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("ucExcludeSettings:: LoadStrings: ", ex);
+            }
+           
+
+        }
+
+        void LoadExcludeFolderPath(bool bLoadCurrentTypeListOnly)
+        {
+            try
+            {
+                excludefoldergrid.ItemsSource = App.oMainReference.objExcluded.lstScanPathsExclude;
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucExcludeSettings:: LoadData: ", ex);
+            }
+        }
+        
+
+        private void btnadd_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                StartAddFolder();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucExcludeSettings:: btn_addFolder_Click: ", ex);
+            }
+        }
+
+        void StartAddFolder()
+        {
+            try
+            {
+                if (App.oMainReference.objExcluded.AddFolderPaths(true, cGlobalSettings.CurrentTypeOfExclusion))
+                {
+                    LoadExcludeFolderPath(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucExcludeSettings::  StartAddFolder: ", ex);
+            }
+        }
+        private void btnremove_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (excludefoldergrid.SelectedIndex < 0)
+                {
+                    MessageBox.Show(Window.GetWindow(this), "Please Select a Path");
+                    return;
+                }
+                csExcludedPath fPath = excludefoldergrid.SelectedItem as csExcludedPath;
+
+                App.oMainReference.objExcluded.RemoveFolderPath(fPath);
+                LoadExcludeFolderPath(true);
+
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("ucExcludeSettings::  btnremove_Click: ", ex);
+            }
+
+        }
+
+        
+
+
+    }
+}

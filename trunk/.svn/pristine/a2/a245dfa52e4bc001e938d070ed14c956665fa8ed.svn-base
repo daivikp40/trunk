@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+
+namespace DuplicatePhotosFixer
+{
+    public class StringToStorageSizeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string strValue)
+            {
+                if (strValue.EndsWith("KB", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (int.TryParse(strValue.Substring(0, strValue.Length - 2).Trim(), out int result))
+                    {
+                        return result;
+                    }
+                }
+                else if (strValue.EndsWith("MB", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (int.TryParse(strValue.Substring(0, strValue.Length - 2).Trim(), out int result))
+                    {
+                        return result * 1024;
+                    }
+                }
+            }
+            return 0; // Default value
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int intValue)
+            {
+                if (intValue >= 1024)
+                {
+                    return $"{intValue / 1024} MB";
+                }
+                else
+                {
+                    return $"{intValue} KB";
+                }
+            }
+            return "0 KB"; // Default value
+        }
+    }
+}

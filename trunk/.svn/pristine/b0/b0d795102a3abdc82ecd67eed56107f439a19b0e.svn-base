@@ -1,0 +1,816 @@
+﻿using DuplicatePhotoFixer;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.CustomExtendClass;
+using DuplicatePhotosFixer.Helpers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using static DuplicatePhotosFixer.enumClass;
+//using DuplicatePhotosFixer.ClassDictionary;
+using UserControl = System.Windows.Controls.UserControl;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucHomeMain.xaml
+    /// </summary>
+    public partial class ucHomeMain : UserControl
+    {
+        public ucHomeMain()
+        {
+            InitializeComponent();
+            chkbxCheckAll.IsChecked = cGlobalSettings.isAllChecked;
+           LoadString();
+            ////List<ComboBoxItem> items = new List<ComboBoxItem>
+            ////{
+            ////    new ComboBoxItem { ImagePath = "/Resources/pc.png", Text = "Scan Computer" },
+            ////    new ComboBoxItem { ImagePath = "/Resources/drive.png", Text = "Scan Google Drive" },
+            ////    new ComboBoxItem { ImagePath = "/Resources/dropbox_img.png", Text = "Scan DropBox" },
+            ////    new ComboBoxItem { ImagePath = "/Resources/picasa15x15.png", Text = "Picasa Library" },
+            ////    new ComboBoxItem { ImagePath = "/Resources/Lightroom_15x15.png", Text = "LightRoom Classic" },
+            ////    new ComboBoxItem { ImagePath = "/Resources/po_logo_small.png", Text = "Photo Organizer" }
+            ////};
+
+            ////customComboBox.ItemsSource = items;
+
+        }
+        //public class ComboBoxItem
+        //{
+        //    public string ImagePath { get; set; }
+        //    public string Text { get; set; }
+        //}
+
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+
+        internal static List<Helpers.csSelectedFiles> selectedFiles = new List<Helpers.csSelectedFiles>();
+
+        private void LoadString()
+        {
+            scan_heading.Text = cResourceManager.LoadString("IDS_INCLUDE_FOLDER_LABEL");
+            btnAddPhotos.Content = cResourceManager.LoadString("DPF_HOME_UC_ADD_PHOTOS_TEXT");
+            btnAddfolders.Content = cResourceManager.LoadString("DPF_HOME_UC_ADD_FOLDER_TEXT");
+            btnScanForDuplicates.Content = cResourceManager.LoadString("DPF_FOOTER_UC_SCAN_FOR_DUPLICATES_TEXT");
+            //--------- Context Menu strings
+          
+            //revelInFolderToolStripMenuItem.Header = cResourceManager.LoadString("DPF_HOME_UC_REVEAL_EXPLORER");
+            //checkAllToolStripMenuItem.Text = cResourceManager.LoadString("DPF_HOME_UC_CHECK_ALL");
+            //unCheckAllToolStripMenuItem.Text = cResourceManager.LoadString("DPF_HOME_UC_UNCHECK_ALL");
+            //removeToolStripMenuItem.Text = cResourceManager.LoadString("DPF_HOME_UC_REMOVE_SCAN_PATH");
+            //removeAllToolStripMenuItem.Text = cResourceManager.LoadString("DPF_HOME_UC_REMOVE_ALL_PATHS");
+
+        }
+
+        void checkListSize(List<csScanPaths> lst)
+        {
+            if (lst.Count >= 1)
+            {
+                btnScanForDuplicates.IsEnabled = true;
+            }
+           
+            {
+                btnScanForDuplicates.IsEnabled = false;
+            }
+            
+        }
+
+        ////public bool selectAllItems = true;
+        //private bool _SelectAllItems = true;
+        //public bool SelectAllItems
+        //{
+        //    get
+        //    {
+        //        return _SelectAllItems;
+        //    }
+        //    set
+        //    {
+        //        _SelectAllItems = value;
+        //        //RaisePropertyChanged("SelectAllItems");
+        //        selectAll(_SelectAllItems);
+        //    }
+        //}
+        //private void selectAll(bool _SelectAllItems)
+        //{
+        //    if(selectedFiles.Count >= 1)
+        //    {
+        //        foreach(var item in selectedFiles)
+        //        {
+        //            item.isSelected = true;
+        //        }
+        //    }
+        //}
+
+
+        private void btnAddPhotos_Click(object sender, RoutedEventArgs e)
+        {
+           
+            btnScanForDuplicates.IsEnabled = true;
+            
+
+
+
+               //openFileBox = new Microsoft.Win32.OpenFileDialog();
+               //openFileBox.Multiselect = true;
+               //openFileBox.Title = "Select a picture";
+               //openFileBox.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+               //  "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+               //  "Portable Network Graphic (*.png)|*.png";
+
+               //if (openFileBox.ShowDialog() == true)
+               //{
+               //    string[] paths = openFileBox.FileNames;
+
+               //    foreach( var path in paths)
+               //    {
+               //        selectedFiles.Add(new Helpers.csSelectedFiles()
+               //        {
+               //            isSelected = true,
+               //            fileIcon = "/Resources/btn_pic.png",
+               //            filePath = path,
+               //            deleteButtonIcon = "/Resources/delete_normal.png",
+               //        });
+               //    }
+
+               //    checkListSize(selectedFiles);
+
+
+
+
+               openFileDialog1 = new OpenFileDialog();
+          //  openFileDialog1.Filter = cGlobalSettings.FileDialogFilterList;
+            openFileDialog1.Filter = "Image Files (*.png;*.jpeg;*.jpg;*.gif;*.bmp)|*.png;*.jpeg;*.jpg;*.gif;*.bmp|All Files (*.*)|*.*";
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.FileName = "";
+            string InitDir = cGlobalSettings.GetInitialDirectory;
+            if (!string.IsNullOrEmpty(InitDir))
+                openFileDialog1.InitialDirectory = InitDir;
+            DialogResult result = openFileDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                List<csScanPaths> lstScanPath = null;
+                try
+                {
+                    lstScanPath = new List<csScanPaths>();
+                    foreach (string strPath in openFileDialog1.FileNames)
+                    {
+                        csScanPaths oScanPath = new csScanPaths {
+                            strPath = strPath,
+                            fileIcon = "/Resources/btn_pic.png",
+                            deleteButtonIcon = "/Resources/delete_normal.png",                           
+
+                        };
+                        lstScanPath.Add(oScanPath);
+                      
+                    }
+                    string statusMessage = addValidScanPath(lstScanPath.ToArray());
+
+                    if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        //MessageBoxEx.Show(this, statusMessage, cGlobalSettings.GetProductName(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Windows.Forms.MessageBox.Show(statusMessage);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    //cGlobalSettings.oLogger.WriteLogException("btn_AddPhotos_Click", ex);
+                }
+                finally
+                {
+                    if (lstScanPath != null) lstScanPath.Clear();
+                    lstScanPath = null;
+                }
+            }
+            
+            gridFileFolder.ItemsSource = null;
+            gridFileFolder.ItemsSource = cGlobalSettings.listScanPath;
+
+            //checkListSize(cGlobalSettings.listScanPath);
+        }
+
+        private void btnAddFolder_Click(object sender, RoutedEventArgs e)
+        {
+            //using (var fbd = new FolderBrowserDialog())
+            //{
+            //    System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+
+            //    if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            //    {
+            //        string[] files = Directory.GetFiles(fbd.SelectedPath);
+
+            //        //System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+
+            btnScanForDuplicates.IsEnabled = true;
+           
+            
+
+            //        string path = fbd.SelectedPath;
+
+            //        selectedFiles.Add(new Helpers.csSelectedFiles()
+            //        {
+            //            isSelected = true,
+            //            fileIcon = "/Resources/btn_folder.png",
+            //            filePath = path,
+            //            deleteButtonIcon = "/Resources/delete_normal.png",
+            //        });
+
+            //        gridFileFolder.ItemsSource = null;
+            //        gridFileFolder.ItemsSource = selectedFiles;
+
+            //    }
+            //}
+
+            switch (scanMode)
+            {
+                case eScanMode.FileSearch:
+                    OpenFileSystemExplorer();
+                    break;
+
+                case eScanMode.GoogleDrive:
+                    OpenGoogleFolderExplorer();
+                    break;
+            }
+
+
+
+        }
+
+        void OpenFileSystemExplorer()
+        {
+            FolderSelectDialog folderSelectDialog = null;
+         
+            try
+            {
+                //folderSelectDialog = new FolderSelectDialog();
+                //folderSelectDialog.InitialDirectory = "c:\\";
+                //folderSelectDialog = new FolderSelectDialog();
+
+                //if (folderSelectDialog.ShowDialog())
+                //{
+                //    string selectedFileName = folderSelectDialog.FileName;
+
+                //    selectedFiles.Add(new Helpers.csSelectedFiles()
+                //    {
+                //        isSelected = true,
+                //        fileIcon = "/Resources/btn_folder.png",
+                //        filePath = selectedFileName,
+                //        deleteButtonIcon = "/Resources/delete_normal.png",
+                //    });
+
+                //    gridFileFolder.ItemsSource = null;
+                //    gridFileFolder.ItemsSource = selectedFiles;
+
+                //    checkListSize(selectedFiles);
+
+                //}
+
+                var fsd = new FolderSelectDialog();
+                
+                //fsd.Title = cResourceManager.LoadString("DPF_HOME_UC_CUSTOM_FOLDER_DIALOG_TITLE");
+                //fsd.InitialDirectory = @"c:\";
+                if (fsd.ShowDialog())
+                {
+                    List<csScanPaths> lstScanPath = new List<csScanPaths>();
+                    foreach (string strPath in fsd.FileName.Split('|'))
+                    {
+                        csScanPaths oScanPath = new csScanPaths { 
+                            strPath = strPath,
+                            fileIcon = "/Resources/btn_folder.png",
+                            deleteButtonIcon = "/Resources/delete_normal.png",
+                            IncludeSubFolder = true,
+                        };
+                        lstScanPath.Add(oScanPath);
+                    }
+                    string statusMessage = addValidScanPath(lstScanPath.ToArray());
+                    lstScanPath.Clear();
+                    lstScanPath = null;
+                    if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        //MessageBoxEx.Show(statusMessage, cGlobalSettings.GetProductNameFromAssembly(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //MessageBoxEx.Show(this, statusMessage, cGlobalSettings.GetProductName(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Windows.Forms.MessageBox.Show(statusMessage);
+                    }
+
+                    gridFileFolder.ItemsSource = null;
+                    gridFileFolder.ItemsSource = cGlobalSettings.listScanPath;
+
+                    //checkListSize(cGlobalSettings.listScanPath);
+                }
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                folderSelectDialog = null;
+            }
+        }
+
+        void OpenGoogleFolderExplorer()
+        {
+            System.Windows.MessageBox.Show("Sign In");
+        }
+
+        private void btn_deleteCurrentRow_Click(object sender, RoutedEventArgs e)
+        {
+            if (cGlobalSettings.listScanPath.Contains((csScanPaths)gridFileFolder.SelectedItem))
+            {
+                cGlobalSettings.listScanPath.Remove((csScanPaths)gridFileFolder.SelectedItem);
+
+
+                checkListSize(cGlobalSettings.listScanPath);
+                //int n = gridFileFolder.SelectedIndex;
+
+                gridFileFolder.ItemsSource = null;
+
+                gridFileFolder.ItemsSource = cGlobalSettings.listScanPath;
+                //FileList.RemoveAt(n);
+
+            }
+        }
+
+      
+
+
+
+        private void btnEmptySelectedFileList_Click(object sender, RoutedEventArgs e)
+        {
+            gridFileFolder.ItemsSource = null;
+            cGlobalSettings.listScanPath.Clear();
+            checkListSize(cGlobalSettings.listScanPath);
+            gridFileFolder.ItemsSource = cGlobalSettings.listScanPath;
+        }
+
+        private void chkbxCheckAll_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            if (cGlobalSettings.isAllChecked == true)
+            {
+                foreach (var item in cGlobalSettings.listScanPath)
+                {
+                    item.isSelected = false;
+                    cGlobalSettings.isAllChecked = false;
+                }
+            }
+            else
+            {
+                foreach (var item in cGlobalSettings.listScanPath)
+                {
+                    item.isSelected = true;
+                    cGlobalSettings.isAllChecked = true;
+                }
+            }
+            gridFileFolder.ItemsSource = null;
+            gridFileFolder.ItemsSource = cGlobalSettings.listScanPath;
+        }
+
+
+        public static eScanMode scanMode;
+        private void cboScanMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+            var index = customComboBox.SelectedIndex;
+
+            if (index == 0)
+            {
+                scanMode = eScanMode.FileSearch;
+                btnAddPhotos.Visibility = Visibility.Visible;
+                btnAddPhotos.Width = 120;
+            }
+            else if (index == 1)
+            {
+                scanMode = eScanMode.GoogleDrive;
+                btnAddPhotos.Visibility = Visibility.Collapsed;
+                btnAddPhotos.Width = 0;
+            }
+
+            else if(index == 2)
+            {
+                scanMode = eScanMode.DropBox;
+                btnAddPhotos.Visibility = Visibility.Collapsed;
+                btnAddPhotos.Width = 0;
+            }
+            else if (index == 3)
+            {
+                scanMode = eScanMode.PicasaLibrary;
+                btnAddPhotos.Visibility = Visibility.Collapsed;
+                btnAddPhotos.Width = 0;
+            }
+            else if (index == 4)
+            {
+                scanMode = eScanMode.LightRoomClassic;
+                btnAddPhotos.Visibility = Visibility.Collapsed;
+                btnAddPhotos.Width = 0;
+            }
+
+
+
+        }
+
+        public void addSelectedPath(csScanPaths objScanPaths, bool addToXML = true)
+        { 
+            //if (isNewPath(pathSelected, pathType, isSelected, out statusMessage)) // Check if path already added and also if its parent folder is added
+            //{
+            DataGridViewRow row = null;
+            //csScanPaths objScanPaths = null;
+            try
+            {
+                /*
+                // Add path to list 
+                objScanPaths = new csScanPaths()
+                {
+                    pathType = PathData.pathType,
+                    strPath = PathData.strPath,
+                    isSelected = PathData.isSelected,
+                    
+                };*/
+                objScanPaths.ScanIncludeSubfolder = true;
+                cGlobalSettings.listScanPath.Add(objScanPaths);
+
+                //// Add to XML
+                //if (addToXML)
+                //    csXmlOperations.addXmlElement(objScanPaths.isSelected, objScanPaths.strPath, objScanPaths.pathType, objScanPaths.FolderId);
+
+                //// Add to DataGrid
+                //row = (DataGridViewRow)(dataGridViewFileFolderList.Rows.Count > 0 ? dataGridViewFileFolderList.Rows[0].Clone() : dataGridViewRow.Clone());
+
+                //row.Cells[0].Value = objScanPaths.isSelected;
+                //row.Cells[1].Value = objScanPaths.strPath;
+                //row.Tag = objScanPaths.pathType;
+                //dataGridViewFileFolderList.Rows.Add(row);
+
+
+                //switch (objScanPaths.pathType)
+                //{
+                //    case enumClass.ePathType.file:
+                //        ((TextAndImageCell)dataGridViewFileFolderList.Rows[dataGridViewFileFolderList.Rows.Count - 1].Cells[1]).Image = DuplicatePhotoFixer.Properties.Resources.btn_pic;// frmDuplicatePhotoFixer.Properties.Resources.btn_pic;
+                //        break;
+                //    case enumClass.ePathType.folder:
+                //        ((TextAndImageCell)dataGridViewFileFolderList.Rows[dataGridViewFileFolderList.Rows.Count - 1].Cells[1]).Image = DuplicatePhotoFixer.Properties.Resources.btn_folder;
+                //        break;
+                //    case enumClass.ePathType.library:
+                //        ((TextAndImageCell)dataGridViewFileFolderList.Rows[dataGridViewFileFolderList.Rows.Count - 1].Cells[1]).Image = DuplicatePhotoFixer.Properties.Resources.media_browser;
+                //        break;
+                //}
+            }
+            catch (System.Exception ex)
+            {
+                //cGlobalSettings.oLogger.WriteLogException("addSelectedPathToGrid", ex);
+            }
+            finally
+            {
+                if (row != null)
+                {
+                    row.Dispose();
+                    row = null;
+                }
+
+                if (objScanPaths != null)
+                    objScanPaths = null;
+            }
+
+
+        }
+
+
+        public string addValidScanPath(csScanPaths[] listOfSelectedPath)
+        {
+            string statusMessage = string.Empty;
+            string msgPriorityLow = string.Empty;
+            try
+            {
+                switch (cGlobalSettings.CurrentScanMode)
+                {
+                    case eScanMode.FileSearch:
+                        {
+                            enumClass.ePathType pathtype = enumClass.ePathType.file;
+                            foreach (csScanPaths ScanPathData in listOfSelectedPath)
+                            {
+                                csScanPaths oScanPathData = ScanPathData;
+                                //bool isValid = ValidatePath(ref oScanPathData, ref statusMessage);
+
+                                // All is well, add path to scan list
+                                //if (isValid)
+                                {
+                                    oScanPathData.isSelected = true;
+                                    ScanPathData.isSelected = true;
+                                    //Program.oMainReference.Home_addSelectedPath(oScanPathData, true);
+                                    addSelectedPath(oScanPathData, true);
+
+                                    //checkListSize(cGlobalSettings.listScanPath);
+                                }
+                            }
+                        }
+                        break;
+                        ///case eScanMode.GoogleDrive:
+                        //case eScanMode.Dropbox:
+                        //    {
+                        //        enumClass.ePathType pathtype = enumClass.ePathType.folder;
+                        //        foreach (csScanPaths ScanPathData in listOfSelectedPath)
+                        //        {
+                        //            csScanPaths oScanPathData = ScanPathData;
+                        //            bool isValid = ValidatePath(ref oScanPathData, ref statusMessage);
+
+                        //            // Aalllll is well, add path to scan list
+                        //            if (isValid)
+                        //            {
+                        //                oScanPathData.isSelected = true;
+                        //                ScanPathData.isSelected = true;
+                        //                Program.oMainReference.Home_addSelectedPath(oScanPathData, true);
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
+                        //case eScanMode.PicasaLibrary:
+                        //    {
+                        //        enumClass.ePathType pathtype = enumClass.ePathType.file;
+                        //        foreach (csScanPaths ScanPathData in listOfSelectedPath)
+                        //        {
+
+                        //            if (cGlobalSettings.listScanPath.Count > 0)
+                        //            {
+                        //                statusMessage = "One Picasa library database file already added!\r\nCannot add multiple files.";
+                        //                break;
+                        //            }
+
+                        //            csScanPaths oScanPathData = ScanPathData;
+                        //            bool isValid = ValidatePath(ref oScanPathData, ref statusMessage);
+
+                        //            // Aalllll is well, add path to scan list
+                        //            if (isValid)
+                        //            {
+                        //                oScanPathData.isSelected = true;
+                        //                ScanPathData.isSelected = true;
+                        //                Program.oMainReference.Home_addSelectedPath(oScanPathData, true);
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
+                        //case eScanMode.DeleteEmptyFolder:
+                        //    break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //cGlobalSettings.oLogger.WriteLogException("addValidScanPath :: ", ex);
+            }
+            return statusMessage;
+        }
+        private void btnScanForDuplicates_Click(object sender, RoutedEventArgs e)
+        {
+
+            App.oMainReference.ShowResults();
+
+
+            //try
+            //{
+
+            //    //foreach (var item in selectedFiles)
+            //    //{
+            //    //    if (Directory.Exists(item.filePath))
+            //    //    {
+            //    //        //string[] files = 
+            //    //    }
+            //    //}
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+
+        }
+
+        private void chkbxCheckAll_Checked()
+        {
+
+        }
+
+        
+
+
+
+        //bool ValidatePath(ref csScanPaths ScanPathData, ref string statusMessage)
+        //{
+        //    bool isValid = false;
+        //    List<string> listExcludePaths = null;
+        //    try
+        //    {
+        //        int counter = 0;
+        //        ScanPathData.pathType = enumClass.ePathType.file;
+        //        string strCheckPath = ScanPathData.strPath;
+
+        //        // ========== ========== ========== ========== 
+        //        /* Check if it is a file or folder 
+        //         * if file then check for supported extensions
+        //         ========== ========== ========== ========== */
+        //        if (cGlobalSettings.CurrentScanMode == eScanMode.FileSearch)
+        //        {
+        //            if (Directory.Exists(ScanPathData.strPath))
+        //            {
+        //                ScanPathData.pathType = enumClass.ePathType.folder;
+        //                isValid = true;
+        //            }
+        //            else if (File.Exists(ScanPathData.strPath))
+        //            {
+        //                if (Regex.IsMatch(System.IO.Path.GetExtension(ScanPathData.strPath), cGlobalSettings.ImageFileExtensionsList, RegexOptions.IgnoreCase))
+        //                {
+        //                    isValid = true;
+        //                    //Program.oMainReference.Home_addSelectedPath(true, s, enumClass.ePathType.file, true);
+        //                }
+        //                else
+        //                {
+        //                    counter++;
+        //                    if (counter > 1)
+        //                        statusMessage = cResourceManager.LoadString("DPF_HOME_UC_ERROR_ITEM_NO_ADDED");
+        //                    else
+        //                        statusMessage = cResourceManager.LoadString("DPF_HOME_UC_ERROR_ITEM_NO_ADDED");
+        //                }
+        //            }
+
+        //        }
+        //        else if (cGlobalSettings.CurrentScanMode == eScanMode.PicasaLibrary)
+        //        {
+        //            if (File.Exists(ScanPathData.strPath))
+        //            {
+        //                if (Regex.IsMatch(System.IO.Path.GetFileName(ScanPathData.strPath), cGlobalSettings.GetImageFileExtensionsList, RegexOptions.IgnoreCase))
+        //                {
+        //                    isValid = true;
+        //                    //Program.oMainReference.Home_addSelectedPath(true, s, enumClass.ePathType.file, true);
+        //                }
+        //                else
+        //                {
+        //                    counter++;
+        //                    if (counter > 1)
+        //                        statusMessage = cResourceManager.LoadString("IDS_ADD_VALID_PATH");
+        //                    else
+        //                        statusMessage = cResourceManager.LoadString("IDS_ADD_VALID_PATH");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                statusMessage = cResourceManager.LoadString("IDS_ADD_VALID_PATH");
+        //            }
+        //        }
+        //        else // For all other scan modes consider path as valid.
+        //        {
+        //            ScanPathData.pathType = enumClass.ePathType.folder;
+        //            isValid = true;
+        //        }
+
+        //        // ==========  Check is path is new i.e. not already added ========== 
+        //        if (isValid)
+        //        {
+        //            string mapPath = csMappedDrive.GetUNCPath(ScanPathData.strPath);
+        //            if (ScanPathData.strPath != mapPath)
+        //            {
+
+        //                string userIP = csMappedDrive.ip;
+
+        //                string ip = System.IO.Path.GetPathRoot(mapPath).Replace("\\\\", "");
+
+        //                if (ip.StartsWith(userIP))
+        //                {
+        //                    // User add its own map drive
+        //                }
+
+        //            }
+        //            bool isPathAlreadyAdded = cGlobalSettings.listScanPath.Where(path => path.strPath == strCheckPath.Trim()).Any();
+        //            if (isPathAlreadyAdded)
+        //            {
+        //                //isPathAlreadyAdded = null;
+        //                isValid = false;
+        //                if (string.IsNullOrEmpty(statusMessage))
+        //                    statusMessage = cResourceManager.LoadString("DPF_HOME_UC_ALREADY_ADDED");
+        //                //MessageBox.Show("Path is already added! ", "Duplicate Photos Fixer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }
+        //        }
+
+        //        //==========  Exclusion List check  ========== 
+        //        if (isValid)
+        //        {
+        //            listExcludePaths = new List<string>();
+        //            // Get list of excluded paths
+        //            foreach (var item in Program.oMainReference.ExcludedFolderList)
+        //            {
+        //                listExcludePaths.Add(item);
+        //            }
+        //            var isPathAlreadyAdded = listExcludePaths.Where(p => p.Trim() == strCheckPath.Trim()).Any();
+        //            if (isPathAlreadyAdded)
+        //            {
+        //                //isPathAlreadyAdded = null;
+        //                isValid = false;
+        //                statusMessage = cResourceManager.LoadString("DPF_cGlobalSettings_FOLDER_EXCLUDED") + " " + Environment.NewLine + cResourceManager.LoadString("DPF_cGlobalSettings_FOLDER_EXCLUDED_HINT");
+        //                //MessageBox.Show("Path is already added! ", "Duplicate Photos Fixer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }
+        //        }
+
+        //        //==========  Default Exclude Folder Check  ========== 
+        //        if (isValid)
+        //        {
+        //            // If path is a system directory path, then don't add the folder
+        //            if (AppFunctions.isDefaultExcludePath(strCheckPath))
+        //            {
+        //                statusMessage = cResourceManager.LoadString("DPF_HOME_UC_SYSTEM_PATH");
+        //                isValid = false;
+        //            }
+        //        }
+
+        //        // ========== New path is a Sub-folder of already added folder ========== 
+        //        if (isValid)
+        //        {
+        //            foreach (string path in cGlobalSettings.listScanPath.Select(p => p.strPath).ToList())
+        //            {
+        //                if (AppFunctions.isChildFolder(path, strCheckPath))
+        //                {
+        //                    isValid = false;
+        //                    statusMessage = cResourceManager.LoadString("DPF_HOME_UC_PARENT_PATH");
+        //                    break;
+        //                    //MessageBox.Show("Parent folder is already added! ", "Duplicate Photos Fixer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //                }
+        //            }
+        //        }
+
+        //        // ==========  New path is a Sub-folder of already excluded folder path ========== 
+        //        if (isValid)
+        //        {
+        //            foreach (string excludePath in listExcludePaths)
+        //            {
+        //                if (AppFunctions.isChildFolder(excludePath, strCheckPath))
+        //                {
+        //                    isValid = false;
+        //                    statusMessage = cResourceManager.LoadString("DPF_HOME_UC_EXCLUDED_PATH");
+        //                    break;
+        //                }
+        //            }
+        //        }
+
+        //        // ========== New path is a Sub-folder of Default Exclude Folder path ==========
+        //        if (isValid)
+        //        {
+        //            foreach (string defaultExcludePath in cGlobalSettings.listDefaultExcludePaths)
+        //            {
+        //                if (AppFunctions.isChildFolder(defaultExcludePath, strCheckPath))
+        //                {
+        //                    isValid = false;
+        //                    statusMessage = cResourceManager.LoadString("DPF_HOME_UC_SYSTEM_DIR");
+        //                    break;
+        //                }
+        //            }
+        //        }
+
+
+        //        /// ========== Only looks for the file hard exclusion ========== 
+        //        //if (isValid)
+        //        //{
+        //        //    if (ScanPathData.pathType == enumClass.ePathType.file)
+        //        //    {
+        //        //        string strPathLower = ScanPathData.strPath.ToLower();
+        //        //        if ((ignoreRules.IgnoreFileHardPattern != null && ignoreRules.IgnoreFileHardPattern.IsMatch(strPathLower))
+        //        //            || (ignoreRules.IgnoreExtensionHardPattern != null && ignoreRules.IgnoreExtensionHardPattern.IsMatch(strPathLower))
+        //        //            || (ignoreRules.IgnorePathHardPattern != null && ignoreRules.IgnorePathHardPattern.IsMatch(strPathLower))
+        //        //            )
+        //        //        {
+        //        //            isValid = false;
+        //        //        }
+        //        //    }
+
+        //        //    else if (ScanPathData.pathType == enumClass.ePathType.folder)
+        //        //    {
+        //        //        if (ignoreRules.IsDirectoryIgnored(ScanPathData.strPath))
+        //        //            isValid = false;
+        //        //    }
+
+        //        //    if (!isValid)
+        //        //    {
+        //        //        statusMessage = cResourceManager.LoadString("DPF_HOME_UC_SYSTEM_FILE_PATH");
+        //        //    }
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //cGlobalSettings.oLogger.WriteLogException("ucHome:: ValidatePath: ", ex);
+        //    }
+        //    finally
+        //    {
+        //        if (listExcludePaths != null) listExcludePaths.Clear();
+        //        listExcludePaths = null;
+        //    }
+
+        //    return isValid;
+        //}
+
+
+    }
+}

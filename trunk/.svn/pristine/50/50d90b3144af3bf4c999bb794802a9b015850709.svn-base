@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucFooter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+               xmlns:cust ="clr-namespace:DuplicatePhotosFixer.CustomControl"
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="52" d:DesignWidth="1434" Background="#343434">
+    <Grid>
+        <DockPanel>
+            
+            <cust:ImageButton x:Name="btn_footer"
+                              DockPanel.Dock="Right"
+                           
+                              Width="150"
+                              Height="34"
+                             Image="{DynamicResource img_play_icon}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                    FontSize="14"  Padding="5" 
+                              Content="Watch Tutorial"      
+                              Visibility="Visible"                    
+                    Style="{DynamicResource stl_btnfooter}">
+
+            </cust:ImageButton>
+        </DockPanel>    
+    </Grid>
+</UserControl>

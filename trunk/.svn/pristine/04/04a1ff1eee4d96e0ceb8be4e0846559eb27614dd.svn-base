@@ -1,0 +1,651 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Interop;
+using DuplicatePhotoFixer;
+using DuplicatePhotosFixer.Helpers;
+using DuplicatePhotosFixer.Track;
+using static DuplicatePhotosFixer.Views.cNagDialogue;
+
+namespace DuplicatePhotosFixer.Models
+{
+     class vmRegistration : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        private bool bActivateTracking = true;
+        BackgroundWorker oBgActivationChecker = null;
+        const string STR_CONST_CHECK_STATUS_KEY = "http://updateservice1.systweak.com/STGenuineValidator/keystatus.asp?key=<key>&email=<email>&machineid=<machineid>&osid=<osid>&osver=<osver>&osarc=<osarc>&productid=<productid>&langid=<langid>&langcode=<langcode>"; //utm_source=<utmsource>&utm_campaign=<utmcampaign>&utm_content=<utm_content>&utm_medium=<utm_medium>&xat=<xat>&affiliate=<affliateid>&
+
+
+        #region properties
+        string _ImgMoneyBack { get; set; }
+        public string ImgMoneyBack
+        {
+            get
+            {
+                return _ImgMoneyBack;
+            }
+            set
+            {
+                _ImgMoneyBack = value;
+                OnPropertyChanged("ImgMoneyBack");
+            }
+        }
+
+        string _txtEmail { get; set; }
+        public string txtEmail
+        {
+            get
+            {
+                return _txtEmail;
+            }
+            set
+            {
+                _txtEmail = value;
+                OnPropertyChanged("txtEmail");
+            }
+        }
+
+        string _txtLicenseKey { get; set; }
+        public string txtLicenseKey
+        {
+            get
+            {
+                return _txtLicenseKey;
+            }
+            set
+            {
+                _txtLicenseKey = value;
+                OnPropertyChanged("txtLicenseKey");
+                LicenseKeyValueChange();
+            }
+        }
+
+        bool _IsActivationBtnEnable { get; set; }
+        public bool IsActivationBtnEnable
+        {
+            get
+            {
+                return _IsActivationBtnEnable;
+            }
+            set
+            {
+                _IsActivationBtnEnable = value;
+                OnPropertyChanged("IsActivationBtnEnable");
+                //LicenseKeyValueChange();
+            }
+        }
+
+        #endregion
+
+
+        public vmRegistration()
+        {
+            Init();
+        }
+
+        void Init()
+        {
+            txtLicenseKey = "";
+            txtEmail = "";
+            LoadMBGLogoLang();
+            oBgActivationChecker = new BackgroundWorker();
+            oBgActivationChecker.DoWork += oBgActivationChecker_DoWork;
+        }
+
+        void LoadMBGLogoLang()
+        {
+            try
+            {
+                if (ImgMoneyBack != null)
+                    ImgMoneyBack = null;
+
+                switch (cGlobalSettings.oScanSettings.LanguageCode.ToLower())
+                {
+
+                    case "fr":
+                        ImgMoneyBack = @"/Resources/mbc_icon_fr.png";
+                        break;
+
+                    case "ja":
+                        ImgMoneyBack = @"/Resources/mbc_icon_ja.png";
+                        break;
+
+                    case "de":
+                        ImgMoneyBack = @"/Resources/mbc_icon_de.png";
+                        break;
+                    case "es":
+                        ImgMoneyBack = @"/Resources/mbc_icon_es.png";
+                        break;
+                    case "ptbr":
+                        ImgMoneyBack = @"/Resources/mbc_icon_pt-br.png";
+                        break;
+
+                    case "nl":
+                        ImgMoneyBack = @"/Resources/mbc_icon_nl.png";
+                        break;
+
+                    case "ru":
+                        ImgMoneyBack = @"/Resources/mbc_icon_ru.png";
+                        break;
+
+                    case "it":
+                        ImgMoneyBack = @"/Resources/mbc_icon_it.png";
+                        break;
+
+                    case "da":
+                        ImgMoneyBack = @"/Resources/mbc_icon_da.png";
+                        break;
+
+                    case "sv":
+                        ImgMoneyBack = @"/Resources/mbc_icon_sv.png";
+                        break;
+
+                    case "no":
+                        ImgMoneyBack = @"/Resources/mbc_icon_no.png";
+                        break;
+
+                    case "fi":
+                        ImgMoneyBack = @"/Resources/mbc_icon_fi.png";
+                        break;
+
+                    case "zhcn":
+                        ImgMoneyBack = @"/Resources/mbc_icon_zhcn.png";
+                        break;
+
+                    case "en":
+                    default:
+                        ImgMoneyBack = @"/Resources/mbc_icon.png";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmRegistration :: LoadMBGLogoLang : ", ex);
+            }
+        }
+
+     
+
+        public void ChangeRegistrationLinksState(bool isRegisterd, string sKey, string sEmail, string utmContent)// HideRegistrationLinks()
+        {
+            try
+            {
+                if (isRegisterd)
+                {
+                    cGlobalSettings.ProductRegisterDate = DateTime.Now;
+                    if (cGlobal.Is_Sent_Key_Status != 0)
+                    {
+                        new Thread(() =>
+                        {
+                            try
+                            {
+                                App.oMainReference.FireKeyStatus(sKey, sEmail, utmContent, HardwareHash.GetHardwareHash());
+                            }
+                            catch (Exception ex)
+                            {
+                                cGlobalSettings.oLogger.WriteLogException("Th- Track email ", ex);
+                            }
+                        }).Start();
+                    }
+                }
+                //this.UIThread(() =>
+                //{
+                //    //DPF is registered
+                //    if (Program.oMainReference.oAbout == null)
+                //        Program.oMainReference.oAbout = new frmAbout();
+
+                //    Program.oMainReference.oAbout.extBtn_Register.Visible = !isRegisterd;
+
+                //    Program.oMainReference.oFooter.btn_Upgrade.Visible = !isRegisterd;
+
+                //    Program.oMainReference.oResult.UpdateValues(isRegisterd);
+                //    Program.oMainReference.oFooter.UpdateValues(isRegisterd);
+
+
+                //    // Program.oMainReference.oFooter.picBoxKey.Visible = !isRegisterd;
+                //    //check, if we are at result view, then do not make registration label visible
+                //    if (!Program.oMainReference.oFooter.extBtn_back.Visible)
+                //    {
+                //        Program.oMainReference.oFooter.lblRegisteredVersion.Visible = isRegisterd;
+                //        Program.oMainReference.oFooter.picBoxRegistered.Visible = isRegisterd;
+                //    }
+
+                //    //this.Close();
+                //    Program.oMainReference.oRegistration1.Dispose();
+                //    Program.oMainReference.oRegistration1 = null;
+
+                //    Notifier.CreateIni();
+                //});
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        cArmadilloHelper oArmHelper = new cArmadilloHelper();
+        private void oBgActivationChecker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                IntPtr oHandle = IntPtr.Zero;
+                App.oMainReference.Dispatcher.Invoke(new Action(() => oHandle = new WindowInteropHelper(App.oMainReference.frmRegistration).Handle));
+                using (new HourGlass(ref oHandle))
+                {
+                    //DisableEnableFrom(true);
+
+                    string[] arrArgs = (string[])e.Argument;
+                    string sEmailAddress = arrArgs[0];
+                    string sKey = arrArgs[1];
+
+                    enumClass.eKeyActionToTake oKeyStatus = enumClass.eKeyActionToTake.KEY_RESERVED;
+                    int eReturnStats = 0;
+                    int nMessages = 0;
+
+                    int oOnlineRetVal = oArmHelper.ActivateOnline(sKey, oHandle, (int)enumClass.LanguageIdentifier.Lang_English, enumClass.eVerificationTime.Register, out oKeyStatus, out eReturnStats, out nMessages);
+
+                    if (oOnlineRetVal == cArmadilloHelper.ACTIVATION_CHECK_SUCCESS)
+                    {
+                        if (oArmHelper.IsKeyAllowedToRegister(oKeyStatus))
+                        {
+
+                            if (oArmHelper.InstallKey(string.Empty, sKey, true))
+                            {
+                                ChangeRegistrationLinksState(true, sKey, sEmailAddress, eUTM_BTN_TYPE.RegistrationNagRegisterNow.ToString());
+                                Program.GetArmStatus();
+
+                                // You have successfully register the product.
+                                App.oMainReference.showMessage(cResourceManager.LoadString("IDS_STR_THANKS"), "");
+
+                                //HideRegistrationLinks();
+                                return;
+                            }
+                            else
+                            {
+
+                                cArmadilloHelper oArmadilloHelper = new cArmadilloHelper();
+                                if ((!oArmadilloHelper.Expired()))
+                                {
+
+                                    //hide registration links
+                                    ChangeRegistrationLinksState(true, sKey, sEmailAddress, eUTM_BTN_TYPE.RegistrationNagRegisterNow.ToString());
+                                    Program.GetArmStatus();
+                                    //HideRegistrationLinks();
+
+                                    // You have successfully register the product.
+                                    App.oMainReference.showMessage(cResourceManager.LoadString("IDS_STR_THANKS"), "");
+                                    return;
+                                }
+                                else
+                                {
+
+                                    //this.UIThread(() => MessageBoxEx.Show(this, cResourceManager.LoadString("IDS_UNREGSTING_EXPIRED"), cGlobal.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information));
+                                    App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        App.oMainReference.showMessage(cResourceManager.LoadString("DPF_REGISTRATION_UNREGISTER_EXPIRE"), "");
+                                        //MessageBox.Show("Unregister/Expired version", cGlobalSettings.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information));
+                                    }));
+                                }
+                            }
+
+                            try
+                            {
+                                string reason1 = string.Format("oArmHelper.IsKeyAllowedToRegister(oKeyStatus):{0}", oKeyStatus);
+                                KVO.ReportExpireCurrentKeyReason(cGlobalSettings.ProductId, reason1, KVO.ReportExpireCurrentKeyReasonType.OnRegister);
+                            }
+                            catch (Exception ex)
+                            {
+                                cGlobalSettings.oLogger.WriteLogException("OnRegister", ex);
+                            }
+                        }
+                        else
+                        {
+                            //  cEnums.ACTIVATION_MESSAGES oMsg = (cEnums.ACTIVATION_MESSAGES)Enum.Parse(typeof(cEnums.ACTIVATION_MESSAGES), nMessages.ToString());
+                            enumClass.ACTIVATION_MESSAGES oMsg = (enumClass.ACTIVATION_MESSAGES)Enum.Parse(typeof(enumClass.ACTIVATION_MESSAGES), ((int)oKeyStatus).ToString()/*nMessages.ToString()*/);
+                            string sMesgToDisplay = oArmHelper.GetActivationMessege(oMsg);
+                            /*this.UIThread(() => MessageBoxEx.Show(this, sMesgToDisplay, cGlobal.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information));*/
+                            App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                            {
+                                App.oMainReference.showMessageEx(App.oMainReference, cGlobalSettings.GetProductNameFromDesc(), sMesgToDisplay);
+                                //MessageBox.Show(sMesgToDisplay, cGlobalSettings.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            }));
+                        }
+                        //DisableEnableFrom(false);
+                    }
+                    else
+                    {
+                        // case should occur only if service fails to check
+                        if (oOnlineRetVal == cArmadilloHelper.ACTIVATION_CHECK_FAILED)
+                        {
+                            if (!AppFunctions.isInternetConnected())
+                            {
+                                App.oMainReference.showMessage(cResourceManager.LoadString("IDS_ERROR_CONNECTING_INTERNET"), "");
+                                return;
+                            }
+
+                            if (oArmHelper.InstallKey(string.Empty, sKey, true))
+                            {
+
+                                //hide registration links
+                                ChangeRegistrationLinksState(true, sKey, sEmailAddress, eUTM_BTN_TYPE.RegistrationNagRegisterNow.ToString());
+                                Program.GetArmStatus();
+                                //HideRegistrationLinks();
+
+                                // You have successfully register the product.
+                                App.oMainReference.showMessage(cResourceManager.LoadString("IDS_STR_THANKS"), "");
+                                return;
+                            }
+                            else
+                            {
+                                cArmadilloHelper oArmadilloHelper = new cArmadilloHelper();
+                                if ((!oArmadilloHelper.Expired()))
+                                {
+
+                                    //hide registration links
+                                    ChangeRegistrationLinksState(true, sKey, sEmailAddress, eUTM_BTN_TYPE.RegistrationNagRegisterNow.ToString());
+                                    Program.GetArmStatus();
+                                    //HideRegistrationLinks();3
+
+                                    // You have successfully register the product.
+                                    Program.oMainReference.showMessage(cResourceManager.LoadString("IDS_STR_THANKS"), "");
+                                    return;
+                                }
+                                else
+                                {
+                                    //this.UIThread(() => MessageBoxEx.Show(this, cResourceManager.LoadString("IDS_UNREGSTING_EXPIRED"), cGlobal.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information));
+                                    App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        App.oMainReference.showMessageEx(App.oMainReference, "", cResourceManager.LoadString("DPF_REGISTRATION_UNREGISTER_EXPIRE"));
+                                        //MessageBox.Show(cResourceManager.LoadString("DPF_REGISTRATION_UNREGISTER_EXPIRE"), cGlobalSettings.GetProductNameFromDesc(), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                    }));
+                                }
+                            }
+
+                        }
+                        //DisableEnableFrom(false);
+
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                //DisableEnableFrom(false);
+                cGlobalSettings.oLogger.WriteLogException("oBgActivationChecker_DoWork ::", ex);
+                //oUtils.WriteToFile(string.Format("{0}|oBgActivationChecker_DoWork()|Error:{1}", this.Name, ex.Message));
+            }
+        }
+
+        public class HourGlass : IDisposable
+        {
+            static IntPtr oHandle = IntPtr.Zero;
+            public HourGlass()
+            {
+                Enabled = true;
+            }
+            public HourGlass(ref IntPtr Handle)
+            {
+                oHandle = Handle;
+                Enabled = true;
+            }
+            public void Dispose()
+            {
+                Enabled = false;
+            }
+            public static bool Enabled
+            {
+                get { return System.Windows.Forms.Application.UseWaitCursor; }
+                set
+                {
+                    if (value == System.Windows.Forms.Application.UseWaitCursor) return;
+                    System.Windows.Forms.Application.UseWaitCursor = value;
+
+                    if (oHandle != null)   // Send WM_SETCURSOR
+                        SendMessage(oHandle, 0x20, oHandle, (IntPtr)1);
+
+                }
+            }
+            [System.Runtime.InteropServices.DllImport("user32.dll")]
+            private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+        }
+
+        public void PurchaseClick()
+        {
+            try
+            {
+                cGlobal.BuyNow(eDiscountOffers.None, eUTM_BTN_TYPE.RegistrationNagUpgrade.ToString());
+
+                //Program.mainWindow.TrackEvent(string.Format("{0}{1}", cTrackingParameters.eUTM_BTN_TYPE.BTN_Purchase.ToString(), ""), cTrackingParameters.eProductName.ActivationWindow.ToString(), cGlobalSettings.bEnableGATrackingVerbose, true, 0, (eReminderEventType)cTrackingParameters.eReminderEventType.actionbuttonprimary);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmRegistration :: PurchaseClick :", ex);
+            }
+        }
+
+        public void PasteCopiedKey()
+        {
+            try
+            {
+                string copied_text = System.Windows.Forms.Clipboard.GetText();
+                if (!string.IsNullOrEmpty(copied_text))
+                    txtLicenseKey = copied_text;
+
+                //App.oMainFormReference.TrackEvent(string.Format("{0}{1}", cTrackingParameters.eUTM_BTN_TYPE.BTN_PasteLicenseKey.ToString(), ""), cTrackingParameters.eProductName.ActivationWindow.ToString(), cGlobalSettings.bEnableGATrackingVerbose, bActivateTracking, 0, (int)cTrackingParameters.eReminderEventType.actionbuttonsecondary);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmActivateViewModel :: PasteCopiedKey : ", ex);
+            }
+        }
+
+        public void Licence_PreviewDown(System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                switch (e.Key)
+                {
+                    // Enable copy/paste and selection of all text.
+                    case Key.C:
+                    case Key.V:
+                    case Key.A:
+                        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                            return;
+                        break;
+
+                    // Enable keyboard navigation/selection.
+                    case Key.Left:
+                    case Key.Up:
+                    case Key.Right:
+                    case Key.Down:
+                    case Key.PageUp:
+                    case Key.PageDown:
+                    case Key.Home:
+                    case Key.End:
+                        return;
+                }
+                e.Handled = false;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmActivateViewModel :: Licence_PreviewDown : ", ex);
+            }
+        }
+
+        public void ActivateNow()
+        {
+            try
+            {
+                if (cGlobal.IS_LB_BUILD == 1)
+                {
+#if LB_WINMAC_REGISTER
+                    LifeBoatWinMacRegisterNow();
+#else
+                    RegisterNow();
+#endif
+                }
+                else
+                {
+                    RegisterNow();
+                }
+
+                //Program.mainWindow.TrackEvent(string.Format("{0}{1}", cTrackingParameters.eUTM_BTN_TYPE.BTN_ActivateNow.ToString(), ""), cTrackingParameters.eProductName.ActivationWindow.ToString(), true, bActivateTracking, 0, (int)cTrackingParameters.eReminderEventType.actionbuttonprimary);
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmActivate::btnActivateNow_Click ::", ex);
+            }
+        }
+
+
+        public void RegisterNow()
+        {
+
+            string sEmailAddress = string.Empty;
+            string sKey = string.Empty;
+
+            try
+            {
+                //VG310820 - consider email also for NL builds
+                if (cGlobal.setupType == eSetupType.NL_ONE_TIME_EMAIL_REGISTER)
+                {
+                    sEmailAddress = txtEmail.Trim();
+                }
+
+                sKey = txtLicenseKey.Trim();
+
+                if (String.IsNullOrEmpty(sKey))
+                {
+                    App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                    {
+                        //MessageBoxWithCheckBox.SimpleMsgBox(this, cResourceManager.LoadString("IDS_KEY_NOT_FOUND"), cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                        System.Windows.MessageBox.Show(cResourceManager.LoadString("DPF_REGISTRATION_KEY_NOT_FOUND"));
+                    }));
+                    return;
+                }
+
+                if (cGlobal.setupType == eSetupType.NL_ONE_TIME_EMAIL_REGISTER)
+                {
+                    if (!AppFunctions.IsValidEmail(sEmailAddress))
+                    {
+                        App.oMainReference.Dispatcher.Invoke(new Action(() =>
+                        {
+                            //MessageBoxWithCheckBox.SimpleMsgBox(this, cResourceManager.LoadString("IDS_NAG_MSG_VALID_EMAIL"), cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                            System.Windows.MessageBox.Show(cResourceManager.LoadString("IDS_NAG_MSG_VALID_EMAIL"));
+                        }));
+                        return;
+                    }
+                }
+
+                if (!oArmHelper.IsValidKey(string.Empty, sKey, false))
+                {
+                    // Key is Invalid and application is expired then show "Unregister/Expired version" message
+                    if (cGlobalSettings.cRegDetails.IsExpired && cGlobalSettings.cRegDetails.Key.ToLower() == sKey.ToLower())
+                    {
+                        //MessageBoxWithCheckBox.SimpleMsgBox(this, cResourceManager.LoadString("IDS_UNREGISTERED_EXPIRED_VERSION"), cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                        System.Windows.MessageBox.Show(cResourceManager.LoadString("DPF_REGISTRATION_UNREGISTER_EXPIRE"));
+                    }
+                    // If key is Invalid and setup type is NL_ONE_TIME_EMAIL_REGISTER, then 
+                    // check for 1 time full access of application 
+                    //VG200820 - will be used for only activation
+                    else if (cGlobal.setupType == eSetupType.NL_ONE_TIME_EMAIL_REGISTER)
+                    {
+                        string message = string.Empty;
+                        bool isSuccess = false;
+                        if (!string.IsNullOrEmpty(sKey) && AppFunctions.IsValidEmail(sEmailAddress))
+                        {
+                            isSuccess = FreeAppTrialProtection.ValidateFreeKey(sEmailAddress, sKey, out message);
+                        }
+                        else
+                        {
+                            message = cResourceManager.LoadString("IDS_NAG_MSG_VALID_EMAIL");
+                            if (string.IsNullOrEmpty(sKey))
+                                message = cResourceManager.LoadString("DPF_REGISTRATION_KEY_NOT_FOUND");
+                        }
+
+                        if (!string.IsNullOrEmpty(message))
+                        {
+                            if (isSuccess)
+                            {
+                                message = cResourceManager.LoadString("DPF_REGISTRATION_UNREGISTER_EXPIRE");
+                                //MessageBoxResult result = MessageBoxWithCheckBox.SimpleMsgBox(this, message, cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                                //MessageBoxWithCheckBox.show(message, "", cGlobalSettings.GetProductName(), cResourceManager.LoadString("DFF_MESSAGEBOX_OK_TEXT"));
+                                System.Windows.MessageBox.Show(cResourceManager.LoadString(message));
+
+                                //MessageBoxResult result = MessageBoxWithCheckBox.SimpleMsgBox(this, message, cGlobalSettings.GetProductName() + " ", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                                //if (result == System.Windows.MessageBoxResult.Yes)
+                                //{
+                                //    cGlobal.frmNagReturnCode = FORM_RETURN_CODES.START_CLEAN;
+                                //}
+                                //else
+                                //{
+                                //    cGlobal.frmNagReturnCode = FORM_RETURN_CODES.DO_NOTHING;
+                                //}
+                                //this.Close();
+                            }
+                            else
+                            {
+                                //MessageBoxWithCheckBox.SimpleMsgBox(this, message, cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                                System.Windows.MessageBox.Show(cResourceManager.LoadString(message));
+                                txtLicenseKey = string.Empty;
+                            }
+                        }
+
+                        if (isSuccess)
+                            return;
+
+                    }
+                    else
+                    {
+                        //MessageBoxWithCheckBox.SimpleMsgBox(this, cResourceManager.LoadString("IDS_INVALID_KEY"), cGlobalSettings.GetProductName() + " ", MessageBoxButton.OK, MessageBoxImage.Information);
+                        System.Windows.MessageBox.Show(cResourceManager.LoadString("IDS_WRONGKEY"));
+                    }
+                    return;
+                }
+                else
+                {
+                    oBgActivationChecker.RunWorkerAsync(new string[] { sEmailAddress, sKey });
+                    //Program.oMainFormReference.oFooter.SetRegistrationSettings();                    
+                }
+            }
+            catch (System.Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("RegisterNow ::", ex);
+            }
+        }
+
+        void LicenseKeyValueChange()
+        {
+            try
+            {
+                if (txtLicenseKey.Length > 0)
+                {
+                    IsActivationBtnEnable = true;
+                }
+                else
+                {
+                    IsActivationBtnEnable = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmRegsitration :: LicenseKeyValueChange :", ex);
+            }
+        }
+    }
+}

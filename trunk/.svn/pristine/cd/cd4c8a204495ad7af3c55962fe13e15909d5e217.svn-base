@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucResultObjectListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <DataGrid x:Name="ObjectListView11" Background="{DynamicResource bgrclr_gray}" >
+            <DataGrid.ColumnHeaderStyle>
+                <Style  TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                <Border BorderBrush="#E5E5E5"
+                                    BorderThickness=" 0.5 0 0.6 0.6"
+                                Background="#fff"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <TextBlock Text="{TemplateBinding Content}" Padding="5,5,0,0" Height="28"  Width="{TemplateBinding Width}" TextAlignment="Left"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Center"
+                                       FontSize="13"
+                                       Foreground="#000"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox>
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn x:Name="lblGroup" Header="Group" MinWidth="80">
+                    
+                </DataGridTextColumn>
+
+                <!--<DataGridTemplateColumn MinWidth="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Height="10" Width="10" Source="{Binding FileIcon}"  />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                <DataGridTextColumn x:Name="lblFileName" Header="File Name" MinWidth="80"/>
+
+                <DataGridTextColumn x:Name="lblPath" Header="Path" Width="*"/>
+
+                <DataGridTextColumn x:Name="lblSize" Header="Size" MinWidth="50"/>
+
+                <DataGridTextColumn x:Name="lblCreated" Header="Created" MinWidth="50"/>
+
+                <DataGridTextColumn x:Name="lblModified" Header="Modified" MinWidth="30"/>
+
+                <DataGridTextColumn x:Name="lblFileType" Header="File type" MinWidth="30"/>
+
+                <DataGridTextColumn x:Name="lblImgWidth" Header="Image Width" MinWidth="30"/>
+
+                <DataGridTextColumn x:Name="lblImgHeight" Header="Image Height" MinWidth="60"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

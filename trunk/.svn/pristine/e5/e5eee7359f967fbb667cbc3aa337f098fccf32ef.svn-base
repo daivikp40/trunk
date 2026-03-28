@@ -1,0 +1,276 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.HelperClasses;
+using DuplicatePhotosFixer.Helpers;
+using DuplicatePhotosFixer.UserControls;
+using Xceed.Wpf.Toolkit;
+
+namespace DuplicatePhotosFixer.Models
+{
+    public class vmFileFormatSettings : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        ObservableCollection<csFileTypes> _lstFileType { get; set; }
+        public ObservableCollection<csFileTypes> lstFileType
+        {
+            get
+            {
+                return _lstFileType;
+            }
+            set
+            {
+                _lstFileType = value;
+                OnPropertyChanged("lstFileType");
+            }
+        }
+
+        private string _storageSize;
+
+        public string StorageSize
+        {
+            get { return _storageSize; }
+            set
+            {
+                if (_storageSize != value)
+                {
+                    _storageSize = value;
+                    OnPropertyChanged("StorageSize");
+                }
+            }
+        }
+
+
+
+
+        long _sMinSizeValue;
+        public long sMinSizeValue
+        {
+            get
+            {
+                return _sMinSizeValue;
+            }
+            set
+            {
+                _sMinSizeValue = value;
+                
+                OnPropertyChanged("sMinSizeValue");
+
+            }
+        }
+
+        int _sMinSize;
+        public int sMinSize
+        {
+            get
+            {
+                return _sMinSize;
+            }
+
+            set
+            {
+                _sMinSize = value;
+             
+                OnPropertyChanged("sMinSize");
+            }
+        }
+
+        SizeUnit _rVal;
+
+        public SizeUnit rVal
+        {
+            get
+            {
+                return _rVal;
+            }
+
+            set
+            {
+                _rVal = value;
+                OnPropertyChanged("rVal");
+            }
+        }
+
+
+        //string _sMinSizeType;
+        //public string sMinSizeType
+        //{
+        //    get
+        //    {
+        //        return _sMinSizeType;
+        //    }
+
+        //    set
+        //    {
+        //        //_sMinSizeType = cResourceManager.LoadString("DPF_PREFERENCES_FORMATS").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        //        //_sMinSizeType = cResourceManager.LoadString("DPF_PREFERENCES_FORMATS").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+        //        OnPropertyChanged("sMinSize");
+        //    }
+        //}
+
+
+        public vmFileFormatSettings()
+        {
+           
+            Init();
+        }
+
+        
+        void Init()
+        {
+            LoadFileFormatSettings(false);
+
+            LoadFileSize();
+            MinValueChange();
+           
+        }
+
+        public enum SizeUnit
+        {
+            KB = 0,
+            MB = 1
+        }
+
+        void ValueToIndex()
+        {
+           
+            try
+            {
+                if (sMinSize == 0)
+                {
+                    rVal = SizeUnit.KB;
+                }
+                else
+                {
+                    rVal = SizeUnit.MB;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        public void MinValueChange()
+        {
+            ValueToIndex();
+        }
+
+        //public void MinValueChange()
+        //{
+        //    ValueToIndex();
+        //}
+
+        void LoadFileSize()
+        {
+            try
+            {
+                csFileTypesOperations.getMinimumSize();
+                if (cGlobalSettings.MinFileSize < 1048576) 
+                {
+
+                    sMinSizeValue = cGlobalSettings.MinFileSize / 1024;                  
+
+
+                }
+                else
+                {
+                    sMinSizeValue= cGlobalSettings.MinFileSize / 1048576;
+                   
+                }
+         
+
+
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("vmFileFormatSettings:: LoadFileSize: ", ex);
+            }
+
+
+        }
+
+        public void LoadFileFormatSettings(bool bLoadDefaultFocefully = false)
+        {
+            try
+            {
+                if (bLoadDefaultFocefully)
+                {
+                    cGlobalSettings.listFileType = null;
+                }
+                else
+                {
+                    /// First check for already saved list. 
+                    /// 
+                    LoadSavedSettings();
+                }
+                /// Else load default list
+                if (cGlobalSettings.listFileType == null || cGlobalSettings.listFileType.Count <= 0)
+                {
+                    csFileTypesOperations.initillizeFileTypes();
+                }
+
+                csFileTypesOperations.SaveFileFormatSettings();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmFileFormatSettings:: LoadFileFormatSettings: ", ex);
+            }
+        }
+
+        void LoadSavedSettings()
+        {
+            string strXMLPath = cGlobalSettings.xmlFileFormatSettings;
+            try
+            {
+                if (File.Exists(strXMLPath))
+                {
+                    Dictionary<int, bool> dictFileTypeStatus = new Dictionary<int, bool>();
+                    if (cSerializer.DeSerializeData(ref dictFileTypeStatus, strXMLPath))
+                    {
+                        csFileTypesOperations.initillizeFileTypes();
+
+                        foreach(var data in dictFileTypeStatus)
+                        {
+                            cGlobalSettings.listFileType[data.Key].isChecked = data.Value;
+                        }
+                    }
+                    else
+                    {
+                        File.Delete(strXMLPath);
+                    }
+                }
+
+                if (cGlobalSettings.listFileType == null)
+                    csFileTypesOperations.initillizeFileTypes();
+            }
+
+
+            catch (Exception ex)
+            {
+                if (File.Exists(strXMLPath))
+                {
+                    File.Delete(strXMLPath);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+using DuplicatePhotosFixer.App_Code;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Models;
+using Xceed.Wpf.Toolkit;
+using CheckBox = System.Windows.Controls.CheckBox;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucSettingsFileFormat.xaml
+    /// </summary>
+
+    public partial class ucSettingsFileFormat : System.Windows.Controls.UserControl
+    {
+
+        public ucSettingsFileFormat()
+        {
+            PreInit();
+            InitializeComponent();
+            Init();
+
+        }
+
+        void PreInit()
+        {
+            try
+            {
+                if (App.oMainReference.objFileFormat == null)
+                    App.oMainReference.objFileFormat = new vmFileFormatSettings();
+                this.DataContext = App.oMainReference.objFileFormat;
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsFileFormat:: PreInit: ", ex);
+            }
+        }
+
+        void Init()
+        {
+            try
+            {
+                LoadStrings();
+                
+
+                LoadFileFormatList();
+
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsFileFormat:: Init: ", ex);
+            }
+        }
+
+        void LoadFileFormatList()
+        {
+            try
+            {
+                var res = cGlobalSettings.listFileType.Where(p => p.Key > 0).Select(p => p.Value);
+                App.oMainReference.objFileFormat.lstFileType = new System.Collections.ObjectModel.ObservableCollection<csFileTypes>(res);
+
+                fileformatsgrid.ItemsSource = App.oMainReference.objFileFormat.lstFileType;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucSettingsFileFormat:: LoadData: ", ex);
+            }
+        }
+        
+        public void ResetDefault()
+        {
+            App.oMainReference.objFileFormat.ResestFileFormatandSize();
+           csFileTypesOperations.LoadFileFormatSettings(true);
+
+            LoadFileFormatList();
+        }
+
+        private void LoadStrings()
+        {
+            lbl1.Text = cResourceManager.LoadString("IDS_MANAGE_FILE_FORMATS");
+            lbl2.Text = cResourceManager.LoadString("DPF_PREFERENCES_FILTER_SORT_NOTE_TEXT");
+            //lblFiletype.Text = cResourceManager.LoadString("DPF_PREFERENCES_FILTER_SORT_FILE_TYPE_TEXT");
+            colUse.Text = cResourceManager.LoadString("DPF_PREFERENCES_FILTER_SORT_USE_TEXT");
+            colTypedes.Text = cResourceManager.LoadString("DPF_PREFERENCES_FILTER_SORT_TYPE_DESCRIPTION_TEXT");
+            lblMinSize.Text = cResourceManager.LoadString("DPF_PREFERENCES_FILTER_SORT_MIN_FILE_SIZE_TEXT");
+
+        }
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //UpdateUIData();
+          
+        }
+
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            csFileTypesOperations.SaveFileFormatSettings();
+            csFileTypesOperations.updateSelectedExtensionsItems();
+
+        }
+
+
+       
+
+        private void domainUpDownMinFileSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+           
+            if (App.oMainReference.objFileFormat.UnitIndex == 0)
+            {
+                numericUpDownMinFileSize.Minimum = 10;
+            }
+
+            else if (App.oMainReference.objFileFormat.UnitIndex == 1)
+            {
+                numericUpDownMinFileSize.Minimum = 1;
+            }
+        }
+
+       
+    }
+}

@@ -1,0 +1,382 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucHomeComparisonMethod"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="628" d:DesignWidth="335" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <!--<Style x:Key="HoverRadioButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Foreground" Value="#000000"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <DockPanel HorizontalAlignment="Left">
+                            <Ellipse x:Name="OuterEllipse" Width="20" Height="20" Stroke="Transparent" StrokeThickness="1"/>
+                            <Ellipse x:Name="InnerEllipse" Width="10" Height="10" Fill="{TemplateBinding Foreground}"/>
+                            <ContentControl Content="{TemplateBinding Content}" Padding="20 0 0 0"/>
+                            </DockPanel>
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="InnerEllipse" Property="Stroke" Value="Blue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
+        <Style TargetType="TextBlock" x:Key="stl_txtsubHeade">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource frgclr_whitish}"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="stl_txtHeader">
+            <Setter Property="FontSize" Value="14"  />
+            <Setter Property="VerticalAlignment" Value="Bottom"  />
+            <Setter Property="Padding" Value="15 0"  />
+            <Setter Property="FontWeight" Value="Medium"  />
+            <Setter Property="Foreground" Value="{DynamicResource cl_fg_primary}" />
+        </Style>
+        
+        
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource bgclr_dark}">
+        <StackPanel Margin="0 0">
+            <Border  BorderBrush="{DynamicResource bgclr_dark}"  BorderThickness="0 1 0 0">
+                <Border.Background>
+                    <ImageBrush ImageSource="{DynamicResource img_top_header}"/>
+                </Border.Background>
+                <DockPanel Height="47"  Margin="0 0">
+                    <TextBlock x:Name="lbl_comparisonMethod" Text="Comparison Method" FontSize="14" VerticalAlignment="Center" Padding="20 0" FontWeight="Medium" Foreground="{DynamicResource cl_fg_primary}"/>
+                    <Image x:Name="picComparisonMethod" Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0"
+                       Cursor="Hand">
+                        <!--<Image.ToolTip>
+                        <TextBlock Width="150"  Text="Choose between Exact Match and Similar Match to search for duplicate and similar images."
+                                   TextWrapping="Wrap"/>
+                    </Image.ToolTip>-->
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Choose between Exact Match and Similar Match to search for duplicate and similar images."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+            <StackPanel Margin="0 10">
+                <RadioButton x:Name="rdbtnExactMatch" GroupName="gnComparisonMethod"  VerticalAlignment="Center" 
+                             IsChecked="{Binding Path=ExactMatchChecked,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="20 5 0 0" 
+                                 Padding="3 -3 0 5" Foreground="{DynamicResource cl_fg_primary}"
+                               FontSize="14" FontWeight="SemiBold"
+                                 Content="Exact Match">
+                    <!--To do Triggers-->                  
+                    
+                </RadioButton>
+                    
+
+                    <RadioButton x:Name="rdbtnSimilarMatch" GroupName="gnComparisonMethod"
+                                 Padding="3 -3 0 5" Foreground="{DynamicResource cl_fg_primary}"
+                                 FontSize="14" FontWeight="SemiBold"
+                             IsChecked="{Binding Path=SimilarMatchChecked,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="20 5 0 0 "  Content="Similar Match" />
+                
+                <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 5">
+                    <Image Source="/Resources/campare/campare7.png" Width="136" Margin="10 0"/>
+                    <Image x:Name="imgMatchLevel" Width="136" Margin="10 0">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Setter Property="Source" Value="/Resources/campare/campare.png"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=rdbtnExactMatch}" Value="True">
+                                        <Setter Property="Source" Value="/Resources/campare/campare7.png"/>
+                                    </DataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="0"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="1"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare1.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="2"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare2.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="3"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare3.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="4"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare4.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="5"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare5.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="6"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare6.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=rdbtnSimilarMatch}" Value="True"></Condition>
+                                            <Condition Binding="{Binding Value, ElementName=matchLevelSlider}" Value="7"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Source" Value="/Resources/campare/campare7.png"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </DockPanel>
+            </StackPanel>
+            <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+            <StackPanel x:Name="similarMatchPropertiesPanel">
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_matchingLevel"
+                               Text="Matching Level" 
+                               Style="{DynamicResource stl_txtHeader}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Matching Level defines a degree of similarity between photos which can be adjusted from Low to High.The level can be changes in results on the go!"
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="matchLevelSlider" Value="{Binding Path=nMatchingPercentage , Mode=TwoWay}"
+                          
+                            TickPlacement="TopLeft" TickFrequency="1" Minimum="0" Maximum="7" Margin="25 15 25 5"
+                        IsSnapToTickEnabled="True" ValueChanged="matchLevelSlider_ValueChanged">
+                    </Slider>
+
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_lowMatching" Text="Low" Style="{StaticResource stl_txtsubHeade}"/>
+                        <TextBlock x:Name="lbl_highMatching" Text="High" Style="{StaticResource stl_txtsubHeade}" DockPanel.Dock="Right"/>
+                        <TextBlock  FontSize="11"  Text="{Binding Path=sMatchingPerValue, UpdateSourceTrigger=PropertyChanged}"
+                                    Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_bitmapSize" Text="Bitmap Size" Style="{DynamicResource stl_txtHeader}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Manage the accuracy of search results by adjusting the slider between Performance and Quality. Slide towards Performance for speedy and nearly accurate results and towards Quality for highly accurate results."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="bitmapSizeSlider" TickPlacement="TopLeft" 
+                            TickFrequency="1" 
+                            Minimum="0" 
+                            Maximum="7" 
+                            IsSnapToTickEnabled="True" 
+                            Value="{Binding Path=nBitMapSize, Mode=TwoWay}"
+                            Margin="25 15 25 5" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_performance" Text="Performace" Style="{StaticResource stl_txtsubHeade}"/>
+                        <TextBlock x:Name="lbl_quality" Text="Quality" Style="{StaticResource stl_txtsubHeade}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxBitmapsize"  
+                                   Text="{Binding Path=sBitmapSizeSelected, UpdateSourceTrigger=PropertyChanged}"
+                                   FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_timeInterval" Text="Time Interval" 
+                               Style="{DynamicResource stl_txtHeader}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="Time interval determines a time gap between photos ranging from less than a second to 24 hours. Choose an interval of your choice for preferred results."
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="timeIntervalSlider" 
+                             Value="{Binding Path=nTimeInterval, Mode=TwoWay}"
+                            TickPlacement="TopLeft" TickFrequency="1" Minimum="0" Maximum="18" Margin="25 15 25 5" 
+                        IsSnapToTickEnabled="True" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_moreTime" Text="More" Style="{StaticResource stl_txtsubHeade}"/>
+                        <TextBlock x:Name="lbl_lessTime" Text="Less" FontSize="11" Foreground="{DynamicResource frgclr_whitish}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxTimeInterval"
+                                   Style="{StaticResource stl_txtsubHeade}" 
+                                    Text="{Binding Path=sTimeIntervalSelected, UpdateSourceTrigger=PropertyChanged}"
+                                   DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 0"/>
+
+                <DockPanel Height="19" Background="{DynamicResource bgclr_soliddark}" Margin="0 0">
+                    <TextBlock x:Name="lbl_GPS"  Text="GPS" 
+                               Style="{DynamicResource stl_txtHeader}"/>
+                    <Image Source="{DynamicResource img_infoicon}"  Width="15" Height="15" HorizontalAlignment="Right" Margin="20 0 10 0" Cursor="Hand">
+                        <Image.ToolTip>
+                            <ToolTip Placement="Bottom" >
+                                <TextBlock Width="150"  Text="GPS checks the embedded coordinates of photos. Location coordinates between photos should fall within the ranges of 0 to 100 meters"
+                                   TextWrapping="Wrap"/>
+                            </ToolTip>
+                        </Image.ToolTip>
+                    </Image>
+
+                </DockPanel>
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0 0 0 1"/>
+
+                <StackPanel Height="71">
+                    <Slider x:Name="gpsSlider"
+                            Value="{Binding Path=nGPSValue, Mode=TwoWay}"
+                            TickPlacement="TopLeft" 
+                            TickFrequency="1" Minimum="0" Maximum="7" Margin="25 15 25 5"
+                        IsSnapToTickEnabled="True" />
+                    <DockPanel Margin="20 0">
+                        <TextBlock x:Name="lbl_LessGPS" Text="Less" Style="{StaticResource stl_txtsubHeade}"/>
+                        <TextBlock x:Name="lbl_MoreGPS" Text="More" Style="{StaticResource stl_txtsubHeade}" DockPanel.Dock="Right"/>
+                        <TextBlock x:Name="txtbxGPS"
+                                    Text="{Binding Path=sGPSSelected, UpdateSourceTrigger=PropertyChanged}"
+                                   Style="{StaticResource stl_txtsubHeade}" DockPanel.Dock="Right" HorizontalAlignment="Center"/>
+                    </DockPanel>
+                </StackPanel>
+                    
+                <StackPanel Orientation="Vertical" Margin="20,0">
+                    <DockPanel>
+                        <CheckBox x:Name="chk_rotatedImages"
+                                  VerticalAlignment="Center"                               
+                                  Margin="0 0 8 0" 
+                                  IsChecked="{Binding Path=ImageRotatedChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   VerticalContentAlignment="Center"
+                                   Foreground="{DynamicResource frgclr_whitish}"
+                                  Content="Include Rotated Images" >
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>                                  
+                                                         
+                    </DockPanel>
+                    <DockPanel>
+                        <CheckBox x:Name="chk_flippedImages"
+                                  VerticalAlignment="Center"                               
+                                  Margin="0 0 8 0"
+                                  Content="Include Flipped Images"        
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                    VerticalContentAlignment="Center"
+                                   IsChecked="{Binding Path=ImageFlippedChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   Foreground="{DynamicResource frgclr_whitish}">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                                  
+
+                    </DockPanel>
+
+                </StackPanel>
+                
+                <Button x:Name="loadDefault_btn" 
+                        Style="{DynamicResource link_btn}"
+                        Background="Transparent"
+                        BorderThickness="0 0 0 1"
+                        BorderBrush="{DynamicResource frgclr_whitish}"
+                        FontSize="13" FontWeight="Bold"                      
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" Foreground="{DynamicResource frgclr_whitish}" 
+                        Margin="10 2 10 0"       
+                        Content="Reset Default Settings" Click="loadDefault_btn_Click" />
+            
+                <!--<StackPanel >
+
+                    <TextBlock x:Name="btn_OpenSettings" Text="Load Defaults" FontSize="13" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{DynamicResource frgclr_whitish}" TextDecorations="Underline" Margin="10 0 10 0"/>
+                </StackPanel>-->
+
+
+                <StackPanel.Style>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=rdbtnExactMatch}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

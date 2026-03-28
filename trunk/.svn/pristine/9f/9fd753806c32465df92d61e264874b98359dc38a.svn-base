@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucpromotionalADU"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="322" d:DesignWidth="1000" Background="{DynamicResource bgclr_soliddark}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="400"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Margin="40 40 0 0" >
+            <DockPanel HorizontalAlignment="Center">
+                <Image x:Name="arrow_img" Source="{DynamicResource img_orange_arrow}"  Margin="0 0 10 0" Stretch="None"/>
+                <TextBlock x:Name="lbl1" Text="Recommended app by Systweak" Foreground="#fff" FontSize="13" VerticalAlignment="Center" FontWeight="Regular"/>
+            </DockPanel>
+            <Image Source="{DynamicResource img_adu-image }" Margin="0 15 0 0"/>
+        </StackPanel>
+        <Image x:Name="divider" Source="{DynamicResource img_divider-line}" HorizontalAlignment="Right"/>
+        <Grid Grid.Column="1" Margin="20 40 0 0">
+            <StackPanel>
+                <DockPanel Margin="0 0 0 20">
+                    <Image x:Name="ADU_img" Source="{DynamicResource img_adu_logo}" Stretch="None"/>
+                    <StackPanel>
+                        <TextBlock x:Name="Product_heading" FontSize="24" Foreground="#fff" FontWeight="Bold" Text="Advanced Driver Updater"/>
+                        <TextBlock x:Name="product_info"  FontSize="14" Foreground="#c9c9c9" FontWeight="Regular" Text="Update Driver &amp; Instantly Boost PC Performance!"/>
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel Margin="20 0 0 3">
+                    <Image x:Name="tick_img" Source="{DynamicResource img_right}" Stretch="None" Margin="0 0 15 0"/>
+                    <TextBlock x:Name="product_des1" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Text="Safely updated old &amp; outdated drivers"/>
+                </DockPanel>
+                <DockPanel Margin="20 0 0 3">
+                    <Image x:Name="tick_img1" Source="{DynamicResource img_right}" Stretch="None" Margin="0 0 15 0"/>
+                    <TextBlock x:Name="product_des2" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Text="Huge driver database to get latest &amp; compatible drivers"/>
+                </DockPanel>
+                <DockPanel Margin="20 0 0 3">
+                    <Image x:Name="tick_img2" Source="{DynamicResource img_right}" Stretch="None" Margin="0 0 15 0"/>
+                    <TextBlock x:Name="product_des3" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Text="Backup &amp; restore old drivers to avoid any issues "/>
+                </DockPanel>
+                <DockPanel Margin="20 0 0 20">
+                    <Image x:Name="tick_img3" Source="{DynamicResource img_right}" Stretch="None" Margin="0 0 15 0"/>
+                    <TextBlock x:Name="product_des4" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Text="Faster browsing, better graphis &amp; smoother performance"/>
+                </DockPanel>
+                <DockPanel Margin="20 0 0 0">
+                    <Button x:Name="install_btn" Width="170" Height="38" Content="Install Now" FontSize="18" Style="{DynamicResource stylGreenBtn}"/>
+                    <Button x:Name="cancel_btn" Width="170" Height="38" Margin="20 0 0 0" Content="Cancel" FontSize="18" Style="{DynamicResource stl_btnScanForDuplicates}" BorderBrush="Transparent"/>
+                    <TextBlock/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock x:Name="lbl_agree" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Padding="2 7" Margin="20 0 5 0">
+                    By installing you agree to
+                    </TextBlock>
+                    <Button x:Name="EULA_btn"  Content="EULA" Style="{DynamicResource link_btn}" />
+                    <TextBlock x:Name="lbl" FontSize="14" Foreground="#B4B4B4" FontWeight="Regular" Padding="4 7">
+                    and
+                    </TextBlock>
+                    <Button x:Name="PrivacyPolicy_btn" Content="Privacy Policy" Style="{DynamicResource link_btn}" HorizontalAlignment="Left" Margin="0"/>
+                </DockPanel>
+
+                <!--<Hyperlink>EULA</Hyperlink> and
+                <Hyperlink>Privacy Policy</Hyperlink>-->
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

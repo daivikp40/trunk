@@ -1,0 +1,184 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucResultDetailedView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             xmlns:cust ="clr-namespace:DuplicatePhotosFixer.CustomControl"
+             mc:Ignorable="d" 
+            d:DesignHeight="684" d:DesignWidth="998">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="51"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="336"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="47"/>
+                    <RowDefinition/>
+
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1" Background="{DynamicResource bgclr_lightdark}">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="92" Width="Auto"/>
+                            <ColumnDefinition MinWidth="98" Width="Auto"/>
+                            <ColumnDefinition MinWidth="98" Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition MinWidth="98" Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <!--<cust:ImageButton x:Name="autoMarkbtn" Grid.Column="1" 
+                                          Image="{DynamicResource img_automark}"  
+                                          HoverImage="{DynamicResource img_automark_over}"
+                                          SelectedImage="{DynamicResource img_automark}"
+                                          FontSize="12" 
+                                          Foreground="#FFF"
+                                          Content="Auto Mark"  
+                                          Visibility="Visible"
+                                          Style="{DynamicResource imgBtn_TopImageText}"/>-->
+                        <Button Grid.Column="1" VerticalContentAlignment="Bottom" Content="Auto Mark" FontWeight="SemiBold" FontSize="12"
+                            Foreground="{DynamicResource frgclr_white}" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1 0 1 0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="{DynamicResource img_automark}" Stretch="Uniform"/>
+                            </Button.Background>
+
+                        </Button>
+
+                        <!--<cust:ImageButton x:Name="unMarkbtn" Grid.Column="2" 
+                                          Image="{DynamicResource img_mark}"  
+                                          HoverImage="{DynamicResource img_mark_over}"
+                                          SelectedImage="{DynamicResource img_mark}"                                       
+                                          Content="UnMark All"  
+                                          Visibility="Visible"
+                                          Style="{DynamicResource imgBtn_TopImageText}"/>-->
+                        <Button Grid.Column="2" Margin="0" VerticalContentAlignment="Bottom" Content="UnMark all" FontWeight="SemiBold" FontSize="12"
+                            Foreground="{DynamicResource frgclr_white}" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="{DynamicResource img_mark}" Stretch="Uniform"/>
+                            </Button.Background>
+
+                        </Button>
+                        <Border Grid.Column="3" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1 0 1 0">
+                            <DockPanel  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="40 0">
+                                <TextBlock Text="Selection Assistant" FontSize="13" Foreground="{DynamicResource frgclr_whitish}" VerticalAlignment="Center"/>
+                                <cust:ImageButton
+                            x:Name="btn_selectionAssistanceOptionA"
+                            Height="25"
+                            ToolTip="Select Assistant"
+                            Width="25"
+                            Margin="10 0 5 0"
+                            Style="{DynamicResource imageButton}"
+                            Image="{DynamicResource img_selection_assistant_A_icon}"
+                            HoverImage="{DynamicResource img_selection_assistant_A_icon_hover}"
+                            SelectedImage="{DynamicResource img_selection_assistant_A_icon}"/>
+                                <cust:ImageButton
+                            x:Name="btn_selectionAssistanceOptionB"
+                            Height="25"
+                            ToolTip="Clear Cache"
+                            Width="25"
+                            Margin="5 0"
+                            Style="{DynamicResource imageButton}"
+                            Image="{DynamicResource img_selection_assistant_B_icon}"
+                            HoverImage="{DynamicResource img_selection_assistant_B_icon_hover}"
+                            SelectedImage="{DynamicResource img_selection_assistant_B_icon}"/>
+
+                            </DockPanel>
+                        </Border >
+
+
+                        <Button Grid.Column="4" Margin="0" VerticalContentAlignment="Bottom" FontWeight="Medium" FontSize="12"
+                            Foreground="{DynamicResource frgclr_white}" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="0"
+                            Background="Transparent" Click="DetailedView_Change" >
+                            <StackPanel>
+                                <Image Source="{DynamicResource img_detailedView}" Height="25"/>
+                                <TextBlock Text="Detailed View"/>
+                            </StackPanel>
+
+                        </Button>
+                        <Popup x:Name="resultViewGridSelection"  IsOpen="False" Placement="Mouse" StaysOpen="False">
+
+                            <Button x:Name="btnImageView" Height="28" BorderThickness="0" 
+                                    BorderBrush="Transparent" >
+                                <DockPanel Background="White" >
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_imageViewIcon}" Margin="2" Stretch="None" />
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                    <TextBlock Text="Image View" Padding="0" Width="150" Background="White"
+                                                   VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                        </Popup>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1" Background="{DynamicResource bgrclr_gray}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Background="{DynamicResource bgrclr_whitish}" Margin="10 5">
+                        <Image Source="{DynamicResource img_alert_icon_trans}" Height="24" Width="24" Margin="10 0"/>
+                        <DockPanel VerticalAlignment="Center" Margin="5 0">
+                            <TextBlock Text="Duplicate Photos found : " FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="0" Foreground="{DynamicResource frg_clr_red}" FontWeight="Bold" FontSize="14" Padding="5 0"/>
+                        </DockPanel>
+                        <Image Source="{DynamicResource img_seprator}" Width="2" Height="25" Margin="5"/>
+                        <DockPanel VerticalAlignment="Center" Margin="5 0">
+                            <TextBlock Text="Space to be Saved : " FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="0 KB" Foreground="{DynamicResource frg_clr_red}" FontWeight="Bold" FontSize="14" Padding="5 0"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Width="100" Height="30" HorizontalAlignment="Right" Background="Transparent" BorderThickness="0">
+                                <TextBlock Text="Delete Marked" TextDecorations="Underline" Foreground="{DynamicResource frg_clr_blue}" FontWeight="Bold" FontSize="13"/>
+                            </Button>
+                        </DockPanel>
+                    </DockPanel>
+
+                    <ScrollViewer Grid.Row="1">
+                        <local:ucResultObjectListView/>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+            <local:ucImageInfo Grid.Column="1" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1"/>
+        </Grid>
+
+        <DockPanel Grid.Row="1" Background="{DynamicResource bgclr_dark}">
+            <TextBlock Width="229" Padding="20 0" Foreground="{DynamicResource frgclr_white}" VerticalAlignment="Center"/>
+            <Border>
+                <TextBlock Width="200" Padding="20 0" Foreground="{DynamicResource frgclr_white}" VerticalAlignment="Center"/>
+            </Border>
+            <DockPanel DockPanel.Dock="Right" Margin="20 0">
+                <Image Source="{DynamicResource img_btnfolder}" Height="15" Width="15"/>
+                <TextBlock Padding="5 0" VerticalAlignment="Center" Foreground="{DynamicResource frgclr_white}"/>
+            </DockPanel>
+
+        </DockPanel>
+        <Border Grid.Row="1" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1"/>
+        <Grid Grid.Row="2" Height="51" Background="{DynamicResource bgrclr_solidgray}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="180"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"  Height="32" Width="82" Content="Back" HorizontalAlignment="Left" Margin="20 0"
+                    BorderThickness="0" Style="{DynamicResource stl_btnBack}" >
+                <Button.Background>
+                    <ImageBrush ImageSource="{DynamicResource img_btnback}"/>
+                </Button.Background>
+            </Button>
+            <Button Grid.Column="1"  Height="34" Width="235" Content="Delete Marked"
+                    HorizontalAlignment="Center" Style="{DynamicResource stl_btnScanDeleteMarked}"/>
+        </Grid>
+        <Border Grid.Row="2" BorderBrush="{DynamicResource clr_darkborder}" BorderThickness="1"/>
+    </Grid>
+</UserControl>

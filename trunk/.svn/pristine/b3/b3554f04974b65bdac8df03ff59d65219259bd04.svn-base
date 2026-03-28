@@ -1,0 +1,572 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using DuplicatePhotosFixer;
+using Microsoft.Win32;
+
+namespace DuplicatePhotoFixer.App_Code
+{
+    static class RegistryTool
+    {
+
+        //static RegistryKey rk_CurrentUser = Registry.CurrentUser;
+
+        //static string baseKey = "HKEY_CURRENT_USER";
+        //static string subKey = @"Software\systweak\Duplicate Photo Fixer";
+
+        public const string REGSTR_IS_GIVE_AWAY_SHOWN = "GA";
+
+
+        public const string REGSTR_IS_SERVER_INFORMED_FOR_FREE_CLEANING = "IsServerInformedForFreeCleaning";
+        public const string REGSTR_IS_FREE_CLEANING_DONE = "IsFreeCleanDone";
+        public const string REGSTR_IS_FIRST_RESULT_LOAD = "bRFTL";
+
+        public static bool isResultLoadFirstTime
+        {
+            get
+            {
+                bool isShown = true;
+                string val = Read(REGSTR_IS_FIRST_RESULT_LOAD, 1, RegistryValueKind.DWord);
+                if (val == null)
+                    isShown = true;
+                else
+                {
+                    isShown = Convert.ToByte(val) == 0 ? false : true;
+                }
+                return isShown;
+            }
+            set
+            {
+                if (value)
+                    Write(REGSTR_IS_FIRST_RESULT_LOAD, 1, RegistryValueKind.DWord);
+                else
+                    Write(REGSTR_IS_FIRST_RESULT_LOAD, 0, RegistryValueKind.DWord);
+            }
+        }
+
+        public static bool isGiveAwayShown
+        {
+            get
+            {
+                bool isShown = true;
+                string val = Read(REGSTR_IS_GIVE_AWAY_SHOWN, 0, RegistryValueKind.DWord);
+                if (val == null)
+                    isShown = false;
+                else
+                {
+                    isShown = Convert.ToByte(val) == 0 ? false : true;
+                }
+                return isShown;
+            }
+            set
+            {
+                if (value)
+                    Write(REGSTR_IS_GIVE_AWAY_SHOWN, 1, RegistryValueKind.DWord);
+                else
+                    Write(REGSTR_IS_GIVE_AWAY_SHOWN, 0, RegistryValueKind.DWord);
+            }
+        }
+
+        public static int IsFreeCleanDone
+        {
+            get
+            {
+                string val = Read(REGSTR_IS_FREE_CLEANING_DONE, 1, RegistryValueKind.DWord);
+                if (val == null)
+                    return 1;
+                else
+                    return Convert.ToByte(val);
+            }
+            set
+            {
+                Write(REGSTR_IS_FREE_CLEANING_DONE, value, RegistryValueKind.DWord);
+            }
+        }
+
+        /* By default assumed that Server knows the status,
+         * In case after removing duplicates not able to inform server (due to internet lost),
+         * update value to 0(Server not informed for free cleaning, but cleaning is done).
+         */
+        public static int IsServerInformedForFreeCleaning
+        {
+            get
+            {
+                string val = Read(REGSTR_IS_SERVER_INFORMED_FOR_FREE_CLEANING, 1, RegistryValueKind.DWord);
+                if (val == null)
+                    return 1;
+                else
+                    return Convert.ToByte(val);
+            }
+            set
+            {
+                Write(REGSTR_IS_SERVER_INFORMED_FOR_FREE_CLEANING, value, RegistryValueKind.DWord);
+            }
+        }
+
+        //public static int ScanSystemStartup
+        //{
+        //    get
+        //    {
+        //        string val = string.Empty;
+        //        if (cGlobal.setupType == System.Windows.Forms.eSetupType.NL_ONE_TIME_EMAIL_REGISTER || cGlobal.setupType == System.Windows.Forms.eSetupType.NL_EQUIVALENT || cGlobal.setupType == System.Windows.Forms.eSetupType.ADG_CAPMPAIGN)
+        //            val = Read(enumClass.eRegistryKeys.ScanSystemStartup.ToString(), 0, RegistryValueKind.DWord);
+        //        else
+        //            val = Read(enumClass.eRegistryKeys.ScanSystemStartup.ToString(), 0, RegistryValueKind.DWord);
+        //        if (val == null)
+        //            return 1;
+        //        else
+        //            return Convert.ToByte(val);
+        //    }
+        //    set
+        //    {
+        //        Write(enumClass.eRegistryKeys.ScanSystemStartup.ToString(), value, RegistryValueKind.DWord);
+        //    }
+        //}
+
+
+        //public static int ShowProductMessages
+        //{
+        //    get
+        //    {
+        //        string val = string.Empty;
+        //        int defaultValue = 1;
+
+        //        if (cGlobal.IS_LB_BUILD == 1)
+        //            defaultValue = 0;
+
+        //        if (cGlobal.setupType == System.Windows.Forms.eSetupType.NL_ONE_TIME_EMAIL_REGISTER || cGlobal.setupType == System.Windows.Forms.eSetupType.NL_EQUIVALENT || cGlobal.setupType == System.Windows.Forms.eSetupType.ADG_CAPMPAIGN)
+        //            val = Read(enumClass.eRegistryKeys.ProductMessages.ToString(), defaultValue, RegistryValueKind.DWord);
+        //        else
+        //            val = Read(enumClass.eRegistryKeys.ProductMessages.ToString(), defaultValue, RegistryValueKind.DWord);
+        //        if (val == null)
+        //            return defaultValue;
+        //        else
+        //            return Convert.ToByte(val);
+        //    }
+        //    set
+        //    {
+        //        Write(enumClass.eRegistryKeys.ProductMessages.ToString(), value, RegistryValueKind.DWord);
+        //    }
+        //}
+
+        //public static int ShowOtherProductMessages
+        //{
+        //    get
+        //    {
+        //        string val = string.Empty;
+        //        int defaultValue = 1;
+
+        //        if (cGlobal.IS_LB_BUILD == 1)
+        //            defaultValue = 0;
+        //        if (cGlobal.setupType == System.Windows.Forms.eSetupType.NL_ONE_TIME_EMAIL_REGISTER || cGlobal.setupType == System.Windows.Forms.eSetupType.NL_EQUIVALENT || cGlobal.setupType == System.Windows.Forms.eSetupType.ADG_CAPMPAIGN)
+        //            val = Read(enumClass.eRegistryKeys.OtherProductMessages.ToString(), defaultValue, RegistryValueKind.DWord);
+        //        else
+        //            val = Read(enumClass.eRegistryKeys.OtherProductMessages.ToString(), defaultValue, RegistryValueKind.DWord);
+        //        if (val == null)
+        //            return defaultValue;
+        //        else
+        //            return Convert.ToByte(val);
+        //    }
+        //    set
+        //    {
+        //        Write(enumClass.eRegistryKeys.OtherProductMessages.ToString(), value, RegistryValueKind.DWord);
+        //    }
+        //}
+
+
+        //public static int CheckAutoUpdates
+        //{
+        //    get
+        //    {
+        //        string val = string.Empty;
+        //        if (cGlobal.setupType == System.Windows.Forms.eSetupType.NL_ONE_TIME_EMAIL_REGISTER || cGlobal.setupType == System.Windows.Forms.eSetupType.NL_EQUIVALENT || cGlobal.setupType == System.Windows.Forms.eSetupType.ADG_CAPMPAIGN)
+        //            val = Read(enumClass.eRegistryKeys.DisableAutoUpdates.ToString(), 1, RegistryValueKind.DWord);
+        //        else
+        //            val = Read(enumClass.eRegistryKeys.DisableAutoUpdates.ToString(), 1, RegistryValueKind.DWord);
+        //        if (val == null)
+        //            return 0;
+        //        else
+        //            return Convert.ToByte(val);
+        //    }
+        //    set
+        //    {
+        //        Write(enumClass.eRegistryKeys.DisableAutoUpdates.ToString(), value, RegistryValueKind.DWord);
+        //    }
+        //}
+
+        public static int notShowDeleteConfirmation
+        { 
+            get 
+            {
+                string val = Read(enumClass.eRegistryKeys.bNotShowDeleteConfirmation.ToString(), 0, RegistryValueKind.DWord);
+                if (val == null)
+                    return 1;
+                else
+                    return Convert.ToByte(val);
+            } 
+            set 
+            {
+                Write(enumClass.eRegistryKeys.bNotShowDeleteConfirmation.ToString(), value, RegistryValueKind.DWord);
+            } 
+        }
+
+        //public static Int16 notShowAutoMarkConfirmation
+        //{
+        //    get
+        //    {
+        //        string val = null;
+        //        if (cGlobal.setupType == System.Windows.Forms.eSetupType.ADD_All)
+        //        {
+        //            val = Read(enumClass.eRegistryKeys.bNotShowAutoMarkConfirmation.ToString(), 1, RegistryValueKind.DWord);
+        //        }
+        //        else
+        //        {
+        //            val = Read(enumClass.eRegistryKeys.bNotShowAutoMarkConfirmation.ToString(), 0, RegistryValueKind.DWord);
+        //        }
+        //        if (val == null)
+        //            return 1;
+        //        else
+        //            return Convert.ToInt16(val);
+        //    }
+        //    set
+        //    {
+        //        Write(enumClass.eRegistryKeys.bNotShowAutoMarkConfirmation.ToString(), value, RegistryValueKind.DWord);
+        //    }
+        //}
+
+        static public Int16 notShowBackConfirmation
+        { 
+            get 
+            {
+                string val = Read(enumClass.eRegistryKeys.bNotShowBackConfirmation.ToString(), 0, RegistryValueKind.DWord);
+                if (val == null)
+                    return 1;
+                else
+                    return Convert.ToInt16(val);
+            }
+            set 
+            {
+                Write(enumClass.eRegistryKeys.bNotShowBackConfirmation.ToString(), value, RegistryValueKind.DWord);
+            } 
+        }
+
+        static public string priorityOrder
+        {
+            get
+            {
+                string val = Read(enumClass.eRegistryKeys.priority.ToString(), cGlobalSettings.DefaultAutoMarkPirority, RegistryValueKind.String);
+                if (val == null)
+                    return null;
+                else
+                    return val;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.priority.ToString(), value, RegistryValueKind.String);
+            }
+        }
+
+
+        static public string FreeAppTrialKey
+        {
+            get
+            {
+                string val = Read(enumClass.eRegistryKeys.FreeAppTrialKey.ToString(), "", RegistryValueKind.String);
+                if (val == null)
+                    return null;
+                else
+                    return val;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.FreeAppTrialKey.ToString(), value, RegistryValueKind.String);
+            }
+        }
+
+        static public string fileTypes
+        {
+            get
+            {
+                string val = Read(enumClass.eRegistryKeys.fileTypes.ToString(), null, RegistryValueKind.String);
+                if (val == null)
+                    return null;
+                else
+                    return val;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.fileTypes.ToString(), value, RegistryValueKind.String);
+            }
+        }
+
+        static public long minFileSize
+        {
+            get
+            {
+                long minSize = cGlobalSettings.DefaultMinFileSize;// 50 * 1024;
+                string val = Read(enumClass.eRegistryKeys.minSize.ToString(), minSize, RegistryValueKind.QWord);
+                //val = "1";
+                if (val == null)
+                    return minSize;
+                else
+                {
+
+                    if (long.TryParse(val, out minSize))
+                    {
+                        if (minSize < 1073741824 && minSize >= 10240) // If(size < 1GB and size >= 10KB)
+                            return minSize;
+                        else
+                            return cGlobalSettings.DefaultMinFileSize;
+                    }
+                    return minSize;
+                }
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.minSize.ToString(), value, RegistryValueKind.QWord);
+            }
+        }
+
+
+        static public Int64 totalFileDeleted
+        {
+            get
+            {
+                int filesDeletedCount = 0;// 50 * 1024;
+                string val = Read(enumClass.eRegistryKeys.FilesDeleted.ToString(), filesDeletedCount, RegistryValueKind.DWord);
+                if (val == null)
+                    return filesDeletedCount;
+                else
+                {
+                    if (int.TryParse(val, out filesDeletedCount))
+                    {
+                        if (filesDeletedCount >= cGlobalSettings.maxTrialDeleteLimit) // If(size < 1GB and size >= 10KB)
+                            return cGlobalSettings.maxTrialDeleteLimit;
+                        else if (filesDeletedCount < 0)
+                            return 0;
+                        else
+                            return filesDeletedCount;
+                    }
+                    return filesDeletedCount;
+                }
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.FilesDeleted.ToString(), value, RegistryValueKind.DWord);
+            }
+        }
+
+
+        // --------------------- Setting-Tab user last selected settings ---------------------
+
+        // Is similar photos checked
+        static public int isSimilarMatch
+        {
+            get
+            {
+                int isSimillar = cGlobalSettings.isSimilarMatchChecked ? 1 : 0;
+                string val = Read(enumClass.eRegistryKeys.isSimilar.ToString(), isSimillar, RegistryValueKind.DWord);
+                if (val != null)
+                {
+                    int.TryParse(val, out isSimillar);
+                    //return cGlobalSettings.matchingLevel;
+                }
+                return isSimillar;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.isSimilar.ToString(), value, RegistryValueKind.DWord);
+            }
+        }
+
+        /*static public int matchLevel
+        {
+            get
+            {
+                int matchingLevelValue = cGlobalSettings.matchingLevel;
+                string val = Read(enumClass.eRegistryKeys.matchingLevel.ToString(), cGlobalSettings.matchingLevel, RegistryValueKind.DWord);
+                if (val != null)
+                {
+                    int.TryParse(val, out matchingLevelValue);
+                    //return cGlobalSettings.matchingLevel;
+                }
+                return matchingLevelValue;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.matchingLevel.ToString(), value, RegistryValueKind.DWord);
+            }
+        }*/
+
+        static public int bitMapSize
+        {
+            get
+            {
+                int bitMapSizeValue = cGlobalSettings.bitMapSizeValue;
+                string val = Read(enumClass.eRegistryKeys.bitMapSizeValue.ToString(), cGlobalSettings.bitMapSizeValue, RegistryValueKind.DWord);
+                if (val != null)
+                {
+                    int.TryParse(val, out bitMapSizeValue);
+                    //return cGlobalSettings.matchingLevel;
+                }
+                return bitMapSizeValue;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.bitMapSizeValue.ToString(), value, RegistryValueKind.DWord);
+            }
+        }
+
+        static public int timeInterval
+        {
+            get
+            {
+                int timeIntervalValue = cGlobalSettings.timeInterval;
+                string val = Read(enumClass.eRegistryKeys.timeInterval.ToString(), cGlobalSettings.timeInterval, RegistryValueKind.DWord);
+                if (val != null)
+                {
+                    int.TryParse(val, out timeIntervalValue);
+                    //return cGlobalSettings.matchingLevel;
+                }
+                return timeIntervalValue;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.timeInterval.ToString(), value, RegistryValueKind.DWord);
+            }
+        }
+
+        static public int GPS
+        {
+            get
+            {
+                int gpsValue = cGlobalSettings.gpsValue;
+                string val = Read(enumClass.eRegistryKeys.gpsValue.ToString(), cGlobalSettings.gpsValue, RegistryValueKind.DWord);
+                if (val != null)
+                {
+                    int.TryParse(val, out gpsValue);
+                    //return cGlobalSettings.matchingLevel;
+                }
+                return gpsValue;
+            }
+            set
+            {
+                Write(enumClass.eRegistryKeys.gpsValue.ToString(), value, RegistryValueKind.DWord);
+            }
+        }
+
+        /// <summary>
+        /// Read the key value
+        /// </summary>
+        /// <param name="KeyName"> Name of key whose value to read.</param>
+        /// <param name="defaultValue"> Key value in case if Key is not exist. </param>
+        /// <returns></returns>
+        static string Read(string KeyName, object defaultValue, RegistryValueKind ValueTypeOf)
+        {
+            string keyValue = null;
+            
+            // Open a subKey as read-only
+            try
+            {
+                keyValue = Convert.ToString(cGlobalSettings.GetCommonAppDataRegistryValue(KeyName, defaultValue));
+                RegistryKey sk1 = Registry.CurrentUser.OpenSubKey(cGlobalSettings.VersionIndependentCommonRegKeyNoHive);// rk.OpenSubKey(cGlobalSettings.CurrentUser_SubKey);
+                // If the RegistrySubKey doesn't exist -> (null)
+                if (sk1 == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    try
+                    {
+                        // If the RegistryKey exists I get its value
+                        // or null is returned.
+                        keyValue = Convert.ToString(sk1.GetValue(KeyName.ToUpper()));
+                        if (string.IsNullOrEmpty(keyValue))
+                        {
+                            // Write/Create key
+                            if (Write(KeyName, defaultValue, ValueTypeOf))
+                            {
+                                try
+                                {
+                                    // Read the key
+                                    keyValue = Convert.ToString(sk1.GetValue(KeyName.ToUpper()));
+                                }
+                                catch
+                                {
+                                    keyValue = null;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        cGlobalSettings.oLogger.WriteLogException("RegistryTool- Read:: OpenSubKey : keyName : " + KeyName + " Value :" + Convert.ToString(defaultValue), e);
+                        //ShowErrorMessage(e, "Reading registry " + KeyName.ToUpper());
+                        keyValue = null;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("RegistryTool:: OpenSubKey : ", ex);
+            }
+
+            return keyValue;
+        }
+
+
+        static bool Write(string KeyName, object Value, RegistryValueKind ValueTypeOf)
+        {
+            try
+            {
+
+                //RegistryValueKind ValueTypeOf;
+                if (Value == null)
+                    return false;
+
+                // Setting
+                // I have to use CreateSubKey 
+                // (create or open it if already exits), 
+                // 'cause OpenSubKey open a subKey as read-only
+                RegistryKey sk1 = Registry.CurrentUser.CreateSubKey(cGlobalSettings.VersionIndependentCommonRegKeyNoHive); //rk.CreateSubKey(cGlobalSettings.CurrentUser_SubKey);
+                // Save the value
+                sk1.SetValue(KeyName.ToUpper(), Value, ValueTypeOf);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                // AAAAAAAAAAARGH, an error!
+                //ShowErrorMessage(e, "Writing registry " + KeyName.ToUpper());
+                cGlobalSettings.oLogger.WriteLogException("RegistryTool:: Write() : keyName : " + KeyName + " Value :" + Convert.ToString(Value), e);
+                return false;
+            }
+        }
+
+        public static bool DeleteKey(string KeyName)
+        {
+            try
+            {
+                // Setting
+                RegistryKey sk1 = Registry.CurrentUser.CreateSubKey(cGlobalSettings.VersionIndependentCommonRegKeyNoHive);
+                // If the RegistrySubKey doesn't exists -> (true)
+                if (sk1 == null)
+                    return true;
+                else
+                    sk1.DeleteValue(KeyName);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                // AAAAAAAAAAARGH, an error!
+                //ShowErrorMessage(e, "Deleting SubKey " + subKey);
+                cGlobalSettings.oLogger.WriteLogException("RegistryTool:: DeleteKey() : keyName : " + KeyName, e);
+                return false;
+            }
+        }
+
+    }
+}

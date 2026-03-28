@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+
+namespace DuplicatePhotosFixer.UserControls.Selection_Assistant
+{
+    /// <summary>
+    /// Interaction logic for ucFolders.xaml
+    /// </summary>
+    public partial class ucFolders : UserControl
+    {
+        public ucFolders()
+        {
+            InitializeComponent();
+            LoadStrings();
+        }
+
+        void LoadStrings()
+        {
+            lbl_Note.Text = cResourceManager.LoadString("IDS_MARKFILES_FOLDER_PRIORITY_NOTE");
+            btnAdd.Content = cResourceManager.LoadString("IDS_MARKFILES_BTN_NEW_RULE_FOR_PROTECTED_FOLDERS");
+
+        }
+    }
+}

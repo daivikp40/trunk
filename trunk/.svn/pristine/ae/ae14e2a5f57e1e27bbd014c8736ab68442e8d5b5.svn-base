@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucSettingsMove"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="441" d:DesignWidth="482" Background="White">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="70" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock x:Name="move_heading" Foreground="{DynamicResource frgclr_solidgray}"
+                       FontSize="20" >
+                Manage duplicate photos
+            </TextBlock>
+            <TextBlock x:Name="heading_info"
+                       Foreground="#83878D"
+                       >
+                This setting will allow you to select which action to perform on duplicate photos
+            </TextBlock>
+        </StackPanel>
+        <DockPanel Grid.Row="1" VerticalAlignment="Center" Margin="0 0 0 5">
+            <RadioButton  x:Name="rb_MoveToBin" Margin="5 2 0 0"  IsChecked="True" Style="{DynamicResource stl_MoveSettingsRadiobtn}" />
+            <TextBlock x:Name="rb_MoveToBinText" Foreground="#565656">
+                 Send duplicate photos to Recycle Bin
+            </TextBlock>
+        </DockPanel>
+       
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <DockPanel>
+                    <RadioButton x:Name="rb_MoveToLocation" Style="{DynamicResource stl_MoveSettingsRadiobtn}"
+                              Margin="5 2 0 5"  IsChecked="False" />
+                    <TextBlock x:Name="rb_MoveToLocationText" Foreground="#565656">
+                     Move duplicate photos to selected path
+                        <LineBreak x:Name="txt_moveLocation"/> "C:\\users\\picture\\"
+                    </TextBlock>
+                </DockPanel>
+                
+                <!--<TextBlock x:Name="txt_moveLocation" Text="C:\\users\\picture\\" Margin="10 0 0 0" Foreground="#565656"/>-->
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Button x:Name="btn_AddFolder" Content="Browse" 
+                        Width="99" 
+                        Height="33" 
+                        Foreground="#9C9690"
+                        BorderBrush="Black"
+                        BorderThickness="1.5"
+                        HorizontalAlignment="Right"
+                        Background="#CACACA"
+                        FontWeight="Bold"
+                        Margin="0 0 10 0"
+                        />
+            </Grid>
+        </Grid>
+
+        
+    </Grid>
+</UserControl>

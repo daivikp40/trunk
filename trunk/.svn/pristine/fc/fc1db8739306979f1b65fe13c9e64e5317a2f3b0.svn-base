@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace DuplicatePhotosFixer
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        public static MainWindow oMainReference = null;
+       
+
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            var application = new App();
+            application.InitializeComponent();
+            cGlobalSettings.InitAll();
+
+            //cGlobalSettings.oLogger1.WriteLog("WinSingleInstance");
+
+            if (args != null)
+            {
+                args = args.Select(rStr =>
+                     rStr.Replace("\\", "").Replace("/", "").Replace("-", "").ToLower().Trim()
+                    ).ToArray();
+
+                try
+                {
+                    List<string> arrs = args.ToList();
+
+                    /*
+                    /// Get Notifier Nag Name
+                    int nIndex = arrs.FindIndex(x => x.ToLower().StartsWith(cGlobalSettings.ASP_CMD_PARAMS_NagName.ToLower()));
+                    if (nIndex > -1)
+                    {
+                        string strNagName = arrs[nIndex];
+                        strNotifierNagName = strNagName.Substring(strNagName.IndexOf('=') + 1);
+                    }
+
+                    /// Get Notifier Nag Action
+                    nIndex = arrs.FindIndex(x => x.ToLower().StartsWith(cGlobalSettings.ASP_CMD_PARAMS_NagAction.ToLower()));
+                    if (nIndex > -1)
+                    {
+                        string strNagAction = arrs[nIndex];
+                        strNotifierNagAction = strNagAction.Substring(strNagAction.IndexOf('=') + 1);
+                    }
+                    */
+                }
+                catch (Exception ex)
+                {
+                    cGlobalSettings.oLogger.WriteLogException("Main:: While read params: ", ex);
+                }
+            }
+
+            application.Run();
+        }
+
+        //public static UserControls.ucHomeComparisonMethod OucHomeComparisonMethod = null;
+    }
+}

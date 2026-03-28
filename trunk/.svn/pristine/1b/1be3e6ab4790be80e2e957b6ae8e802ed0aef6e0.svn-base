@@ -1,0 +1,287 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using DuplicatePhotosFixer.App_Code;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.HelperClasses;
+using DuplicatePhotosFixer.Helpers;
+using DuplicatePhotosFixer.UserControls;
+using Xceed.Wpf.Toolkit;
+
+namespace DuplicatePhotosFixer.Models
+{
+    public class vmFileFormatSettings : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        ObservableCollection<csFileTypes> _lstFileType { get; set; }
+        public ObservableCollection<csFileTypes> lstFileType
+        {
+            get
+            {
+                return _lstFileType;
+            }
+            set
+            {
+                _lstFileType = value;
+                OnPropertyChanged("lstFileType");
+            }
+        }
+
+       private IntegerUpDown _numericValue;
+
+        public IntegerUpDown numericValue
+        {
+            get
+            {
+                return _numericValue;
+            }
+
+            set
+            {
+                _numericValue = value;
+
+                OnPropertyChanged("numericValue");
+            }
+        }
+
+        long _sMinSizeValue;
+        public long sMinSizeValue
+        {
+            get
+            {
+                return _sMinSizeValue;
+            }
+            set
+            {
+                _sMinSizeValue = value;
+
+                OnPropertyChanged("sMinSizeValue");
+
+            }
+        }
+
+        private int unitIndex; // 0 for KB, 1 for MB
+
+        
+
+        public int UnitIndex
+        {
+            get => unitIndex;
+            set
+            {
+                unitIndex = value;
+                OnPropertyChanged(nameof(UnitIndex));
+                ConvertSize();
+            }
+        }
+
+        private string convertedSize;
+        public string ConvertedSize
+        {
+            get => convertedSize;
+            set
+            {
+                convertedSize = value;
+                OnPropertyChanged(nameof(ConvertedSize));
+            }
+        }
+
+         void ConvertSize()
+        {
+            if (UnitIndex == 0) // KB
+            {
+                ConvertedSize = "KB";
+            }
+            else if (UnitIndex == 1) // MB
+            {
+                ConvertedSize = "MB";
+            }
+        }
+
+        private string _storageSize;
+
+        public string StorageSize
+        {
+            get { return _storageSize; }
+            set
+            {
+                if (_storageSize != value)
+                {
+                    _storageSize = value;
+                    OnPropertyChanged("StorageSize");
+                }
+            }
+        }
+
+
+
+
+
+        int _sMinSize;
+        public int sMinSize
+        {
+            get
+            {
+                return _sMinSize;
+            }
+
+            set
+            {
+                _sMinSize = value;
+             
+                OnPropertyChanged("sMinSize");
+            }
+        }
+
+        SizeUnit _rVal;
+
+        public SizeUnit rVal
+        {
+            get
+            {
+                return _rVal;
+            }
+
+            set
+            {
+                _rVal = value;
+                OnPropertyChanged("rVal");
+            }
+        }
+
+
+        //string _sMinSizeType;
+        //public string sMinSizeType
+        //{
+        //    get
+        //    {
+        //        return _sMinSizeType;
+        //    }
+
+        //    set
+        //    {
+        //        //_sMinSizeType = cResourceManager.LoadString("DPF_PREFERENCES_FORMATS").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        //        //_sMinSizeType = cResourceManager.LoadString("DPF_PREFERENCES_FORMATS").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+        //        OnPropertyChanged("sMinSize");
+        //    }
+        //}
+
+
+        public vmFileFormatSettings()
+        {
+           
+            Init();
+        }
+
+        
+        void Init()
+        {
+            csFileTypesOperations.LoadFileFormatSettings(false);
+
+            LoadFileSize();
+           
+           
+        }
+
+        public enum SizeUnit
+        {
+            KB = 0,
+            MB = 1
+        }
+
+        void ValueToIndex()
+        {
+           
+            try
+            {
+                if (sMinSize == 0)
+                {
+                    rVal = SizeUnit.KB;
+                }
+                else
+                {
+                    rVal = SizeUnit.MB;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        public void MinValueChange()
+        {
+            ValueToIndex();
+        }
+
+        //public void MinValueChange()
+        //{
+        //    ValueToIndex();
+        //}
+
+       public void LoadFileSize()
+        {
+            try
+            {
+                csFileTypesOperations.getMinimumSize();
+
+                if (cGlobalSettings.MinFileSize < 1048576)
+                {
+
+                    sMinSizeValue = cGlobalSettings.MinFileSize / 1024;
+
+
+                }
+                else
+                {
+                    sMinSizeValue = cGlobalSettings.MinFileSize / 1048576;
+
+                }
+                //sMinSizeValue = cGlobalSettings.MinFileSize;
+                UnitIndex = cGlobalSettings.MinFileSizeIn;
+
+                
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("vmFileFormatSettings:: LoadFileSize: ", ex);
+            }
+
+
+        }
+
+        public void ResestFileFormatandSize()
+        {
+            csFileTypesOperations.getMinimumSize();
+            LoadFileSize();
+            UnitIndex = 0;
+        }
+
+
+       public void SaveSettingsToRegistry()
+        {
+            cGlobalSettings.oRegSettings.SaveMinFileSettingstoRegistry();
+       }
+
+
+
+       
+    }
+}

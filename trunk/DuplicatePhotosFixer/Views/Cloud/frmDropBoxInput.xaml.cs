@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using DuplicatePhotosFixer;
+
+namespace DuplicatePhotosFixer.Views.Cloud
+{
+    /// <summary>
+    /// Interaction logic for frmDropBoxInput.xaml
+    /// </summary>
+    public partial class frmDropBoxInput : Window
+    {
+
+        const string strCloudScannerName = "Dropbox";
+        public frmDropBoxInput()
+        {
+            InitializeComponent();
+            LoadStrings();
+        }
+
+        void LoadStrings()
+        {
+            try
+            {
+                lbl_heading.Content = cGlobalSettings.GetProductName();
+                txtSignin.Content = string.Format(cResourceManager.LoadString("IDS_SIGN_IN_DROPBOX"), strCloudScannerName);
+                txtPoint1.Text = string.Format(cResourceManager.LoadString("IDS_SIGN_IN_DROPBOX_OPENED"), strCloudScannerName);
+                txtPoint2.Text = string.Format("{0}", cResourceManager.LoadString("IDS_SIGN_IN_DROPBOX_PASTE"));
+                txtPoint3.Text = string.Format("{0}", cResourceManager.LoadString("IDS_SIGN_IN_DROPBOX_CLICK"));
+                btnCancel.Content = cResourceManager.LoadString("IDS_CANCEL");
+                btnContinue.Content = cResourceManager.LoadString("DPF_MESSAGEBOX_CONTINUE");
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("frmDropboxInput:: LoadStrings: ", ex);
+            }
+        }
+    }
+}

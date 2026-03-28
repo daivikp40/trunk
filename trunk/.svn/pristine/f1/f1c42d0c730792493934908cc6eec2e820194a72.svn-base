@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucGeneral"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="464" d:DesignWidth="515" Background="{DynamicResource frgclr_white}">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="57"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Margin="10 20">
+            <TextBlock Text="Alert Settings" FontSize="22" Foreground="{DynamicResource frgclr_solidgray}"/>
+            <TextBlock Text="The settings below allow you to hide/unhide confirmation dialog boxes shown in the application while performing actions like delete, auto-mark &amp; moving back. You can change settings as per your requirements."
+                       TextWrapping="Wrap" Foreground="{DynamicResource frgclr_solidgray}" Margin="0 0 0 30" 
+                       FontSize="14"/>
+
+            <CheckBox Content="Do not show confirmation dialog on delete." Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Do not show auto mark dialog on Auto Mark." Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Do not show confirmation window on moving back." Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Launch at system startup" Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Product Messages" Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Show other product recommendations for my PC" Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+            <CheckBox Content="Show periodic update messages." Foreground="{DynamicResource frgclr_solidgray}" Margin="0 10"/>
+
+        </StackPanel>
+        <TextBlock Grid.Row="1" Background="{DynamicResource bgrclr_grayish}"/>
+    </Grid>
+</UserControl>

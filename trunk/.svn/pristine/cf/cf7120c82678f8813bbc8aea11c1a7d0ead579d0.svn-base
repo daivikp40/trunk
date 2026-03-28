@@ -1,0 +1,150 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using DuplicatePhotosFixer.ClassDictionary;
+
+// ------------------------------------------------------------------
+// Wraps System.Windows.Forms.OpenFileDialog to make it present
+// a vista-style dialog.
+// ------------------------------------------------------------------
+
+namespace DuplicatePhotosFixer.CustomExtendClass
+{
+    /// <summary>
+    /// Wraps System.Windows.Forms.OpenFileDialog to make it present
+    /// a vista-style dialog.
+    /// </summary>
+    public class FileSelectDialog
+    {
+        // Wrapped dialog
+		OpenFileDialog ofd = null;
+
+		/// <summary>
+		/// Default constructor
+		/// </summary>
+		/// 
+
+		public FileSelectDialog()
+		{
+
+			csFileTypes.getLastFileTypesList();
+
+			var FileTypesToAdd = cGlobalSettings.listFileType.Where(p => p.Key >= -1);
+			foreach (var item in FileTypesToAdd)
+			{
+				cGlobalSettings.FileDialogFilterList += item.Value.FileDialogFilterItem;
+
+			}
+
+			ofd = new OpenFileDialog();
+			ofd.Filter = cGlobalSettings.GetFileDialogFileFilter + "|\n";
+			ofd.Multiselect = true;
+			ofd.FileName = "";
+			string InitDir = cGlobalSettings.GetInitialDirectory;
+			if (!string.IsNullOrEmpty(InitDir))
+				ofd.InitialDirectory = InitDir;
+
+			
+
+		
+		}
+
+		#region Properties
+
+		/// <summary>
+		/// Gets/Sets the initial file to be selected. A null value selects the current file.
+		/// </summary>
+		public string InitialDirectory
+		{
+			get { return ofd.InitialDirectory; }
+			set { ofd.InitialDirectory = value == null || value.Length == 0 ? Environment.CurrentDirectory : value; }
+		}
+
+		/// <summary>
+		/// Gets/Sets the title to show in the dialog
+		/// </summary>
+		public string Title
+		{
+			get { return ofd.Title; }
+			set { ofd.Title = value == null ? "Select a Photo" : value; }
+		}
+
+        /// <summary>
+        /// Gets the selected folder
+        /// </summary>
+        /// 
+        //string[] _FileNames { get; set; }
+        public string[] FileNames
+        {
+            get { return ofd.FileNames; }
+        }
+
+        public string FileName
+		{
+			get { return ofd.FileName; }
+		}
+
+		#endregion
+
+		#region Methods
+
+		/// <summary>
+		/// Shows the dialog
+		/// </summary>
+		/// <returns>True if the user presses OK else false</returns>
+		public bool ShowDialog()
+		{
+			return ShowDialog(IntPtr.Zero);
+		}
+
+		/// <summary>
+		/// Shows the dialog
+		/// </summary>
+		/// <param name="hWndOwner">Handle of the control to be parent</param>
+		/// <returns>True if the user presses OK else false</returns>
+		public bool ShowDialog(IntPtr hWndOwner)
+		{
+				bool flag = false;							
+				ofd.FileName = this.InitialDirectory;
+				//fbd.ShowNewFolderButton = false;
+				if (ofd.ShowDialog(new WindowWrapper(hWndOwner)) != DialogResult.OK) return false;
+				ofd.FileName = ofd.FileName;
+			//ofd.FileNames = ofd.FileNames;   
+				flag = true;
+			
+
+			return flag;
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Creates IWin32Window around an IntPtr
+	/// </summary>
+
+	//public class WindowWrapper : System.Windows.Forms.IWin32Window
+	//{
+	//	/// <summary>
+	//	/// Constructor
+	//	/// </summary>
+	//	/// <param name="handle">Handle to wrap</param>
+	//	public WindowWrapper(IntPtr handle)
+	//	{
+	//		_hwnd = handle;
+	//	}
+
+	//	/// <summary>
+	//	/// Original ptr
+	//	/// </summary>
+	//	public IntPtr Handle
+	//	{
+	//		get { return _hwnd; }
+	//	}
+
+	//	private IntPtr _hwnd;
+	//}
+
+}

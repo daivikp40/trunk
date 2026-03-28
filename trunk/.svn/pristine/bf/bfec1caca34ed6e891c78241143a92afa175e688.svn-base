@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Engine;
+using DuplicatePhotosFixer.Helpers;
+using static DuplicatePhotosFixer.cClientEnum;
+
+namespace DuplicatePhotosFixer.Models
+{
+   public class vmExcludedFolderSettings
+    {
+        public UserControl ctrlOwner = null;
+        //MainScanHelper objMainScanHelper = null;
+
+        public ObservableCollection<csExcludedPath> lstScanPathsExclude { get; set; }
+
+        public vmExcludedFolderSettings()
+        {
+            Init();
+
+        }
+
+        void Init()
+        {
+            try
+            {
+                lstScanPathsExclude = new ObservableCollection<csExcludedPath>();
+                FillFolderPaths(false);
+            }
+            catch (Exception ex)
+            {
+
+                cGlobalSettings.oLogger.WriteLogException("vmExcludedFolderSettings:: Init: ", ex);
+            }
+        }
+
+       public void FillFolderPaths(bool bLoadCurrentTypeListOnly)
+        {
+            try
+            {
+                /// Get xml files data 
+                /// 
+                csExcludedXmlOperations.LoadExcludedFolderPathsList();
+                if (bLoadCurrentTypeListOnly)
+                {
+                    lstScanPathsExclude = new ObservableCollection<csExcludedPath>();
+                }
+
+                for (int i = 0; i < cGlobalSettings.listExcludedFolderPaths.Count; i++)
+                {
+                    lstScanPathsExclude.Add(cGlobalSettings.listExcludedFolderPaths[i]);
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: FilScanPaths: ", ex);
+            }
+        }
+
+        public bool AddFolderPaths(bool bShowErrorMsg, eTypeOfExclusion typeOfExclusion)
+        {
+            bool bAdded = false;
+            try
+            {
+                string statusMessage = string.Empty;
+                string[] selectedPaths = null;
+                if (!cGlobalSettings.objScanner.Browse(out selectedPaths))
+                    return false;
+
+                if (selectedPaths == null || selectedPaths.Length <= 0)
+                    return false;
+
+                /// Validate Path and add in a scan path list
+                /// 
+                bool isListUpdated = false;
+                for (int i = 0; i < selectedPaths.Length; i++)
+                {
+
+                    csExcludedPath excludePathData = new csExcludedPath()
+                    {
+
+                        FolderPath = selectedPaths[i],
+                        TypeOfExclusion = typeOfExclusion
+
+                    };
+
+                    if (cGlobalSettings.objMainScanHelper.validExcludFolderPath(selectedPaths[i], ref statusMessage))
+                    {
+                        cGlobalSettings.listExcludedFolderPaths.Add(excludePathData);
+                        isListUpdated = true;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    App.oMainReference.showMessage(statusMessage, "");
+                }
+
+
+                /// Save path in xml
+                /// 
+                if (isListUpdated)
+                {
+                    csExcludedXmlOperations.SaveExcludeFolderPathsList(cGlobalSettings.listExcludedFolderPaths);
+                    FillFolderPaths(true);
+                    bAdded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return bAdded;
+        }
+
+        public bool RemoveFolderPath(csExcludedPath RemoveScanPath)
+        {
+            try
+            {
+                cGlobalSettings.listExcludedFolderPaths.Remove(RemoveScanPath);
+                csExcludedXmlOperations.SaveExcludeFolderPathsList(cGlobalSettings.listExcludedFolderPaths);
+                FillFolderPaths(true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("vmExcludedFolderSettings:: RemoveScanPath: ", ex);
+            }
+            return false;
+        }
+
+        public void LoadDefaultValue()
+        {
+            try
+            {
+                if(cGlobalSettings.listExcludedFolderPaths.Count > 0)
+                {
+                    cGlobalSettings.listExcludedFolderPaths.Clear();
+                    lstScanPathsExclude.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+
+               
+            }
+        }
+    }
+}

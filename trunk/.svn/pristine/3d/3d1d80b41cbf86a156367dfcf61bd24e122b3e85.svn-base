@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using DuplicatePhotoFixer;
+
+namespace DuplicatePhotosFixer.UserControls
+{
+    /// <summary>
+    /// Interaction logic for ucResultObjectListView.xaml
+    /// </summary>
+    public partial class ucResultObjectListView : UserControl
+    {
+        public ucResultObjectListView()
+        {
+            InitializeComponent();
+            LoadStrings();
+        }
+        void LoadStrings()
+        {
+
+            lblGroup.Header = cResourceManager.LoadString("DPF_RESULT_OLV_GROUP");
+            //ObjectListView1.Columns["olvColumnKey"].Text = cResourceManager.LoadString("");
+            lblFileName.Header = cResourceManager.LoadString("DPF_RESULT_OLV_FILENAME");
+            lblPath.Header = cResourceManager.LoadString("DPF_RESULT_OLV_PATH");
+            lblSize.Header = cResourceManager.LoadString("DPF_RESULT_OLV_SIZE");
+            lblCreated.Header = cResourceManager.LoadString("DPF_RESULT_OLV_CREATED");
+            lblModified.Header = cResourceManager.LoadString("DPF_RESULT_OLV_MODIFIED");
+            lblFileType.Header = cResourceManager.LoadString("DPF_RESULT_OLV_FILETYPE");
+            lblImgWidth.Header = cResourceManager.LoadString("DPF_RESULT_OLV_IMAGEWIDTH");
+            lblImgHeight.Header = cResourceManager.LoadString("DPF_RESULT_OLV_IMAGEHEIGHT");
+
+        }
+
+    }
+}

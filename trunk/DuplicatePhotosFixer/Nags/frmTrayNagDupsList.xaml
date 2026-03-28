@@ -1,0 +1,73 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Nags.frmTrayNagDupsList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Nags"
+        mc:Ignorable="d"
+        Title="frmTrayNagDupsList" Height="381" Width="503" WindowStyle="None" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="58"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <DockPanel>
+               
+                <Button x:Name="btn_Close" Width="21" Height="18"
+                        Background="Transparent" DockPanel.Dock="Right">
+                    <Image x:Name="close_btn" Source="/Resources/grab_close.png"/>
+                </Button>
+                <Button x:Name="btn_settings" Width="21" Height="18"
+                        Background="Transparent"
+                        DockPanel.Dock="Right">
+                    <Image x:Name="settings_logo" Source="{DynamicResource img_settings_sm}"/>
+                </Button>
+                <TextBlock x:Name="label1"
+                           Margin="3 0 3 0">
+                    Duplicate Photos Fixer Pro
+                </TextBlock>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center" Margin="0 5 0 0">
+                <TextBlock x:Name="img_count"
+                       Foreground="#FFA526"
+                       FontSize="17"
+                       FontWeight="Bold"
+                           Padding="5 0 5 0">
+                    {0}
+                </TextBlock>
+                <TextBlock x:Name="txtinfo"
+                       Foreground="Black"
+                       FontSize="17"
+                       FontWeight="Bold"
+                           Padding="5 0 5 0">
+                    Similar Photos are occupying
+                </TextBlock>
+                <TextBlock x:Name="img_space"
+                       Foreground="#FFA526"
+                       FontSize="17"
+                       FontWeight="Bold"
+                           Padding="5 0 5 0">
+                    {1} Space
+                </TextBlock>
+            </DockPanel>
+            <TextBlock x:Name="lbl_activateNow"
+                       FontSize="13"
+                     HorizontalAlignment="Center"
+                       Margin="0 5 0 5">
+                Activate now and Clean 117 similar photos and save 7606 MB space with a <LineBreak BaselineAlignment="Center"/> special discounted price only for you.
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Button x:Name="btn_claimOffer"
+                    Width="153"
+                    Height="32"
+                    Background="#006DBF"
+                    Foreground="White"
+                    HorizontalAlignment="Right">
+                Remove Now
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DuplicatePhotosFixer.Views
+{
+    public class cNagDialogue
+    {
+        public enum FORM_RETURN_CODES
+        {
+            DO_NOTHING,
+            UPGRADE_NOW,
+            START_CLEAN,
+            SHOW_ENTER_KEY_DIALOG,
+            SHOW_ENTER_FREE_KEY_DIALOG,
+            AUTO_MARK,
+            RESET_DEFAULT,
+            SHOW_SETTINGS,
+            REQUEST_FREE_LICENSE_KEY,
+            NO_THANKS,
+            EULA,
+            PRIVACY_POLICY,
+            GET_RB,
+            UPGRADE_NOW_RP,
+            UPDATE_PROFILE_RP,
+            QUIT_WINDOW,
+            SHOW_REMOVE_DUPLICATE_GUIDE,
+            CLOSE_TO_TRAY,
+            UPGRADE_NOW_N_SHOW_ENTER_KEY_DIALOG,
+            YES_PROCEED,
+            START_SCAN,
+            InstallUtility,
+            GetAuthorization, // get authorization
+
+        }
+    }
+}

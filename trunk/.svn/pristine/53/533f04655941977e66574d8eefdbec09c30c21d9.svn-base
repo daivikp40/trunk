@@ -1,0 +1,233 @@
+﻿<UserControl x:Class="DuplicatePhotosFixer.UserControls.ucMainBoder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:cust ="clr-namespace:DuplicatePhotosFixer.CustomControl"
+             xmlns:local="clr-namespace:DuplicatePhotosFixer.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="235" d:DesignWidth="725" Background="Black">
+    <Grid>
+        <Border  BorderBrush="{DynamicResource clr_darkborder}"  BorderThickness="0 1 0 0">
+            <Border.Background>
+                <ImageBrush ImageSource="{DynamicResource img_top_header}"/>
+            </Border.Background>
+            <Grid Grid.Row="0" Background="#3E3E3E"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+
+            </Grid.ColumnDefinitions>
+            <!--<Image x:Name="dpf_logo" Source="/Resources/Application-0.png" HorizontalAlignment="Left"
+                           Margin="5 10 0 0" Width="50" Height="50"/>-->
+            <Label Content="Duplicate Photos Fixer Pro" Foreground="#ECECEC" VerticalAlignment="Top"
+                   HorizontalAlignment="Center" 
+                   FontSize="18"
+                  />
+            <Grid Grid.Column="1">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <DockPanel VerticalAlignment="Top" Margin="0 0 0 0">
+                        <cust:ImageButton x:Name="lnkLblLang"                                                              
+                                  Image="{DynamicResource img_en_flag}"
+                                         Cursor="Hand"
+                                   Style="{DynamicResource stl_btnLanguage}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_cart}"
+                                          Click="lnkLblLang_Click">
+                            <ComboBox x:Name="languageComboBox" SelectionChanged="LanguageComboBox_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image x:Name="flag_img" Source="{Binding FlagImagePath}" Width="20" Height="20" Margin="0 0 5 0"/>
+                                            <TextBlock Text="{Binding LanguageName}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                        </cust:ImageButton>
+                        <cust:ImageButton x:Name="lnkLblLangArrow"                                                              
+                                 
+                                   Style="{DynamicResource stl_btnLanguageArrow}"
+                                     Image="{DynamicResource img_dropdownarrow}"   
+                        HoverImage="{DynamicResource  img_cart}"
+                                          Cursor="Hand"
+                                  SelectedImage="{DynamicResource  img_cart}" Click="lnkLblLangArrow_Click">
+
+                                <ComboBox x:Name="languageComboBox1" SelectionChanged="LanguageComboBox_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding FlagImagePath}" Width="20" Height="20" Margin="0 0 5 0"/>
+                                            <TextBlock Text="{Binding LanguageName}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </cust:ImageButton>
+
+                    </DockPanel>
+                    <!--<cust:ImageButton x:Name="btnCart"                                                              
+                                  Image="{DynamicResource img_cart}"
+                                   Style="{DynamicResource stl_btnCart}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                  SelectedImage="{DynamicResource  img_cart}">
+                    </cust:ImageButton>-->
+                    <cust:ImageButton x:Name="btnActionCenter"  
+                                      
+                                  Image="{DynamicResource img_actioncenter}"
+                                   Style="{DynamicResource stl_btnAction}"
+                        HoverImage="{DynamicResource  img_cart}"
+                                      Cursor="Hand"                                      
+                                  SelectedImage="{DynamicResource  img_close_clicked}" Click="btnActionCenter_Click">
+                    </cust:ImageButton>
+                    <Image Source="{DynamicResource img_footer}" x:Name="linkDivider" Margin="0 2 0 0" Width="25" Height="15" VerticalAlignment="Top" />
+                    <cust:ImageButton x:Name="linklblSettings"
+                              DockPanel.Dock="Right"
+                              Margin="0 0 5 0"                           
+                             Image="{DynamicResource img_settings_sm}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                    FontSize="14" VerticalAlignment="Top" Padding="5 0" 
+                              Content="Settings"                             
+                              Visibility="Visible"
+                    
+                    Style="{DynamicResource stl_btnSettings}" Click="linklblSettings_Click">
+
+                    </cust:ImageButton>
+
+                    <cust:ImageButton x:Name="lnkLblHelp"
+                              DockPanel.Dock="Right"
+                              Margin="0,0,10,0"                                   
+                             Image="{DynamicResource img_dropdownarrow}"  
+                              HoverImage="{DynamicResource img_dropdownarrow}"
+                              SelectedImage="{DynamicResource img_dropdownarrow}"
+                    FontSize="14" VerticalAlignment="Top" Padding="5 0" 
+                              Content="? Help"                                       
+                              Visibility="Visible"                    
+                    Style="{DynamicResource StyleMainBorderHelpButton}" Click="lnkLblHelp_Click">
+                      
+                    </cust:ImageButton>
+                    <Popup x:Name="settingspopup"  IsOpen="False" Placement="Mouse" StaysOpen="False">
+                        <StackPanel >
+                            <Button x:Name="btnHelp" Height="28" BorderThickness="0" 
+                                    BorderBrush="Transparent">
+                                <DockPanel Background="White" >
+                                    <Border Background="#F8F8F8">
+                                    <Image Source="{DynamicResource img_helpicon}" Margin="2"  />
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Help" Padding="0" Width="150" Background="White"
+                                                   VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnContactus" Height="28"  BorderThickness="0"
+                                    BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_contactus}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Contact us" Padding="0" Width="150"
+                                                    VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnclearCache" Height="28" BorderThickness="0"
+                                    BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_cache}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Clear cache"
+                                                    Padding="0" Width="150"  VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnRegistration" Height="28" BorderThickness="0"
+                                    BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_registration}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Enter Registration key" Padding="0" Width="150"  VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnUpdates" Height="28" BorderThickness="0" BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_updates}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Check for updates" Padding="0" Width="150"  VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnFeedback" Height="28" BorderThickness="0" BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_feedback}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="Feedback" Padding="0" Width="150" 
+                                                   VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+
+                            <Button x:Name="btnAboutUs" Height="28" BorderThickness="0" BorderBrush="Transparent">
+                                <DockPanel Background="White">
+                                    <Border Background="#F8F8F8">
+                                        <Image Source="{DynamicResource img_about_icon}" Margin="2"/>
+                                    </Border>
+                                    <!--<Border BorderBrush="{DynamicResource clr_grayborder}" BorderThickness="0 0 0 1">-->
+                                        <TextBlock Text="About us" Padding="0" Width="150"  VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    <!--</Border>-->
+                                </DockPanel>
+                            </Button>
+                        </StackPanel>
+                    </Popup>
+
+                    <DockPanel HorizontalAlignment="Right">
+                        <cust:ImageButton x:Name="btn_close"  DockPanel.Dock="Right"                              
+                                  Margin="0,0,5,0"
+                                  Image="{DynamicResource img_close_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_close_hover}"
+                                  SelectedImage="{DynamicResource  img_close_clicked}" Click="btn_close_Click" >
+                        </cust:ImageButton>
+                     
+                        <cust:ImageButton x:Name="btnMaximize"     DockPanel.Dock="Right"                         
+                                 
+                                  Image="{DynamicResource img_max_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_max_hover}"
+                                  SelectedImage="{DynamicResource  img_max_clicked}" Click="btnMaximize_Click" >
+                        </cust:ImageButton>
+                        <cust:ImageButton x:Name="btnMinimize"   DockPanel.Dock="Right"                                                         
+                                  Image="{DynamicResource img_min_normal}"
+                                   Style="{DynamicResource StyleMainBorderButtons}"
+                        HoverImage="{DynamicResource  img_min_hover}"
+                                  SelectedImage="{DynamicResource  img_min_clicked}" Click="btnMinimize_Click" >
+                        </cust:ImageButton>
+
+                    </DockPanel>
+
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,773 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using DuplicatePhotosFixer.ClassDictionary;
+using DuplicatePhotosFixer.Engine;
+using DuplicatePhotosFixer.Engine.WinApiScan;
+using DuplicatePhotosFixer.Helpers;
+using Microsoft.Win32;
+using static DuplicatePhotosFixer.cClientEnum;
+
+
+namespace DuplicatePhotosFixer.Models
+{
+    public class ucHomeViewModel : INotifyPropertyChanged
+    {
+        public UserControl ctrlOwner = null;
+        public MainScanHelper objMainScanHelper = null;
+        OpenFileDialog ofd = null;
+
+        public List<ScanModeData> lstScanModeData { get; set; }
+        public ObservableCollection<csScanPaths> lstScanPathsInclude { get; set; }
+        public ObservableCollection<csScanPaths> lstScanPathsExclude { get; set; }
+        public ObservableCollection<csScanPaths> lstScanPathsProtected { get; set; }
+
+        #region context menu string properties
+
+        private string _txtRevel;
+        public string txtRevel
+        {
+            get { return _txtRevel; }
+
+            set
+            {
+                _txtRevel = value;
+                OnPropertyChanged("txtRevel");
+            }
+        }
+
+        private string _txtCheckAll;
+        public string txtCheckAll
+        {
+            get { return _txtCheckAll; }
+
+            set
+            {
+                _txtCheckAll = value;
+                OnPropertyChanged("txtCheckAll");
+            }
+        }
+
+        private string _txtUnCheckAll;
+        public string txtUnCheckAll
+        {
+            get { return _txtUnCheckAll; }
+
+            set
+            {
+                _txtUnCheckAll = value;
+                OnPropertyChanged("txtUnCheckAll");
+            }
+        }
+
+
+        private string _txtRemoveScanList;
+        public string txtRemoveScanList
+        {
+            get { return _txtRemoveScanList; }
+
+            set
+            {
+                _txtRemoveScanList = value;
+                OnPropertyChanged("txtRemoveScanList");
+            }
+        }
+
+        private string _txtRemoveAllScanList;
+        public string txtRemoveAllScanList
+        {
+            get { return _txtRemoveAllScanList; }
+
+            set
+            {
+                _txtRemoveAllScanList = value;
+                OnPropertyChanged("txtRemoveAllScanList");
+            }
+        }
+
+
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+
+        public ucHomeViewModel()
+        {
+            Init();
+        }
+
+        void Init()
+        {
+            try
+            {
+                objMainScanHelper = new MainScanHelper();
+
+               lstScanPathsInclude = new ObservableCollection<csScanPaths>();
+                //lstScanPathsExclude = new ObservableCollection<csScanPaths>();
+                //lstScanPathsProtected = new ObservableCollection<csScanPaths>();
+                
+                FillScanModes();
+                FillScanPaths(false);
+                LoadStrings();
+                loadExcludePaths();
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: Init: ", ex);
+            }
+        }
+
+        void loadExcludePaths()
+        {
+            csExcludedXmlOperations.LoadExcludedFolderPathsList();
+        }
+
+        void LoadStrings()
+        {
+            try
+            {
+                // context menu strings
+
+                txtRevel = cResourceManager.LoadString("DPF_HOME_UC_REVEAL_EXPLORER");
+                txtCheckAll = cResourceManager.LoadString("DPF_HOME_UC_CHECK_ALL");
+                txtUnCheckAll = cResourceManager.LoadString("DPF_HOME_UC_UNCHECK_ALL");
+                txtRemoveAllScanList = cResourceManager.LoadString("DPF_HOME_UC_REMOVE_ALL_PATHS");
+                txtRemoveScanList = cResourceManager.LoadString("DPF_HOME_UC_REMOVE_SCAN_PATH");
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: LoadStrings: ", ex);
+            }
+        }
+
+        void FillScanModes()
+        {
+            try
+            {
+                lstScanModeData = new List<ScanModeData>();
+                var fontSize = 12.0;
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("DPF_SCAN_COMPUTER"), ModeIcon = @"\Resources\pc.png", IconMargin = "0", ModeType = eScanMode.FileSearch, cboFontSize = fontSize, ItemHeight = 40 });
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("DPF_SCAN_GOOGLE"), ModeIcon = @"\Resources\drive.png", IconMargin = "0", ModeType = eScanMode.GoogleDrive, cboFontSize = fontSize, ItemHeight = 40 });
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("IDS_SCAN_DROPBOX"), ModeIcon = @"\Resources\dropbox_img.png", IconMargin = "0", ModeType = eScanMode.Dropbox, cboFontSize = fontSize, ItemHeight = 40 });
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("DPF_SCAN_Picasa_LIBRARY"), ModeIcon = @"\Resources\picasa15x15.png", IconMargin = "0", ModeType = eScanMode.Dropbox, cboFontSize = fontSize, ItemHeight = 40 });
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("IDS_LIGHTROOM_CLASSIC"), ModeIcon = @"\Resources\Lightroom_15x15.png", IconMargin = "0", ModeType = eScanMode.Dropbox, cboFontSize = fontSize, ItemHeight = 40 });
+                lstScanModeData.Add(new ScanModeData() { ModeName = cResourceManager.LoadString("IDS_PHOTOS_ORGANIZER"), ModeIcon = @"\Resources\po_logo_small.png", IconMargin = "0", ModeType = eScanMode.Dropbox, cboFontSize = fontSize, ItemHeight = 40 });
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: FillScanModes: ", ex);
+            }
+        }
+
+      public  void FillScanPaths(bool bLoadCurrentTypeListOnly)
+        {
+            try
+            {
+                /// Get xml files data 
+                /// 
+                csXmlOperations.LoadScanPathsList();
+                if (bLoadCurrentTypeListOnly)
+                {
+                    switch (cGlobalSettings.CurrentTypeOfInclusion)
+                    {
+                        case eTypeOfInclusion.Included:
+                            lstScanPathsInclude = new ObservableCollection<csScanPaths>();
+                            break;
+
+                        case eTypeOfInclusion.Protected:
+                            lstScanPathsProtected = new ObservableCollection<csScanPaths>();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                for (int i = 0; i < cGlobalSettings.listScanPaths.Count; i++)
+                {
+                    if (bLoadCurrentTypeListOnly && cGlobalSettings.listScanPaths[i].TypeOfInclusion != cGlobalSettings.CurrentTypeOfInclusion)
+                        continue;
+
+                    switch (cGlobalSettings.listScanPaths[i].TypeOfInclusion)
+                    {
+                        case eTypeOfInclusion.Included:
+                            lstScanPathsInclude.Add(cGlobalSettings.listScanPaths[i]);
+                            break;
+
+                        case eTypeOfInclusion.Protected:
+                            lstScanPathsProtected.Add(cGlobalSettings.listScanPaths[i]);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (cGlobalSettings.listScanPaths[i].TypeOfInclusion != eTypeOfInclusion.Included)
+                        continue;
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: FilScanPaths: ", ex);
+            }
+        }
+
+        public bool AddPhotoPaths(bool bShowErrorMsg, eTypeOfInclusion typeOfInclusion)
+        {
+            bool bAdded = false;
+            Nullable<bool> result = false;
+            try
+            {
+
+                string statusMessage = string.Empty;
+                //string[] selectedFile = null;
+
+                if (cGlobalSettings.listFileType == null)
+                    csFileTypesOperations.initillizeFileTypes();
+
+                ofd = new OpenFileDialog();
+                ofd.Filter = cGlobalSettings.GetFileDialogFileFilter;
+                ofd.Multiselect = true;
+                ofd.FileName = "";
+                string InitDir = cGlobalSettings.GetInitialDirectory;
+                if (!string.IsNullOrEmpty(InitDir))
+                    ofd.InitialDirectory = InitDir;
+                //selectedFile = HelperClasses.cSelectFilesFolders.ShowFile_System(App.oMainReference);
+
+                //if (selectedFile == null || selectedFile.Length <= 0)
+                //    return false;
+
+                /// Validate Path and add in a scan path list
+                /// 
+
+                bool isListUpdated = false;
+                result = ofd.ShowDialog();
+
+                if (result == true)
+                {
+                    foreach (string strPath in ofd.FileNames)
+                    {
+
+                        csScanPaths scanPathData = new csScanPaths()
+                        {
+                            myVisibility = Visibility.Collapsed,
+                            IsCheckboxEnabled = false,
+                            IsSelected = true,
+                            PathType = cClientEnum.ePathType.file,
+                            ScanPath = strPath,
+                            //TypeOfInclusion = typeOfInclusion,
+                            IncludeSubfolder = false,
+                            ImageIcon = "/Resources/btn_pic.png"
+
+                        };
+
+                        if (objMainScanHelper.DValidatePath(strPath, ref statusMessage))
+                        {
+                            cGlobalSettings.listScanPaths.Add(scanPathData);
+                            isListUpdated = true;
+                        }
+
+                    }
+
+                    if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        App.oMainReference.showMessage(statusMessage, "");
+                    }
+
+
+                    /// Save path in xml
+                    /// 
+                    if (isListUpdated)
+                    {
+                        csXmlOperations.SaveScanPathsList(cGlobalSettings.listScanPaths);
+                        FillScanPaths(true);
+                        bAdded = true;
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+
+            return bAdded;
+        }
+
+        public bool AddScanPaths(bool bShowErrorMsg, eTypeOfInclusion typeOfInclusion)
+        {
+            bool bAdded = false;
+            try
+            {
+                string statusMessage = string.Empty;
+                string[] selectedPaths = null;
+                if (!cGlobalSettings.objScanner.Browse(out selectedPaths))
+                    return false;
+
+                if (selectedPaths == null || selectedPaths.Length <= 0)
+                    return false;
+
+                /// Validate Path and add in a scan path list
+                /// 
+                bool isListUpdated = false;
+                for (int i = 0; i < selectedPaths.Length; i++)
+                {
+
+                    csScanPaths scanPathData = new csScanPaths()
+                    {
+                        myVisibility = Visibility.Visible,
+                        IsSelected = true,
+                        IsCheckboxEnabled = true,
+                        PathType = cClientEnum.ePathType.folder,
+                        ScanPath = selectedPaths[i],
+                        TypeOfInclusion = typeOfInclusion,
+                        IncludeSubfolder = true,
+                        ImageIcon = @"/Resources/btn_folder.png"
+
+                    };
+
+                    if (objMainScanHelper.DValidatePath(selectedPaths[i], ref statusMessage))
+                    {
+                        cGlobalSettings.listScanPaths.Add(scanPathData);
+                        isListUpdated = true;
+                    }
+
+                }
+
+                if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    App.oMainReference.showMessage(statusMessage,"");
+                }
+
+
+                /// Save path in xml
+                /// 
+                if (isListUpdated)
+                {
+                    csXmlOperations.SaveScanPathsList(cGlobalSettings.listScanPaths);
+                    FillScanPaths(true);
+                    bAdded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return bAdded;
+        }
+
+        bool ValidatePath(string strPath)
+        {
+            ///ToDo:
+            bool isValid = true;
+
+            return isValid;
+        }
+
+        public void doDragDrop(DragEventArgs e)
+        {
+
+            string statusMessage = string.Empty;
+          
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) && (cGlobalSettings.CurrentScanMode == eScanMode.FileSearch ||
+                cGlobalSettings.CurrentScanMode == eScanMode.PicasaLibrary || cGlobalSettings.CurrentScanMode == eScanMode.Lightroom || cGlobalSettings.CurrentScanMode == eScanMode.BoxCloud))
+            {             
+
+                /// Validate Path and add in a scan path list
+                /// 
+                bool isListUpdated = false;
+                foreach(string strPath in (string[])e.Data.GetData(DataFormats.FileDrop, false))
+                {
+                    bool isFolder = File.GetAttributes(strPath).HasFlag(FileAttributes.Directory);
+                    if(isFolder == true) {
+
+                        csScanPaths scanPathData = new csScanPaths
+                        {
+                            myVisibility = Visibility.Visible,
+                            IsSelected = true,
+                            IsCheckboxEnabled = true,
+                            PathType = cClientEnum.ePathType.folder,
+                            ScanPath = strPath,                      
+                            IncludeSubfolder = true,
+                            ImageIcon = @"/Resources/btn_folder.png"
+
+
+                        };
+                        if (objMainScanHelper.DValidatePath(strPath, ref statusMessage))
+                        {
+                            cGlobalSettings.listScanPaths.Add(scanPathData);
+                            isListUpdated = true;
+                        }
+                    }
+
+                    else if (isFolder == false)
+                    {
+                        csScanPaths scanPathData = new csScanPaths
+                        {
+                            myVisibility = Visibility.Collapsed,
+                            IsCheckboxEnabled = false,
+                            IsSelected = true,
+                            PathType = cClientEnum.ePathType.file,
+                            ScanPath = strPath,
+                            //TypeOfInclusion = typeOfInclusion,
+                            IncludeSubfolder = false,
+                            ImageIcon = "/Resources/btn_pic.png"
+
+                        };
+                        if (objMainScanHelper.DValidatePath(strPath, ref statusMessage))
+                        {
+                            cGlobalSettings.listScanPaths.Add(scanPathData);
+                            isListUpdated = true;
+                        }
+                    }
+                   
+                  
+                   
+
+                }
+
+                if (!string.IsNullOrEmpty(statusMessage))
+                {
+                    App.oMainReference.showMessage(statusMessage ,"");
+                }
+
+
+                /// Save path in xml
+                /// 
+                if (isListUpdated)
+                {
+                    csXmlOperations.SaveScanPathsList(cGlobalSettings.listScanPaths);
+                    FillScanPaths(true);
+                   
+                }
+            }
+        }
+
+        public bool RemoveScanPath(csScanPaths RemoveScanPath)
+        {
+            try
+            {
+                cGlobalSettings.listScanPaths.Remove(RemoveScanPath);
+                csXmlOperations.SaveScanPathsList(cGlobalSettings.listScanPaths);
+                FillScanPaths(true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel:: RemoveScanPath: ", ex);
+            }
+            return false;
+        }
+        public void alterListScanPath(string SelectedPath, bool newSelectedstatus, string RememberMe, eTypeOfInclusion inclusionType, bool IncludeSubFolder = true, bool ScanIncludeSubFolder = true)
+        {
+            try
+            {
+            
+
+                cGlobalSettings.listScanPaths = cGlobalSettings.listScanPaths.Select(p =>
+                {
+                    if (p.ScanPath.AddBackSlash().ToLower() == SelectedPath.Trim().ToLower().AddBackSlash() && p.TypeOfInclusion == inclusionType)
+                    {
+                        p.IsSelected = newSelectedstatus;
+                    }
+                    return p;
+                }).ToList();
+
+                csXmlOperations.SaveScanPathsList(cGlobalSettings.listScanPaths);
+                FillScanPaths(true);
+              
+
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel ::alterListScanPath::", ex);
+            }
+        }
+
+        internal void removePathFromList(string selectedPath, eTypeOfInclusion SelectedTab)
+        {
+            object isPathAlreadyAdded = null;
+            try
+            {
+                if (SelectedTab == eTypeOfInclusion.Included)
+                {
+                    isPathAlreadyAdded = cGlobalSettings.listScanPaths.Where(x => x.TypeOfInclusion == eTypeOfInclusion.Included && x.ScanPath.RemoveEndBackSlash().ToLower().Trim() == selectedPath.RemoveEndBackSlash().ToLower().Trim()).FirstOrDefault();
+                }
+                else
+                {
+                    isPathAlreadyAdded = cGlobalSettings.listScanPaths.Where(x => x.TypeOfInclusion != eTypeOfInclusion.Included && x.ScanPath.RemoveEndBackSlash().ToLower().Trim() == selectedPath.RemoveEndBackSlash().ToLower().Trim()).FirstOrDefault();/*.Single(p => p.Path.AddBackSlash().ToLower() == selectedPath.AddBackSlash().ToLower().Trim());*/
+                }
+
+                if (isPathAlreadyAdded != null)
+                {
+                    cGlobalSettings.listScanPaths.Remove((csScanPaths)isPathAlreadyAdded);
+                    isPathAlreadyAdded = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                cGlobalSettings.oLogger.WriteLogException("ucHomeViewModel :: removePathFromList", ex);
+            }
+        }
+
+
+        public void RevealExplorer(object sender)
+        {
+            ProcessStartInfo showExplorer = null;
+            try
+            {
+                // Close context Menu
+                //CloseMenu(sender, e);
+
+                if (App.oMainReference.UiWait)
+                {
+                    return;
+                }
+
+                string strPath = Convert.ToString(((TextBlock)sender).Tag);
+
+
+                if (string.IsNullOrEmpty(strPath))
+                    return;
+
+                //VG220322 - based on current scan mode open the required folder
+
+                switch (cGlobalSettings.CurrentScanMode)
+                {
+
+                    case eScanMode.FileSearch:
+                        if (System.IO.File.Exists(strPath) || Directory.Exists(strPath))
+                        {
+                            string finalArgs = string.Format("/Select, \"" + strPath + "\"");
+                            showExplorer = new ProcessStartInfo("Explorer.exe", finalArgs);
+                            Process.Start(showExplorer);
+                        }
+                        else
+                        {
+                            /* SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);*/
+                            string finalArgs = string.Format("/Select, \"" + /*SelectedPath*/Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\"");
+                            showExplorer = new ProcessStartInfo("Explorer.exe", finalArgs);
+                            Process.Start(showExplorer);
+                        }
+                        break;
+
+
+
+                    case eScanMode.Dropbox:
+                        break;
+
+                    case eScanMode.GoogleDrive:
+                        {
+                            //open folder explorer dialog box for Google drive here
+                            //OpenGoogleFolderExplorer();
+                        }
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (showExplorer != null) showExplorer = null;
+            }
+        }
+
+
+
+
+
+        public void CheckAllScanFiles(object sender)
+        {
+            try
+            {
+                // Close context Menu
+                //CloseMenu(sender, e);
+
+                if (App.oMainReference.UiWait)
+                {
+                    return;
+                }
+                //Cursor = Cursors.Wait;
+                App.oMainReference.UiWait = true;
+
+              
+
+                        lstScanPathsInclude.All(p =>
+                        {
+                            p.IsSelected = true;
+                            p.IncludeSubfolder = true;
+                            // ---------------- Update Scan Path list ----------------
+                            alterListScanPath(p.ScanPath, true, string.Empty, eTypeOfInclusion.Included);
+                            // ---------------- Change in XML document ----------------
+                            //csXmlOperations.alterXmlElement(p.ScanPath, true, string.Empty, eTypeOfInclusion.Included);
+                            return true;
+                        });
+                        //grdIncludeFiles.UpdateLayout();
+                 
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                //Cursor = Cursors.Arrow;
+                App.oMainReference.UiWait = false;
+            }
+        }
+
+        public void UnCheckAllScanFiles(object sender)
+        {
+            try
+            {
+                // Close context Menu
+                //CloseMenu(sender, e);
+
+                if (App.oMainReference.UiWait)
+                {
+                    return;
+                }
+                //Cursor = Cursors.Wait;u
+
+
+                        
+                            lstScanPathsInclude.All(p =>
+                            {
+                                p.IsSelected = false;
+                                p.IncludeSubfolder = false;
+                                // ---------------- Update Scan Path list ----------------
+                                alterListScanPath(p.ScanPath, false, string.Empty, eTypeOfInclusion.Included);
+
+                                // ---------------- Change in XML document ----------------
+                                //csXmlOperations.alterXmlElement(p.ScanPath, false, string.Empty, eTypeOfInclusion.Included);
+
+                                return true;
+                            });
+
+                            //grdIncludeFiles.UpdateLayout();
+                        
+                
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                //Cursor = Cursors.Arrow;
+                App.oMainReference.UiWait = false;
+            }
+        }
+
+        public void RemoveItemFromScanList(object sender)
+        {
+            try
+            {
+                // Close context Menu
+                //CloseMenu(sender, e);
+
+                eTypeOfInclusion SelectedTabForLocations = cGlobalSettings.CurrentTypeOfInclusion;
+
+                if (App.oMainReference.UiWait)
+                {
+                    return;
+                }
+                //Cursor = Cursors.Wait;
+              App.oMainReference.UiWait = true;
+
+                string strPath = Convert.ToString(((TextBlock)sender).Tag);
+
+                if (string.IsNullOrEmpty(strPath))
+                    return;
+
+               
+                            csScanPaths selectedpath = lstScanPathsInclude.FirstOrDefault(x => string.Compare(x.ScanPath, strPath, true) == 0);
+
+                            // ---------------- Update Scan Path list ----------------
+                            removePathFromList(strPath, SelectedTabForLocations);
+
+                            // ---------------- Change in XML document ----------------
+                            csXmlOperations.removeXmlElement(strPath, SelectedTabForLocations);
+
+                            /// Remove from Binding list
+                            lstScanPathsInclude.Remove(selectedpath);
+                      
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                //Cursor = Cursors.Arrow;
+                App.oMainReference.UiWait = false;
+            }
+        }
+
+        public void RemoveAllItemScanList(object sender)
+        {
+            try
+            {
+                // Close context Menu
+                //CloseMenu(sender, e);
+
+                eTypeOfInclusion SelectedTabForLocations = cGlobalSettings.CurrentTypeOfInclusion;
+
+                if (App.oMainReference.UiWait)
+                {
+                    return;
+                }
+                //Cursor = Cursors.Wait;
+                App.oMainReference.UiWait = true;
+
+
+                foreach (csScanPaths str in lstScanPathsInclude)
+                {
+                    // ---------------- Update Scan Path list ----------------
+                    removePathFromList(str.ScanPath, SelectedTabForLocations);
+
+                    /// ---------------- Change in XML document ----------------
+                    /// Check if path is included both in Included and Excluded list
+                    /// 
+                    csXmlOperations.removeXmlElement(str.ScanPath, SelectedTabForLocations);
+                }
+
+                /// Remove from Binding list
+                lstScanPathsInclude.Clear();
+            
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                //Cursor = Cursors.Arrow;
+                App.oMainReference.UiWait = false;
+            }
+        }
+    }
+}
+

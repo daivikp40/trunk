@@ -1,0 +1,139 @@
+﻿<Window x:Class="DuplicatePhotosFixer.Views.Cloud.frmMessageDriveAuthorize"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DuplicatePhotosFixer.Views.Cloud"
+        mc:Ignorable="d"
+        Title="frmMessageDriveAuthorize" Height="457" Width="726" WindowStyle="None" Background="#1D1C19">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="47"/>
+            <RowDefinition/>
+            <RowDefinition Height="61"/>
+        </Grid.RowDefinitions>
+        <DockPanel Background="Black">
+            <Button x:Name="btn_close" DockPanel.Dock="Right" Width="24"
+                    Height="24" Background="Transparent" 
+                    VerticalAlignment="Top"
+                    BorderBrush="Black">
+                <Image x:Name="img_close" Source="/Resources/close.png"  />
+            </Button>
+            <Label x:Name="lbl_heading" Content="label1" Foreground="White" Margin="10 0 0 0"/>
+        </DockPanel>
+        <Grid Grid.Row="1" Margin="20 20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="gDrive_img" Source="/Resources/driveicon.png" Width="48" Height="48" VerticalAlignment="Top" />
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" MinHeight="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="txt_heading" Text="Please authorize IDS_DU_APP_NAME to continue adding Google
+                           Drive folder in scan list."
+                           Foreground="White" FontSize="20" TextWrapping="Wrap" Width="Auto"
+                           MinWidth="578"
+                           Margin="5 0 0 0"/>
+              
+                <TextBlock Grid.Row="1" x:Name="txt_StepsHeader"
+                           Text="Here are the steps to authorize IDS_DU_APP_NAME to scan Google Drive:"
+                           VerticalAlignment="Center" 
+                           Foreground="#A8A8A8"
+                            FontSize="15"/>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition  />
+                            <RowDefinition  />
+                        </Grid.RowDefinitions>
+                        <Image x:Name="img_driveclick" Source="/Resources/driveclick.png" Width="45" Height="33"
+                               VerticalAlignment="Top"/>
+                        <Image x:Name="img_drivefill" Grid.Row="1" Source="/Resources/drivefill.png" Width="45" Height="33"
+                               VerticalAlignment="Top"/>
+                        <Image x:Name="img_driveadd" Grid.Row="2" Source="/Resources/driveclick.png" Width="45" Height="33"
+                               VerticalAlignment="Top"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <TextBlock x:Name="txtStep1" Text="Click on Allow Permissions button for authentication."
+                                       Foreground="White"
+                                       FontSize="14"/>
+                            <TextBlock x:Name="txtStep1Sub" 
+                                       Text="Click on Allow Permissions button at the bottom. This will redirect to browser for Google Drive 
+                                       authentication."
+                                       VerticalAlignment="Bottom"
+                                       Padding="0 5 0 0"
+                                       TextWrapping="Wrap"
+                                       Foreground="#A8A8A8"/>
+                        </StackPanel>
+                        <Grid Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock x:Name="txtStep2" Text="Fill required details and process."
+                                       Foreground="White"
+                                       FontSize="14"/>
+                                <TextBlock x:Name="txtStep2Sub" 
+                                       Text="Enter your username and password of Google Drive account and complete the authorization 
+                                           process."
+                                      
+                                            VerticalAlignment="Bottom"
+                                       Padding="0 5 0 0"
+                                       TextWrapping="Wrap"
+                                       Foreground="#A8A8A8"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <StackPanel>
+                                <TextBlock x:Name="txtStep3" Text="Add folder and scan your Google Drive."
+                                       Foreground="White"
+                                       FontSize="14"/>
+                                <TextBlock x:Name="txtStep3Sub" 
+                                       Text="Come back to application and click on Add Folder button to select and scan your Google Drive 
+                                           folder. "
+                                        Padding="0 5 0 0"
+                                       VerticalAlignment="Bottom"
+                                       TextWrapping="Wrap"
+                                       Foreground="#A8A8A8"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+               
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" >
+            <DockPanel HorizontalAlignment="Right" Margin="0 0 20 0" VerticalAlignment="Top">
+                <Grid Grid.Column="1">
+                    
+                </Grid>
+                <Button x:Name="btn_scan" Content="Scan Computer"
+                        Width="185" Height="39" 
+                        Margin="0 0 15 0"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Style="{DynamicResource stylGreenBtn}"
+                        />
+                <Button x:Name="btn_allowpermissions"
+                        Content="Allow Permissions" 
+                        Width="185" Height="39"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Style="{DynamicResource stl_btnScanForDuplicates}"/>
+            </DockPanel>
+        </Grid>
+        
+    </Grid>
+</Window>
